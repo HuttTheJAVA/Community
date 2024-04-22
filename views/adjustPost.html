@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>아무말 대잔치</title>
+    <style>
+      .flex-container-between {
+        width: 35%;
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #f4f5f7;
+        justify-content: center;
+      }
+      .title {
+        font-size: 32px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+      .line-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+      .line {
+        width: 100%;
+        height: 1px;
+        background-color: black;
+      }
+
+      input {
+        width: 350px; /* 원하는 너비로 조정 */
+        height: 33px; /* 원하는 높이로 조정 */
+        background-color: #f4f5f7;
+        border-radius: 4px;
+        border-width: 1px;
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      .solid-line-1px-black {
+        width: 100%;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.16);
+      }
+
+      .litte-bottom-margin {
+        margin-bottom: 15px;
+      }
+      .middle-bottom-margin {
+        margin-bottom: 30px;
+      }
+      .big-bottom-margin {
+        margin-bottom: 160px;
+      }
+      .bold {
+        font-weight: bold;
+      }
+      .font-32px {
+        font-size: 32px;
+      }
+      .arrow-prev,
+      .arrow-next {
+        position: relative;
+        float: left;
+        width: 50px;
+        height: 50px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+      }
+      .user-image{
+        width: 36px;
+        height: 36px;
+        border-radius: 50%; /* 반지름의 절반을 설정하여 원형 모양 생성 */
+        background-color: #D9D9D9; /* 배경색 지정 (예시로 빨간색 사용) */
+        background-image: url('/earth.jpg'); /* 배경 이미지로 설정 */
+        background-size: cover; /* 배경 이미지를 요소에 맞게 조절 */
+      }
+      .arrow-prev::after {
+        position: absolute;
+        left: 35px;
+        top: 20px;
+        content: '';
+        width: 10px; /* 사이즈 */
+        height: 10px; /* 사이즈 */
+        border-top: 2px solid #000; /* 선 두께 */
+        border-right: 2px solid #000; /* 선 두께 */
+        transform: rotate(225deg); /* 각도 */
+      }
+
+      .arrow-next::after {
+        position: absolute;
+        left: 10px;
+        top: 20px;
+        content: '';
+        width: 10px; /* 사이즈 */
+        height: 10px; /* 사이즈 */
+        border-top: 5px solid #f4f5f7; /* 선 두께 */
+        border-right: 5px solid #f4f5f7; /* 선 두께 */
+        transform: rotate(45deg); /* 각도 */
+      }
+      .left-margin {
+        margin-left: 40px;
+      }
+      .top-margin {
+        margin-top: 10px;
+      }
+      .container-center {
+        max-width: 592px;
+        width: 100%; /* 너비를 최대 너비로 확장 */
+        display: flex; /* 수정: flex 컨테이너로 변경 */
+        align-items: center;
+        /* border: 1px solid black; */
+        flex-direction: column;
+      }
+      .image-circle {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%; /* 반지름의 절반을 설정하여 원형 모양 생성 */
+        background-color: #c4c4c4; /* 배경색 지정 (예시로 빨간색 사용) */
+        /* margin-left: 20px; 왼쪽으로 20px의 상대적인 마진 */
+      }
+
+      textarea {
+        width: 570px; /* 원하는 너비로 조정 */
+        height: 276px; /* 원하는 높이로 조정 */
+        background-color: #f4f5f7;
+        border-radius: 4px;
+        font-size: 15px;
+        word-wrap: break-word; /* 긴 단어 또는 URL이 텍스트 상자를 벗어날 때 줄 바꿈을 처리 */
+        border: 1px solid #f4f5f7;
+      }
+      button {
+        border-radius: 4px;
+        background-color: #7f6aee;
+        color: white;
+        width: 355px; /* 원하는 너비로 조정 */
+        height: 33px; /* 원하는 높이로 조정 */
+        border: none;
+        font-size: 14px;
+        font-weight: bold;
+      }
+      .container-user-feature-name {
+        width: 100%;
+        display: flex;
+        font-size: 15px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        /* border: 1px solid black; */
+      }
+      input {
+        width: 570px; /* 원하는 너비로 조정 */
+        height: 64px; /* 원하는 높이로 조정 */
+        background-color: #f4f5f7;
+        border-radius: 4px;
+        border-width: 1px;
+        border: 1px solid #f4f5f7;
+      }
+      .title-area {
+        width: 570px; /* 원하는 너비로 조정 */
+        height: 64px; /* 원하는 높이로 조정 */
+        background-color: #f4f5f7;
+        display: flex;
+        align-items: center;
+        /* border: 1px solid black; */
+      }
+      .feature-name-container {
+        width: 100%;
+        display: flex;
+        font-weight: bold;
+        /* border: 1px solid black; */
+      }
+      .text-16px {
+        font-size: 16px;
+      }
+      .text-15px {
+        font-size: 15px;
+      }
+      .file-button {
+        width: 68px;
+        height: 29px;
+        border-radius: 4px;
+        background-color: #d9d9d9;
+        font-size: 13px;
+        color: #000000;
+        text-align: center; /* 텍스트를 가운데로 정렬 */
+        line-height: 29px; /* 버튼의 높이와 같게 설정하여 수직 가운데 정렬 */
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="flex-container-between">
+      <span class="arrow-prev"></span>
+      <div class="title">아무 말 대잔치</div>
+      <span class="user-image"></span>
+    </div>
+    <div class="line-container">
+      <div class="line"></div>
+    </div>
+    <div class="top-margin bold" style="font-size: 24px; margin-top: 25px">
+      게시글 수정
+    </div>
+    <div style="margin-top: 50px"></div>
+    <div class="container-center">
+      <div class="feature-name-container text-16px">
+        <div style="margin-left: 20px">제목*</div>
+      </div>
+      <div class="top-margin"></div>
+      <div class="solid-line-1px-black"></div>
+      <div class="title-area bold" style="margin-left: 15px">제목 1</div>
+      <div class="solid-line-1px-black"></div>
+      <div style="margin-top: 30px"></div>
+      <div class="feature-name-container text-16px" style="margin-bottom: 10px">
+        <div style="margin-left: 20px">내용*</div>
+      </div>
+      <div
+        class="solid-line-1px-black"
+        style="margin-top: 10px; margin-bottom: 15px"
+      ></div>
+      <textarea placeholder="내용을 입력해주세요." style="font-size: 14px">
+무엇을 얘기할까요? 아무말이라면, 삶은 항상 놀라운 모험이라고 생각합니다. 우리는 매일 새로운 경험을 하고 배우며 성장합니다. 때로는 어려움과 도전이 있지만, 그것들이 우리를 더 강하고 지혜롭게 만듭니다. 또한 우리는 주변의 사람들과 연결되며 사랑과 지지를 받습니다. 그래서 우리의 삶은 소중하고 의미가 있습니다.
+자연도 아름다운 이야기입니다. 우리 주변의 자연은 끝없는 아름다움과 신비로움을 담고 있습니다. 산, 바다, 숲, 하늘 등 모든 것이 우리를 놀라게 만들고 감동시킵니다. 자연은 우리의 생명과 안정을 지키며 우리에게 힘을 주는 곳입니다. 
+마지막으로, 지식을 향한 탐구는 항상 흥미로운 여정입니다. 우리는 끝없는 지식의 바다에서 배우고 발견할 수 있으며, 이것이 우리를 더 깊이 이해하고 세상을 더 넓게 보게 해줍니다.
+그런 의미에서, 삶은 놀라움과 경이로움으로 가득 차 있습니다. 새로운 경험을 즐기고 항상 앞으로 나아가는 것이 중요하다고 생각합니다.</textarea
+      >
+
+      <div
+        class="solid-line-1px-black"
+        style="margin-top: 5px; margin-bottom: 15px"
+      ></div>
+      <div class="feature-name-container text-15px" style="margin-bottom: 7px">
+        <div style="margin-left: 20px">이미지</div>
+      </div>
+      <div
+        class="text-15px left-margin"
+        style="display: flex; align-items: center; width: 100%"
+      >
+        <div class="file-button">파일 선택</div>
+        <div style="font-size: 14px; margin-left: 10px">기존 파일 명</div>
+      </div>
+      <div style="display: flex; align-items: center">
+        <button style="margin-top: 25px">수정하기</button>
+      </div>
+    </div>
+    <script src="/adjustPost.js">
+
+    </script>
+  </body>
+</html>
