@@ -79,7 +79,6 @@ function render_Post(){
         댓글 등록
         </div>
     </div>`;
-    toast();
     });
     replys();
 }
@@ -112,47 +111,62 @@ function replys(){
                     </div>
                 </div>
                 <div class="reply-box-update">
-                    <div class="mini-button">수정</div>
+                    <div id="reply-adjust" class="mini-button">수정</div>
 
-                    <div class="mini-button" style="margin-left: 10px">삭제</div>
+                    <div id="reply-delete" class="mini-button" style="margin-left: 10px">삭제</div>
                 </div>
             </div>`);
         }
+        toast();
     });
 }
 
 function toast(){
-
-    const deletePostButton = document.getElementById('delete-post');
+    
+    //게시글에 대한
     const button_cancel = document.getElementById("cancel");
     const button_ok = document.getElementById("ok");
+    const button_delete = document.getElementById("delete-post");
 
+    //댓글에 대한
+    const reply_adjust = document.getElementById("reply-adjust");
+    const reply_delete = document.getElementById("reply-delete");
 
-    function post_delete_message(){
-    const toastMessage = document.getElementById('toastMessage');
-
-    const title = document.getElementById('toastTitle');
-    const content = document.getElementById('toastContent');
-    
-    title.innerHTML="게시글을 삭제하시겠습니까?";
-    content.innerHTML="삭제한 내용은 복구 할 수 없습니다.";
-    button_ok.innerHTML="확인";
-    button_cancel.innerHTML="취소";
-    toastMessage.style.opacity = 1;
-    document.getElementById('toastMessage').classList.remove('hidden');
+    function post_delete_message(title_text){
+        const title = document.getElementById('toastTitle');
+        const content = document.getElementById('toastContent');
+        
+        title.innerHTML = title_text;
+        content.innerHTML = "삭제한 내용은 복구 할 수 없습니다.";
+        button_ok.innerHTML = "확인";
+        button_cancel.innerHTML = "취소";
     }
-
+    
     function hideToast(){
-    toastMessage.style.opacity = 0;
+        document.getElementById("myModal").style.display = "none";
     }
 
     function post_delete(){
     window.location.href = "/board";
     }
 
-    deletePostButton.addEventListener('click', post_delete_message);
+    function showPostModal() {
+        document.getElementById("myModal").style.display = "block";
+        post_delete_message("게시글을 삭제하시겠습니까?");
+    }
+
+    function showReplyModal(){
+        document.getElementById("myModal").style.display = "block";
+        post_delete_message("댓글을 삭제하시겠습니까?");
+    }
+
+    // deletePostButton.addEventListener('click', post_delete_message);
     button_cancel.addEventListener('click',hideToast);
-    button_ok.addEventListener('click',post_delete);
+    button_ok.addEventListener('click',post_delete); // 이거는 게시글, 댓글 구분이 안되니 각각에대해 다른 결과가 나오게 처리 (지금 이대로 하면 댓글 삭제 때 확인 누르면 /board로 가버림.)
+    button_delete.addEventListener('click',showPostModal);
+
+    reply_delete.addEventListener('click',showReplyModal);
+    
 }
 
 window.onload = render_Post;
