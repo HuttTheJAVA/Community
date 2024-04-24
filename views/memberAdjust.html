@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>아무말 대잔치</title>
+<link rel="stylesheet" href="/css/dropDown.css">
+<link rel="stylesheet" href="/css/toast.css">
 <style>
   body {
     margin: 0;
@@ -17,6 +19,15 @@
     font-size: 32px;
     margin-top: 20px;
     margin-bottom: 20px;
+  }
+  .error-flex{
+    color: red;
+    display: flex;
+    width: 100%;
+    height: 30px;
+    font-weight: bold;
+    width: 350px;
+    /* border: 1px solid black; */
   }
   .line-container {
     width: 100%;
@@ -115,14 +126,6 @@
     background-color: #D9D9D9; /* 배경색 지정 (예시로 빨간색 사용) */
     margin-left: 20px; /* 왼쪽으로 20px의 상대적인 마진 */
   }
-  .user-image{
-    width: 36px;
-    height: 36px;
-    border-radius: 50%; /* 반지름의 절반을 설정하여 원형 모양 생성 */
-    background-color: #D9D9D9; /* 배경색 지정 (예시로 빨간색 사용) */
-    background-image: url('/earth.jpg'); /* 배경 이미지로 설정 */
-    background-size: cover; /* 배경 이미지를 요소에 맞게 조절 */
-  }
   .user-big-image{
     width: 149px;
     height: 149px;
@@ -183,7 +186,16 @@
   <div class="flex-container-between">
     <div class="invisable_circle"></div>
     <div class="title">아무 말 대잔치</div>
-    <div class="user-image"></div>
+
+    <div class="dropdown">
+      <div class="dropbtn"></div>
+      <div class="dropdown-content">
+        <a class="dropdown-cell" href="">회원정보수정</a>
+        <a class="dropdown-cell" href="/adjustPassword">비밀번호수정</a>
+        <a class="dropdown-cell" href="logout">로그아웃</a>
+      </div>
+    </div>
+
   </div>
 </div>
 <div class="line-container">
@@ -209,7 +221,7 @@
         </div>
     </div>
     <input
-          id="input-id"
+          id="nickName"
           type="text"
           minlength="5"
           maxlength="13"
@@ -218,10 +230,11 @@
           value="스타트업코드"
           style="padding-left: 10px;"
       />
-    <div class="custom-button">
+    <div id="adjust" class="custom-button">
         수정하기
     </div>
-    <div style="font-size: 14px;margin-top: 10px;margin-bottom: 70px;">
+    <div id="nickNameHelper" class="error-flex" style="font-size: 12px;"></div>
+    <div id="deleteMember" style="font-size: 14px;margin-top: 10px;margin-bottom: 70px;">
         회원 탈퇴
     </div>
     <div class="submit-button">
@@ -229,5 +242,26 @@
     </div>
 </div>
 </div>
+
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <div id="toastTitle" class="wrap-text font-24 bold" style="margin-top: 40px;">
+          
+    </div>
+    <div id="toastContent" class="wrap-text font-20" style="margin-top: 30px;">
+          
+    </div>
+    <div class="wrap-button" style="margin-top: 25px;">
+        <button id="cancel" class="button-cancel">
+          
+        </button>
+        <button id="ok" class="button-ok" style="margin-left: 15px;">
+          
+        </button>
+      </div>
+  </div>
+</div>
+<div class="adjustPassWordtoastMessage" id="adjustToast"></div>
+<script src="/memberAdjust.js"></script>
 </body>
 </html>

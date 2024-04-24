@@ -70,7 +70,7 @@ function button_change(){
     if(!(emailMessage == "이메일을 다시 확인해보세요." || emailMessage == "")){
         validation_condition1 = false;
     }
-    if(passWordMessage == "올바른 비밀번호 형식을 입력하세요." || passWordMessage == "비밀번호를 입력해주세요"){
+    if(!(passWordMessage == "" || passWordMessage == "비밀번호가 다릅니다.")){
         validation_condition2 = false;
     }
     if(validation_condition1 && validation_condition2){

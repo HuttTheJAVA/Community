@@ -1,5 +1,3 @@
-
-
 const deletePostButton = document.getElementById('delete-post');
 const button_cancel = document.getElementById("cancel");
 const button_ok = document.getElementById("ok");

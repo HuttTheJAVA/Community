@@ -8,7 +8,7 @@ function K_feature(feature){
 
 function render_Post(){
     const postId = window.location.pathname.split('/').pop();
-    console.log(postId);
+    
     fetch(`/api/post/${postId}`)
     .then(response => response.json())
     .then(data => {
@@ -68,14 +68,14 @@ function render_Post(){
         style="margin-top: 20px; margin-bottom: 20px">
     </div>
     <div class="reply-write-box">
-        <textarea
+        <textarea id="comment-input"
         placeholder="댓글을 남겨주세요!"
         style="margin-top: 15px">
         </textarea>
     </div>
     <div class="solid-line-1px-black"></div>
     <div class="reply-submit-box middle-bottom-margin">
-        <div class="custom-button" style="margin-top: 5px; margin-right: 5px">
+        <div id=reply-submit class="custom-button" style="margin-top: 5px; margin-right: 5px">
         댓글 등록
         </div>
     </div>`;
@@ -94,6 +94,7 @@ function replys(){
             const writer = data[reply]["writer"];
             const content = data[reply]["content"];
             const time = data[reply]["time"];
+            const id = data[reply]["id"];
 
             replyContainer.insertAdjacentHTML('beforeend',`
             <div class="reply-box">
@@ -107,15 +108,25 @@ function replys(){
                         </div>
                     </div>
                     <div class="reply-box-left-content">
-                        <div style="margin-left: 45px">${content}</div>
+                        <div id=${id} style="margin-left: 45px">${content}</div>
                     </div>
                 </div>
                 <div class="reply-box-update">
-                    <div id="reply-adjust" class="mini-button">수정</div>
+                    <div id="reply-adjust-${id}" class="mini-button">수정</div>
 
                     <div id="reply-delete" class="mini-button" style="margin-left: 10px">삭제</div>
                 </div>
             </div>`);
+
+            const adjustButton = document.getElementById(`reply-adjust-${id}`);
+            adjustButton.addEventListener('click',() => {
+                const contentText = document.getElementById(`${id}`);
+                const content = contentText.textContent.trim(); // 현재 내용 가져오기
+                const comment_input = document.getElementById("comment-input");
+                comment_input.value = content;
+                const adjustButton = document.getElementById("reply-submit");
+                adjustButton.textContent = "댓글 수정";
+            })
         }
         toast();
     });
@@ -144,20 +155,27 @@ function toast(){
     
     function hideToast(){
         document.getElementById("myModal").style.display = "none";
+        document.body.style.overflow = '';
     }
 
     function post_delete(){
-    window.location.href = "/board";
+        window.location.href = "/board";
+
+        // display = none으로 안해주면 /board에서 이페이지로 다시 돌아오면 모달이 보여짐.
+        // 근데 사실 이 버튼이 게시글 삭제, 댓글 삭제 공통으로 지금 적용된거라 버튼을 따로 분리하고 구현도 따로해야함.
+        document.getElementById("myModal").style.display = "none";
     }
 
     function showPostModal() {
         document.getElementById("myModal").style.display = "block";
         post_delete_message("게시글을 삭제하시겠습니까?");
+        document.body.style.overflow = 'hidden';
     }
 
     function showReplyModal(){
         document.getElementById("myModal").style.display = "block";
         post_delete_message("댓글을 삭제하시겠습니까?");
+        document.body.style.overflow = 'hidden';
     }
 
     // deletePostButton.addEventListener('click', post_delete_message);

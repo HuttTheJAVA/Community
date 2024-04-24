@@ -1,0 +1,46 @@
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 115px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropbtn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%; /* 반지름의 절반을 설정하여 원형 모양 생성 */
+    background-image: url('/earth.jpg');; /* 이미지 경로 설정 */
+    background-size: cover; /* 배경 이미지를 요소에 맞게 조절 */
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-cell{
+    width: 115px;
+    background-color: #D9D9D9;
+    font-size: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}

@@ -37,13 +37,12 @@
       }
 
       input {
-        width: 350px; /* 원하는 너비로 조정 */
+        width: 570px; /* 원하는 너비로 조정 */
         height: 33px; /* 원하는 높이로 조정 */
         background-color: #f4f5f7;
         border-radius: 4px;
         border-width: 1px;
         font-size: 16px;
-        font-weight: bold;
       }
 
       .solid-line-1px-black {
@@ -162,6 +161,7 @@
         border-radius: 4px;
         border-width: 1px;
         border: 1px solid #f4f5f7;
+        color: black;
       }
       .title-area {
         width: 570px; /* 원하는 너비로 조정 */
@@ -215,7 +215,7 @@
       </div>
       <div class="top-margin"></div>
       <div class="solid-line-1px-black"></div>
-      <div class="title-area bold" style="margin-left: 15px">제목 1</div>
+      <input id="title" class="bold" style="margin-left: 15px" minlength="1" maxlength="26"></input>
       <div class="solid-line-1px-black"></div>
       <div style="margin-top: 30px"></div>
       <div class="feature-name-container text-16px" style="margin-bottom: 10px">
@@ -225,12 +225,7 @@
         class="solid-line-1px-black"
         style="margin-top: 10px; margin-bottom: 15px"
       ></div>
-      <textarea placeholder="내용을 입력해주세요." style="font-size: 14px">
-무엇을 얘기할까요? 아무말이라면, 삶은 항상 놀라운 모험이라고 생각합니다. 우리는 매일 새로운 경험을 하고 배우며 성장합니다. 때로는 어려움과 도전이 있지만, 그것들이 우리를 더 강하고 지혜롭게 만듭니다. 또한 우리는 주변의 사람들과 연결되며 사랑과 지지를 받습니다. 그래서 우리의 삶은 소중하고 의미가 있습니다.
-자연도 아름다운 이야기입니다. 우리 주변의 자연은 끝없는 아름다움과 신비로움을 담고 있습니다. 산, 바다, 숲, 하늘 등 모든 것이 우리를 놀라게 만들고 감동시킵니다. 자연은 우리의 생명과 안정을 지키며 우리에게 힘을 주는 곳입니다. 
-마지막으로, 지식을 향한 탐구는 항상 흥미로운 여정입니다. 우리는 끝없는 지식의 바다에서 배우고 발견할 수 있으며, 이것이 우리를 더 깊이 이해하고 세상을 더 넓게 보게 해줍니다.
-그런 의미에서, 삶은 놀라움과 경이로움으로 가득 차 있습니다. 새로운 경험을 즐기고 항상 앞으로 나아가는 것이 중요하다고 생각합니다.</textarea
-      >
+      <textarea id="content-area" placeholder="내용을 입력해주세요." style="font-size: 14px"></textarea>
 
       <div
         class="solid-line-1px-black"
@@ -247,7 +242,7 @@
         <div style="font-size: 14px; margin-left: 10px">기존 파일 명</div>
       </div>
       <div style="display: flex; align-items: center">
-        <button style="margin-top: 25px">수정하기</button>
+        <button id="adjust" style="margin-top: 25px">수정하기</button>
       </div>
     </div>
     <script src="/adjustPost.js">

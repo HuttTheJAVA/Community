@@ -23,16 +23,17 @@ function checkValidation(){
             content: content
         };
 
-        fetch('/saveData',{
-            method: 'POST',
-            headers:{
-                'Content-Type': 'application/json'
-            },
-            body:JSON.stringify(jsonData)
-        })
-        .then(response=>response.json())
-        .then(data => console.log(data))
-        .catch(error => console.error('Error:', error));
+        // 이 코드는 백엔드 서버에서 구현하자.
+        // fetch('/saveData',{
+        //     method: 'POST',
+        //     headers:{
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body:JSON.stringify(jsonData)
+        // })
+        // .then(response=>response.json())
+        // .then(data => console.log(data))
+        // .catch(error => console.error('Error:', error));
     }
 }
 
