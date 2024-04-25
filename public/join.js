@@ -1,8 +1,8 @@
+import { checkDuplicate } from "./checkDuplicate.js";
 const passwordHelper = document.getElementById('passwordHelper');
 const passwordCheckHelper = document.getElementById('passwordCheckHelper');
 const emailHelper = document.getElementById('emailHelper');
 const nickNameHelper = document.getElementById('nickNameHelper');
-
 
 const email = document.getElementById('email').value;
 const password = document.getElementById('password').value;
@@ -89,12 +89,10 @@ function checkNickName(nickName){
         return "*닉네임을 입력해주세요.";
     }else if(nickName.length > 10){
         return "*닉네임은 최대 10자 까지 작성 가능합니다.";
-    }else if(false){
-        // 중복 닉네임 체크 로직
-        return "*중복된 닉네임 입니다.";
     }else if(/\s/.test(nickName)){
         return "*띄어쓰기를 없애주세요.";
     }
+
     return "";
 }
 
@@ -105,9 +103,9 @@ function activate_button(){
     const passwordCheck = document.getElementById('password-check').value;
     const nickName = document.getElementById('nickName').value;
 
-    email_err = validateEmail(email);
-    passwordCompare_err = check_passWords(password,passwordCheck);
-    nickName_err = checkNickName(nickName);
+    let email_err = validateEmail(email);
+    let passwordCompare_err = check_passWords(password,passwordCheck);
+    let nickName_err = checkNickName(nickName);
 
     if(!email_err && !passwordCompare_err && !nickName_err){
         btn.style.backgroundColor = '#7F6AEE';
@@ -116,7 +114,7 @@ function activate_button(){
     }
 }
 
-function global_validation(){
+async function global_validation(){
 
     emailHelper.innerText = '';
     nickNameHelper.innerText = '';
@@ -128,11 +126,12 @@ function global_validation(){
     const passwordCheck = document.getElementById('password-check').value;
     const nickName = document.getElementById('nickName').value;
 
-    email_err = validateEmail(email);
-    password_err = validatePassword(password);
-    passwordCheck_err = validatePassword(passwordCheck);
-    nickName_err = checkNickName(nickName);
-    passwordCompare_err = "";
+    let email_err = validateEmail(email);
+    let password_err = validatePassword(password);
+    let passwordCheck_err = validatePassword(passwordCheck);
+    let nickName_err = checkNickName(nickName);
+    let passwordCompare_err = "";
+
     if(password != passwordCheck){
         passwordCompare_err = "비밀번호와 비밀번호 확인이 서로 다릅니다.";
     }
@@ -147,11 +146,18 @@ function global_validation(){
         
     }else{
         emailHelper.innerText = email_err;
-        nickNameHelper.innerText = nickName_err;
+        if(!nickName_err){
+            checkDuplicate(nickName)
+            .then(duplicateMessage => {
+                nickNameHelper.innerText = duplicateMessage;
+            })
+        }else{
+            nickNameHelper.innerText = nickName_err;
+        }
         if(password_err || passwordCheck_err){
             passwordHelper.innerText = password_err;
             passwordCheckHelper.innerText = passwordCheck_err;
-        }else{
+        }else{ // 이거는 비번과 비번 확인에 에러가 없고 비번 비교에 에러가 있을 경우 렌더링 즉. 비번, 비번 확인에 에러가 있다면 그것만 보여주고 이 메시지는 에러가 존재한다고 해도 보여주지 않음. 일단 비번, 비번확인 에러부터 고치는게 급선무니까
             passwordCheckHelper.innerText = passwordCompare_err;
         }
     }

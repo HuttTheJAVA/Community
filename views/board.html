@@ -172,8 +172,20 @@
         display: flex;
         justify-content: space-between;
       }
-      .card{
-        
+      .image-circle {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%; /* 반지름의 절반을 설정하여 원형 모양 생성 */
+        background-color: #c4c4c4; /* 배경색 지정 (예시로 빨간색 사용) */
+        /* margin-left: 20px; 왼쪽으로 20px의 상대적인 마진 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+      }
+      .image-circle img{
+        max-width: 100%; /* 이미지가 원 안에 들어가도록 함 */
+        max-height: 100%; /* 이미지가 원 안에 들어가도록 함 */
       }
     </style>
   </head>

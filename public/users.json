@@ -1,0 +1,32 @@
+{
+    "Lee":{
+        "email": "asd@asd.com",
+        "password": "asd1234!",
+        "nickname": "Lee",
+        "profileImage": "Lee.png"
+    },
+    "Park":{
+		"email": "asd@asd.com",
+        "password": "asd1234!",
+        "nickname": "Park", 
+        "profileImage": "Park.png"
+    },
+    "Kim":{
+		"email": "asd@asd.com",
+        "password": "asd1234!",
+        "nickname": "Kim",
+        "profileImage": "Kim.png"
+    },
+    "Choi":{
+		"email": "asd@asd.com",
+        "password": "asd1234!",
+        "nickname": "Choi",
+        "profileImage": "Choi.png"
+    },
+    "Oh":{
+		"email": "asd@asd.com",
+        "password": "asd1234!",
+        "nickname": "Oh",
+        "profileImage": "Oh.png"
+    }
+}

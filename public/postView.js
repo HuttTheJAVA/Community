@@ -23,6 +23,7 @@ function render_Post(){
     const reply = K_feature(parseInt(data["reply"]));
     const watch = K_feature(parseInt(data["watch"]));
     const time = data["time"];
+    const image = data["image"];
 
     jsonContainer.innerHTML += `<div 
     class="feature-name-container bold litte-bottom-margin"
@@ -31,7 +32,9 @@ function render_Post(){
     </div>
     <div class="feature-name-container" style="margin-bottom: 25px">
         
-        <div class="image-circle" style="margin-right: 10px"></div>
+        <div class="image-circle" style="margin-right: 10px">
+            <img src="/api/user/${writer}">
+        </div>
         <div class="text-15px bold">${writer}</div>
         <div style="margin-left: 30px; font-size: 14px">
         ${time}
@@ -47,7 +50,7 @@ function render_Post(){
     </div>
 
     <div class="img-container">
-        <img src="earth.jpg" />
+        <img src="/${image}" width=544px height=306px/>
     </div>
     <div class="post-message middle-bottom-margin">
         ${content}
@@ -68,17 +71,15 @@ function render_Post(){
         style="margin-top: 20px; margin-bottom: 20px">
     </div>
     <div class="reply-write-box">
-        <textarea id="comment-input"
-        placeholder="댓글을 남겨주세요!"
-        style="margin-top: 15px">
-        </textarea>
+        <textarea id="comment-input" placeholder="댓글을 남겨주세요!" style="margin-top: 15px"></textarea>
     </div>
     <div class="solid-line-1px-black"></div>
     <div class="reply-submit-box middle-bottom-margin">
-        <div id=reply-submit class="custom-button" style="margin-top: 5px; margin-right: 5px">
+        <div id="reply-submit" class="custom-button" style="margin-top: 5px; margin-right: 5px">
         댓글 등록
         </div>
     </div>`;
+    document.getElementById("comment-input").addEventListener('input',activate_button)
     });
     replys();
 }
@@ -185,6 +186,17 @@ function toast(){
 
     reply_delete.addEventListener('click',showReplyModal);
     
+}
+
+function activate_button(){
+    const reply_text = document.getElementById("comment-input").value;
+    const btn = document.getElementById("reply-submit");
+    if(reply_text){
+        btn.style.backgroundColor = "#7f6aee";
+    }else{
+        btn.innerText = "댓글 등록";
+        btn.style.backgroundColor = "#aca0eb";
+    }
 }
 
 window.onload = render_Post;

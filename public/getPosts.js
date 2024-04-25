@@ -46,7 +46,9 @@ function fetchAndRenderJSON() {
                     </div>
                     <div class="solid-line-1px-black"></div>
                     <div class="container-row">
-                        <div class="image-circle"></div>
+                    <div class="image-circle">
+                        <img src="/api/user/${writer}">
+                    </div>
                         <div class="left-margin bold" style="font-size: 15px">
                             ${writer}
                         </div>

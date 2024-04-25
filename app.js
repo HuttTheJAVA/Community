@@ -107,7 +107,21 @@ app.get('/api/reply/:postId',(req,res)=>{
   } catch (error) {
     console.error('JSON 파일 읽기 오류:', error);
   }
-})
+});
+
+app.get('/api/user/:nickName',(req,res)=>{
+  const nickName = req.params.nickName;
+  const existingData = fs.readFileSync(path.join(__dirname, 'public', 'users.json'), 'utf8');
+  const jsonData = JSON.parse(existingData);
+  const imageFilePath = path.join(__dirname, 'public','images', jsonData[nickName]["profileImage"]);
+  res.sendFile(imageFilePath);
+});
+
+app.get('/api/users',(req,res)=>{
+  const existingData = fs.readFileSync(path.join(__dirname, 'public', 'users.json'), 'utf8');
+  const jsonData = JSON.parse(existingData);
+  res.json(jsonData);
+});
 
 app.get('/post/:postId',(req,res) => {
   console.log('here ');
