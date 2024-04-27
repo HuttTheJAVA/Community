@@ -1,4 +1,4 @@
-import { checkDuplicate } from "./checkDuplicate.js";
+import { checkDuplicatenickName,checkDuplicateEmail } from "./checkDuplicate.js";
 const passwordHelper = document.getElementById('passwordHelper');
 const passwordCheckHelper = document.getElementById('passwordCheckHelper');
 const emailHelper = document.getElementById('emailHelper');
@@ -25,10 +25,6 @@ function validateEmail(email) {
     var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         return "올바른 이메일 주소 형식을 입력해주세요.(예:abc@example.com)";
-    }
-
-    if(false){
-        return "중복된 이메일 입니다.";
     }
     
     // 모든 조건 통과
@@ -61,14 +57,14 @@ function validatePassword(password) {
     return "";
 }
 
-function check_passWords(){
+async function check_passWords(){
 
     const password = document.getElementById('password').value;
     const passwordCheck = document.getElementById('password-check').value;
 
-    var passWordErrorMessage = validatePassword(password);
+    var passWordErrorMessage = await validatePassword(password);
 
-    var passwordCheckErrorMessage = validatePassword(passwordCheck);
+    var passwordCheckErrorMessage = await validatePassword(passwordCheck);
     
     if (passWordErrorMessage){
         return passWordErrorMessage;
@@ -96,16 +92,16 @@ function checkNickName(nickName){
     return "";
 }
 
-function activate_button(){
+async function activate_button(){
 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const passwordCheck = document.getElementById('password-check').value;
     const nickName = document.getElementById('nickName').value;
 
-    let email_err = validateEmail(email);
-    let passwordCompare_err = check_passWords(password,passwordCheck);
-    let nickName_err = checkNickName(nickName);
+    let email_err = await validateEmail(email);
+    let passwordCompare_err = await check_passWords(password,passwordCheck);
+    let nickName_err = await checkNickName(nickName);
 
     if(!email_err && !passwordCompare_err && !nickName_err){
         btn.style.backgroundColor = '#7F6AEE';
@@ -126,15 +122,30 @@ async function global_validation(){
     const passwordCheck = document.getElementById('password-check').value;
     const nickName = document.getElementById('nickName').value;
 
-    let email_err = validateEmail(email);
-    let password_err = validatePassword(password);
-    let passwordCheck_err = validatePassword(passwordCheck);
-    let nickName_err = checkNickName(nickName);
+    let email_err = await validateEmail(email);
+    let password_err = await validatePassword(password);
+    let passwordCheck_err = await validatePassword(passwordCheck);
+    let nickName_err = await checkNickName(nickName);
     let passwordCompare_err = "";
-
+    
     if(password != passwordCheck){
         passwordCompare_err = "비밀번호와 비밀번호 확인이 서로 다릅니다.";
     }
+
+    if(!nickName_err){
+        await checkDuplicatenickName(nickName)
+        .then(duplicateMessage => {
+            nickName_err = duplicateMessage;
+        })
+    }   
+
+    if(!email_err){
+        await checkDuplicateEmail(email)
+        .then(duplicateMessage => {
+            email_err = duplicateMessage;
+        })
+    }
+
     if(!email_err && !password_err && !passwordCheck_err && !nickName_err && !passwordCompare_err){
         // 완료 처리 및 페이지 이동
         
@@ -146,14 +157,9 @@ async function global_validation(){
         
     }else{
         emailHelper.innerText = email_err;
-        if(!nickName_err){
-            checkDuplicate(nickName)
-            .then(duplicateMessage => {
-                nickNameHelper.innerText = duplicateMessage;
-            })
-        }else{
-            nickNameHelper.innerText = nickName_err;
-        }
+        
+        nickNameHelper.innerText = nickName_err;
+        
         if(password_err || passwordCheck_err){
             passwordHelper.innerText = password_err;
             passwordCheckHelper.innerText = passwordCheck_err;
@@ -163,6 +169,49 @@ async function global_validation(){
     }
 
 }
+
+function showImageHelper() {
+    var image = document.getElementById('uploaded-image');
+    var imageHelper = document.getElementById('imageHelper');
+  
+    // 이미지가 없는 경우
+    if (!image.src.startsWith('data:')) {
+      imageHelper.innerText = "*프로필 사진을 추가해주세요.";
+    } else {
+      // 이미지가 있는 경우
+      imageHelper.innerText = "";
+    }
+}
+
+window.onload = function() {
+    showImageHelper();
+};
+
+document.getElementById('circle').addEventListener('click', function() {
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = function(event) {
+        var file = event.target.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function() {
+                var img = document.getElementById('uploaded-image');
+                img.style.display = 'block'; // 이미지를 보이도록 설정합니다.
+                img.src = reader.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    input.click();
+});
+
+document.getElementById('uploaded-image').addEventListener('load',showImageHelper);
+
+// 십자선 클릭 시 이벤트 버블링 방지
+document.getElementById('crosshair').addEventListener('click', function(event) {
+    event.stopPropagation();
+});
 
 document.getElementById("email").addEventListener('input',activate_button);
 document.getElementById("password").addEventListener('input',activate_button);

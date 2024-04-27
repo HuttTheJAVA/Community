@@ -68,7 +68,7 @@ document.getElementById("adjust").addEventListener('click', function() {
     }
 
     if (!passWordErrorMessage && !passwordCheckErrorMessage){
-        if(!password1 == password2){
+        if(!password == passwordCheck){
             passwordCheckHelper.innerHTML = '비밀번호와 비밀번호 확인이 다릅니다.'
         }else{
             var toastMessage = document.getElementById("adjustToast");

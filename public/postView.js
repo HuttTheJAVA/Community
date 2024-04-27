@@ -80,6 +80,7 @@ function render_Post(){
         </div>
     </div>`;
     document.getElementById("comment-input").addEventListener('input',activate_button)
+    document.getElementById("reply-submit").addEventListener('click',submit_reply)
     });
     replys();
 }
@@ -197,6 +198,12 @@ function activate_button(){
         btn.innerText = "댓글 등록";
         btn.style.backgroundColor = "#aca0eb";
     }
+}
+
+function submit_reply(){
+    const reply_text = document.getElementById("comment-input");
+    reply_text.value="";
+    alert("댓글 등록 완료!");    
 }
 
 window.onload = render_Post;

@@ -67,3 +67,26 @@ adjust.onclick = function(){
         }, 3000); 
     }
 }
+
+document.querySelector('.change-button').addEventListener('click', function() {
+    // 파일 입력(input) 요소 선택
+    var fileInput = document.createElement('input');
+    fileInput.type = 'file';
+  
+    // 파일 선택 시의 이벤트 처리
+    fileInput.addEventListener('change', function(event) {
+      var file = event.target.files[0]; // 선택된 파일 가져오기
+      if (file) {
+        var reader = new FileReader(); // 파일을 읽기 위한 FileReader 객체 생성
+        reader.onload = function(e) {
+          // 선택된 이미지를 user-big-image에 적용
+          var image = document.querySelector('.user-big-image img');
+          image.src = e.target.result;
+        };
+        reader.readAsDataURL(file); // 파일을 base64 형식의 데이터 URL로 변환하여 읽음
+      }
+    });
+  
+    // 파일 입력(input) 요소 클릭
+    fileInput.click();
+  });
