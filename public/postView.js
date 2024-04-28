@@ -81,6 +81,7 @@ function render_Post(){
     </div>`;
     document.getElementById("comment-input").addEventListener('input',activate_button)
     document.getElementById("reply-submit").addEventListener('click',submit_reply)
+    document.getElementById("reply-submit").addEventListener('click',change_submit_button_text)
     });
     replys();
 }
@@ -138,7 +139,7 @@ function toast(){
     
     //게시글에 대한
     const button_cancel = document.getElementById("cancel");
-    const button_ok = document.getElementById("ok");
+    const button_ok = document.getElementById("ok"); // 모달에 있는 ok를 말하는거 따라서 게시글 삭제버튼, 댓글 삭제 버튼 모두에 적용됨.
     const button_delete = document.getElementById("delete-post");
 
     //댓글에 대한
@@ -160,12 +161,20 @@ function toast(){
         document.body.style.overflow = '';
     }
 
-    function post_delete(){
-        window.location.href = "/board";
+    function deleteOk(){
+        const context = document.getElementById("toastTitle").innerText;
+        if(context == '게시글을 삭제하시겠습니까?'){
+            window.location.href = "/board";
+            document.getElementById("myModal").style.display = "none";
+        }
+        else{
+            document.getElementById("myModal").style.display = "none";
+            alert("댓글 삭제 완료!");
+            document.body.style.overflow = ''; 
+        }
 
         // display = none으로 안해주면 /board에서 이페이지로 다시 돌아오면 모달이 보여짐.
         // 근데 사실 이 버튼이 게시글 삭제, 댓글 삭제 공통으로 지금 적용된거라 버튼을 따로 분리하고 구현도 따로해야함.
-        document.getElementById("myModal").style.display = "none";
     }
 
     function showPostModal() {
@@ -182,7 +191,7 @@ function toast(){
 
     // deletePostButton.addEventListener('click', post_delete_message);
     button_cancel.addEventListener('click',hideToast);
-    button_ok.addEventListener('click',post_delete); // 이거는 게시글, 댓글 구분이 안되니 각각에대해 다른 결과가 나오게 처리 (지금 이대로 하면 댓글 삭제 때 확인 누르면 /board로 가버림.)
+    button_ok.addEventListener('click',deleteOk); // 이거는 게시글, 댓글 구분이 안되니 각각에대해 다른 결과가 나오게 처리 (지금 이대로 하면 댓글 삭제 때 확인 누르면 /board로 가버림.)
     button_delete.addEventListener('click',showPostModal);
 
     reply_delete.addEventListener('click',showReplyModal);
@@ -204,6 +213,13 @@ function submit_reply(){
     const reply_text = document.getElementById("comment-input");
     reply_text.value="";
     alert("댓글 등록 완료!");    
+}
+
+function change_submit_button_text(){
+    const button = document.getElementById('reply-submit');
+    if(button.innerText == '댓글 수정'){
+        button.innerText = '댓글 등록';
+    }
 }
 
 window.onload = render_Post;

@@ -15,11 +15,11 @@
     position: fixed;
     text-align: center;
     font-size: 16px;
-    bottom: 400px;
+    bottom: 2%;
     left: 50%;
     width: 102px;
-    height: 46px;
-    line-height: 46px;
+    height: 26px;
+    line-height: 26px;
     transform: translateX(-50%);
     background-color: #ACA0EB;
     color: #FFFFFF;

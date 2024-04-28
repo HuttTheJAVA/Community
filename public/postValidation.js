@@ -22,7 +22,7 @@ function checkValidation(){
             title: title,
             content: content
         };
-
+        alert("게시글 등록 완료!");
         // 이 코드는 백엔드 서버에서 구현하자.
         // fetch('/saveData',{
         //     method: 'POST',
