@@ -1,0 +1,102 @@
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.adjustPassWordtoastMessage {
+    display: none;
+    position: fixed;
+    text-align: center;
+    font-size: 16px;
+    bottom: 2%;
+    left: 50%;
+    width: 102px;
+    height: 26px;
+    line-height: 26px;
+    transform: translateX(-50%);
+    background-color: #ACA0EB;
+    color: #FFFFFF;
+    padding: 10px 20px;
+    border-radius: 30px;
+}
+
+.modal-content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    background-color: #fff;
+    color: #333;
+    border-radius: 12px;
+    width: 408px;
+    height: 242px;
+}
+
+/* 닫기 버튼 스타일 */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.bold{
+    font-weight: bold;
+}
+.font-20{
+    font-size: 20px;
+}
+.font-24{
+    font-size: 24px;
+}
+.button-cancel{
+    
+    background-color: black;
+    color: white;
+    
+}
+.button-ok{
+    
+    background-color: #C4A5FA;
+    color: black;
+    
+}
+button{
+    width: 127px;
+    height: 44px;
+    line-height: 44px;
+    font-size: 20px;
+    border-radius: 12px;
+    text-align: center;
+    border: none;
+}
+.wrap-text{
+    display: flex;
+    width: 100%;
+    height: 25px;
+    align-items: center;
+    justify-content: center;
+}
+.wrap-button{
+    display: flex;
+    width: 100%;
+    height: 50px;
+    align-items: center;
+    justify-content: center;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}

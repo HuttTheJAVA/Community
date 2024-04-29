@@ -1,0 +1,50 @@
+.circle {
+    width: 149px;
+    height: 149px;
+    border-radius: 50%; /* 원형을 만듭니다. */
+    position: relative;
+    background-color: #C4C4C4;
+    cursor: pointer; /* 원형 영역에 마우스 커서를 손모양으로 변경합니다. */
+    overflow: hidden; /* 원 밖의 이미지는 잘립니다. */
+}
+.circle:hover .crosshair {
+    cursor: pointer; /* 십자선 영역에 마우스 커서를 손모양으로 변경합니다. */
+}
+.crosshair {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20%;
+    height: 20%;
+    transform: translate(-50%, -50%);
+}
+.crosshair::before,
+.crosshair::after {
+    content: "";
+    position: absolute;
+    background-color: black;
+}
+.crosshair::before {
+    width: 2px;
+    height: 100%;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+}
+.crosshair::after {
+    width: 100%;
+    height: 2px;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+/* 업로드된 이미지를 조정합니다. */
+#uploaded-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 100%; /* 원 안에 이미지가 꽉 차도록 최대 너비 설정 */
+    max-height: 100%; /* 원 안에 이미지가 꽉 차도록 최대 높이 설정 */
+    display: none; /* 초기에는 이미지를 숨깁니다. */
+}
