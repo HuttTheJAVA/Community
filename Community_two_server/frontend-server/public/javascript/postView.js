@@ -118,9 +118,9 @@ async function replys(){
                     </div>
                 </div>
                 <div class="reply-box-update">
-                    <div id="reply-adjust-${id}" class="mini-button" onclick="adjustReply(${id})">수정</div>
+                    <div id="reply-adjust-${id}" class="reply-adjust-mini-button" onclick="adjustReply(${id})">수정</div>
 
-                    <div id="reply-delete-${id}" class="mini-button" style="margin-left: 10px">삭제</div>
+                    <div id="reply-delete-${id}" class="reply-delete-mini-button" style="margin-left: 10px">삭제</div>
                 </div>
             </div>`);
         }
@@ -138,16 +138,6 @@ function toast(){
     //댓글에 대한
     const reply_adjust = document.getElementById("reply-adjust");
     const reply_delete = document.getElementById("reply-delete");
-
-    function post_delete_message(title_text){
-        const title = document.getElementById('toastTitle');
-        const content = document.getElementById('toastContent');
-        
-        title.innerHTML = title_text;
-        content.innerHTML = "삭제한 내용은 복구 할 수 없습니다.";
-        button_ok.innerHTML = "확인";
-        button_cancel.innerHTML = "취소";
-    }
     
     function hideToast(){
         document.getElementById("myModal").style.display = "none";
@@ -170,24 +160,13 @@ function toast(){
         // 근데 사실 이 버튼이 게시글 삭제, 댓글 삭제 공통으로 지금 적용된거라 버튼을 따로 분리하고 구현도 따로해야함.
     }
 
-    function showPostModal() {
-        document.getElementById("myModal").style.display = "block";
-        post_delete_message("게시글을 삭제하시겠습니까?");
-        document.body.style.overflow = 'hidden';
-    }
-
-    function showReplyModal(){
-        document.getElementById("myModal").style.display = "block";
-        post_delete_message("댓글을 삭제하시겠습니까?");
-        document.body.style.overflow = 'hidden';
-    }
-
     // deletePostButton.addEventListener('click', post_delete_message);
-    button_cancel.addEventListener('click',hideToast);
-    button_ok.addEventListener('click',deleteOk); // 이거는 게시글, 댓글 구분이 안되니 각각에대해 다른 결과가 나오게 처리 (지금 이대로 하면 댓글 삭제 때 확인 누르면 /board로 가버림.)
-    button_delete.addEventListener('click',showPostModal);
+    // button_cancel.addEventListener('click',hideToast);
+    // button_ok.addEventListener('click',deleteOk); // 이거는 게시글, 댓글 구분이 안되니 각각에대해 다른 결과가 나오게 처리 (지금 이대로 하면 댓글 삭제 때 확인 누르면 /board로 가버림.)
+    // button_delete.addEventListener('click',showPostModal);
 
-    reply_delete.addEventListener('click',showReplyModal);
+    // reply_delete.addEventListener('click',showReplyModal);
+    addEventListener_reply_button();
 
 }
 
@@ -207,6 +186,30 @@ function change_submit_button_text(){
     if(button.innerText == '댓글 수정'){
         button.innerText = '댓글 등록';
     }
+}
+
+function post_delete_message(title_text){
+    const title = document.getElementById('toastTitle');
+    const content = document.getElementById('toastContent');
+    const button_ok = document.getElementById('ok');
+    const button_cancel = document.getElementById('cancel');
+
+    title.innerHTML = title_text;
+    content.innerHTML = "삭제한 내용은 복구 할 수 없습니다.";
+    button_ok.innerHTML = "확인";
+    button_cancel.innerHTML = "취소";
+}
+
+function showReplyModal(){
+    document.getElementById("myModal").style.display = "block";
+    post_delete_message("댓글을 삭제하시겠습니까?");
+    document.body.style.overflow = 'hidden';
+}
+
+function showPostModal() {
+    document.getElementById("myModal").style.display = "block";
+    post_delete_message("게시글을 삭제하시겠습니까?");
+    document.body.style.overflow = 'hidden';
 }
 
 function adjustReply(replyId){
@@ -280,5 +283,34 @@ function submit_reply(){
     })
 }
 
+function addEventListener_reply_button(){
+    const reply_delete_buttons = document.querySelectorAll('.reply-delete-mini-button');
+    const modal = document.getElementById('myModal');
+    const yesBtn = document.getElementById('ok');
+    const noBtn = document.getElementById('cancel');
+    reply_delete_buttons.forEach(delButton => {
+        delButton.addEventListener('click',function (){
+            const buttonId = delButton.id;
+            showReplyModal();
+
+            yesBtn.onclick = function(){
+                console.log(buttonId); // 참고로 buttonId=reply-delete-3 이런식이라 파싱해야함.
+                // 여기서 백엔드 서버로 해당 id를 보내서 실제로 삭제하자.
+                // 그리고 게시글 삭제,수정,댓글 삭제 모두 다 구현하자.
+                modal.style.display = 'none';
+            }
+
+            noBtn.onclick = function (){
+                modal.style.display = 'none';
+            }
+
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                  modal.style.display = 'none';
+                }
+            } 
+        })
+    })
+}
 
 window.onload = render_Post;
