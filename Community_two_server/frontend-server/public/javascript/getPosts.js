@@ -1,10 +1,11 @@
-BACKEND_IP_PORT = localStorage.getItem('backend-ip-port');
-
-console.log(BACKEND_IP_PORT);
+// https로 할려고 했는데 SSL 인증서가 필요한듯 하다
+//https 에러 메시지:https://localhost:8081/post net::ERR_SSL_PROTOCOL_ERROR
+BACKEND_IP_PORT = "http://localhost:8081"
 
 function redirectToPost(postId) {
     // postId를 사용하여 URL을 생성합니다.
-    const url = `/post/${postId}`; // 예시 URL, postId에 따라서 동적으로 생성해야 합니다.
+    // const url = `${BACKEND_IP_PORT}/post/${postId}`; // 예시 URL, postId에 따라서 동적으로 생성해야 합니다
+    const url = `/post/${postId}`;
 
     // 페이지를 새 URL로 리디렉션합니다.
     window.location.href = url;
@@ -17,7 +18,6 @@ function K_feature(feature){
     }
     return feature;
 }
-
 
 // 서버에서 JSON 데이터를 가져오는 AJAX 요청
 fetch(`${BACKEND_IP_PORT}/post`)
@@ -51,7 +51,7 @@ fetch(`${BACKEND_IP_PORT}/post`)
                 <div class="solid-line-1px-black"></div>
                 <div class="container-row">
                 <div class="image-circle">
-                    <img src="/api/user/${writer}">
+                    <img src="/images/${writer}.png">
                 </div>
                     <div class="left-margin bold" style="font-size: 15px">
                         ${writer}

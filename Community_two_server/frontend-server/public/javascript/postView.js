@@ -1,3 +1,5 @@
+BACKEND_IP_PORT = "http://localhost:8081"
+
 function K_feature(feature){
     if(feature > 999){
         feature_k = parseInt(feature/1000)
@@ -6,10 +8,10 @@ function K_feature(feature){
     return feature;
 }
 
-function render_Post(){
+async function render_Post(){
     const postId = window.location.pathname.split('/').pop();
     
-    fetch(`/api/post/${postId}`)
+    await fetch(`${BACKEND_IP_PORT}/post/${postId}`)
     .then(response => response.json())
     .then(data => {
     const jsonContainer = document.getElementById("post-view-container");
@@ -33,7 +35,7 @@ function render_Post(){
     <div class="feature-name-container" style="margin-bottom: 25px">
         
         <div class="image-circle" style="margin-right: 10px">
-            <img src="/api/user/${writer}">
+            <img src="/images/${writer}.png">
         </div>
         <div class="text-15px bold">${writer}</div>
         <div style="margin-left: 30px; font-size: 14px">
@@ -82,13 +84,14 @@ function render_Post(){
     document.getElementById("comment-input").addEventListener('input',activate_button)
     document.getElementById("reply-submit").addEventListener('click',submit_reply)
     document.getElementById("reply-submit").addEventListener('click',change_submit_button_text)
+    document.getElementById("reply-submit").addEventListener('click', submit_reply)
     });
     replys();
 }
 
-function replys(){
+async function replys(){
     const postId = window.location.pathname.split('/').pop();
-    fetch(`/api/reply/${postId}`)
+    await fetch(`${BACKEND_IP_PORT}/post/${postId}/reply`)
     .then(response => response.json())
     .then(data => {
         const replyContainer = document.getElementById("post-view-container");
@@ -96,7 +99,7 @@ function replys(){
         for(const reply in data){
             const writer = data[reply]["writer"];
             const content = data[reply]["content"];
-            const time = data[reply]["time"];
+            const time = data[reply]["date"];
             const id = data[reply]["id"];
 
             replyContainer.insertAdjacentHTML('beforeend',`
@@ -115,24 +118,14 @@ function replys(){
                     </div>
                 </div>
                 <div class="reply-box-update">
-                    <div id="reply-adjust-${id}" class="mini-button">수정</div>
+                    <div id="reply-adjust-${id}" class="mini-button" onclick="adjustReply(${id})">수정</div>
 
-                    <div id="reply-delete" class="mini-button" style="margin-left: 10px">삭제</div>
+                    <div id="reply-delete-${id}" class="mini-button" style="margin-left: 10px">삭제</div>
                 </div>
             </div>`);
-
-            const adjustButton = document.getElementById(`reply-adjust-${id}`);
-            adjustButton.addEventListener('click',() => {
-                const contentText = document.getElementById(`${id}`);
-                const content = contentText.textContent.trim(); // 현재 내용 가져오기
-                const comment_input = document.getElementById("comment-input");
-                comment_input.value = content;
-                const adjustButton = document.getElementById("reply-submit");
-                adjustButton.textContent = "댓글 수정";
-            })
         }
-        toast();
     });
+    toast();
 }
 
 function toast(){
@@ -161,7 +154,7 @@ function toast(){
         document.body.style.overflow = '';
     }
 
-    function deleteOk(){
+    function deleteOk(){ // 게시글의 삭제 버튼일 경우 ID는 POSTID, 댓글 삭제의 경우 ID는 replyId
         const context = document.getElementById("toastTitle").innerText;
         if(context == '게시글을 삭제하시겠습니까?'){
             window.location.href = "/board";
@@ -195,7 +188,7 @@ function toast(){
     button_delete.addEventListener('click',showPostModal);
 
     reply_delete.addEventListener('click',showReplyModal);
-    
+
 }
 
 function activate_button(){
@@ -209,17 +202,83 @@ function activate_button(){
     }
 }
 
-function submit_reply(){
-    const reply_text = document.getElementById("comment-input");
-    reply_text.value="";
-    alert("댓글 등록 완료!");    
-}
-
 function change_submit_button_text(){
     const button = document.getElementById('reply-submit');
     if(button.innerText == '댓글 수정'){
         button.innerText = '댓글 등록';
     }
 }
+
+function adjustReply(replyId){
+    const contentText = document.getElementById(replyId);
+    const content = contentText.textContent.trim(); // 현재 내용 가져오기
+    const comment_input = document.getElementById("comment-input");
+    comment_input.value = content;
+    const adjustButton = document.getElementById("reply-submit");
+    adjustButton.style.backgroundColor = "#7f6aee";
+    adjustButton.textContent = "댓글 수정";
+    adjustButton.dataset.replyId = replyId; // 댓글 수정 버튼의 데이터 속성에 댓글 ID 저장
+}
+
+// 댓글 입력 제출하면 댓글 수정인 경우 `${BACKEND_IP_PORT}/post/${postId}/reply/replyId로 Put 요청
+function submit_reply(){
+    const btn = document.getElementById("reply-submit");
+    if(btn.style.backgroundColor != "rgb(127, 106, 238)"){
+        alert("내용을 입력하세요!");
+        return;
+    }
+    const reply_text = document.getElementById("comment-input").value;
+    const adjustButton = document.getElementById("reply-submit");
+    const postId = window.location.pathname.split('/').pop();
+    let fetchUrl = `${BACKEND_IP_PORT}/post/${postId}/reply`;
+    let method = 'POST';
+    let jsonData = {};
+
+    if (adjustButton.textContent === '댓글 수정') {
+        const replyId = adjustButton.dataset.replyId;
+        fetchUrl += `/${replyId}`; // 수정할 댓글의 ID를 URL에 추가
+        method = 'PUT'; // 수정할 때는 PUT 메서드 사용
+
+        jsonData = {
+            content: reply_text
+        }
+    }else{
+
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2,'0');
+        const day = String(now.getDate()).padStart(2,'0');
+        const formattedDate = `${year}-${month}-${day}`;
+
+        jsonData = {
+            writer: "andrew", // 해당값은 사실 지금 로그인 된 사용자의 닉네임이 들어가야함. 이 부분은 세션때 구현하자
+            date: formattedDate,
+            content: reply_text
+        };
+    }
+
+    fetch(fetchUrl, {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jsonData)
+    })
+    .then(response => {
+        if(response.ok) {
+            if (adjustButton.textContent === '댓글 수정') {
+                alert("댓글 수정 완료!");
+            } else {
+                alert("댓글 등록 완료!");
+            }
+            reply_text.value="";
+            // 댓글 등록/수정 후에 페이지를 다시 불러옴
+            render_Post();
+        } else {
+            alert("오류가 발생했습니다. 다시 시도해주세요.");
+        }
+    })
+}
+
 
 window.onload = render_Post;

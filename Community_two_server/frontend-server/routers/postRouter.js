@@ -5,7 +5,11 @@ const router = express.Router();
 const __dirname = path.resolve();
 
 router.get("/",(req,res) => {
-    res.sendFile(path.join(__dirname,'frontend-server/view/board.html'));
+    res.sendFile(path.join(__dirname,'view/board.html'));
+});
+
+router.get("/:postId",(req,res) => {
+    res.sendFile(path.join(__dirname,'view/post-view.html'));
 });
 
 export default router;

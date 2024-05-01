@@ -6,10 +6,10 @@ import userRouter from './routers/userRouter.js';
 import postRouter from './routers/postRouter.js';
 
 const app = express();
-const port = 8080; 
+const port = 8080;
 const __dirname = path.resolve();
 
-app.use(express.static(__dirname + "/frontend-server/public")); 
+app.use(express.static(__dirname + "/public")); 
 app.use(cors());
 
 
@@ -21,5 +21,6 @@ app.use('/user', userRouter);
 app.use('/post', postRouter);
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
+    console.log(`FrontEnd Server app listening on port ${port}`);
 });
+
