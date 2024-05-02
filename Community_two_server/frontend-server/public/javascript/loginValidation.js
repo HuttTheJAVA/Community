@@ -1,3 +1,5 @@
+BACKEND_IP_PORT = 'http://localhost:8081'
+
 function validateEmail(email) {
     // 이메일이 비어 있는지 확인
     if (!email) {
@@ -13,10 +15,6 @@ function validateEmail(email) {
     var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         return "올바른 이메일 주소 형식을 입력해주세요.(예:abc@example.com)";
-    }
-
-    if (email != 'chy@naver.com'){
-        return "이메일을 다시 확인해보세요.";
     }
     
     // 모든 조건 통과
@@ -50,10 +48,28 @@ function validatePassword(password) {
     if(!/\d/.test(password) || !/\W/.test(password)){
         return validErrorMessage;
     }
-    
-    if(password != 'Chy1234!'){
-        return "비밀번호가 다릅니다.";
+}
+
+async function existAccount(email,password){
+    const obj = {
+        email : `${email}`,
+        password : `${password}`,
     }
+
+    const data = {
+        method: 'POST',
+        headers:{
+            'Content-Type':'application/json'
+        },
+        body: JSON.stringify(obj),
+        credentials: 'include'
+    }
+
+    return await fetch(`${BACKEND_IP_PORT}/user/sign-in`,data)
+    .then(isAuthentic => isAuthentic.json())
+    .then(isAuthenticJson => {
+        return isAuthenticJson.result === "true";
+    })
 }
 
 function button_change(){
@@ -80,7 +96,7 @@ function button_change(){
     }
 }
 
-document.getElementById("login").addEventListener('click', function() {
+document.getElementById("login").addEventListener('click', async function() {
     var email = document.getElementById("email").value;
     var errorMessage = validateEmail(email);
     
@@ -97,8 +113,15 @@ document.getElementById("login").addEventListener('click', function() {
     if (passWordErrorMessage){
         document.getElementById('passwordHelper').innerHTML = '* '+passWordErrorMessage;
     }
+
+    const isExist = await existAccount(email,password);
+
     if(!errorMessage && !passWordErrorMessage){
-        window.location.href = "/board";
+        if(!isExist){
+            document.getElementById('passwordHelper').innerHTML = '* 존재하지 않는 계정 정보입니다.';
+        }else{
+            window.location.href = "/board";
+        }
     }
 });
 
