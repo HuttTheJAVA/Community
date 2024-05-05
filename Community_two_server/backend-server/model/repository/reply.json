@@ -59,6 +59,12 @@
       "writer": "andrew",
       "date": "2024-05-01",
       "content": "asdasdas"
+    },
+    {
+      "id": 24,
+      "writer": "Choi",
+      "date": "2024-04-14",
+      "content": "버튼이 나타나는 댓글!"
     }
   ],
   "2": [
@@ -119,6 +125,12 @@
       "writer": "jochn",
       "date": "2024-04-23",
       "content": "팬서비스가 굉장한 걸로 알고 있습니다."
+    },
+    {
+      "id": 23,
+      "writer": "andrew",
+      "date": "2024-05-06",
+      "content": "asdasd"
     }
   ],
   "5": [

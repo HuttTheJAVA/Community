@@ -97,8 +97,8 @@ async function render_Post(){
     if(userNickname === writer){
         const PostButton = document.getElementById("PostButton");
         PostButton.innerHTML += 
-        `<div class="mini-button" onclick="window.location.href = 'adjustPost/${postId}';">수정</div>
-        <div id="delete-post" class="mini-button" style="margin-left: 10px">삭제</div>`
+        `<div id=post-${postId} class="mini-button" onclick="window.location.href = 'adjustPost/${postId}';">수정</div>
+        <div id="delete-post-${postId}" class="mini-button" style="margin-left: 10px">삭제</div>`
     }
 
     document.getElementById("comment-input").addEventListener('input',activate_button)
@@ -106,10 +106,10 @@ async function render_Post(){
     document.getElementById("reply-submit").addEventListener('click',change_submit_button_text)
     document.getElementById("reply-submit").addEventListener('click', submit_reply)
     });
-    replys();
+    replys(userNickname);
 }
 
-async function replys(){
+async function replys(nickName){
     const postId = window.location.pathname.split('/').pop();
     await fetch(`${BACKEND_IP_PORT}/post/${postId}/reply`)
     .then(response => response.json())
@@ -121,6 +121,8 @@ async function replys(){
             const content = data[reply]["content"];
             const time = data[reply]["date"];
             const id = data[reply]["id"];
+
+            const isCurrentUser = writer === nickName;
 
             replyContainer.insertAdjacentHTML('beforeend',`
             <div class="reply-box">
@@ -137,11 +139,12 @@ async function replys(){
                         <div id=${id} style="margin-left: 45px">${content}</div>
                     </div>
                 </div>
-                <div class="reply-box-update">
-                    <div id="reply-adjust-${id}" class="reply-adjust-mini-button" onclick="adjustReply(${id})">수정</div>
-
-                    <div id="reply-delete-${id}" class="reply-delete-mini-button" style="margin-left: 10px">삭제</div>
-                </div>
+                ${isCurrentUser ? `
+                            <div class="reply-box-update">
+                                <div id="reply-adjust-${id}" class="reply-adjust-mini-button" onclick="adjustReply(${id})">수정</div>
+                                <div id="reply-delete-${id}" class="reply-delete-mini-button" style="margin-left: 10px">삭제</div>
+                            </div>
+                        ` : ''}
             </div>`);
         }
     });
@@ -180,8 +183,8 @@ function toast(){
         // 근데 사실 이 버튼이 게시글 삭제, 댓글 삭제 공통으로 지금 적용된거라 버튼을 따로 분리하고 구현도 따로해야함.
     }
 
-    addEventListener_reply_button();
-
+    addEventListener_mini_button('.reply-delete-mini-button','댓글을 삭제하시겠습니까?');
+    addEventListener_mini_button('.mini-button','게시글을 삭제하시겠습니까?');
 }
 
 function activate_button(){
@@ -214,9 +217,9 @@ function post_delete_message(title_text){
     button_cancel.innerHTML = "취소";
 }
 
-function showReplyModal(){
+function showReplyModal(text){
     document.getElementById("myModal").style.display = "block";
-    post_delete_message("댓글을 삭제하시겠습니까?");
+    post_delete_message(text);
     document.body.style.overflow = 'hidden';
 }
 
@@ -297,25 +300,33 @@ function submit_reply(){
     })
 }
 
-function addEventListener_reply_button(){
-    const reply_delete_buttons = document.querySelectorAll('.reply-delete-mini-button');
+function addEventListener_mini_button(className,text){
+    const reply_delete_buttons = document.querySelectorAll(className);
     const modal = document.getElementById('myModal');
     const yesBtn = document.getElementById('ok');
     const noBtn = document.getElementById('cancel');
     reply_delete_buttons.forEach(delButton => {
         delButton.addEventListener('click',function (){
             const buttonId = delButton.id;
-            showReplyModal();
+            showReplyModal(text);
 
-            yesBtn.onclick = function(){
-                console.log(buttonId); // 참고로 buttonId=reply-delete-3 이런식이라 파싱해야함.
-                // 여기서 백엔드 서버로 해당 id를 보내서 실제로 삭제하자.
-                // 그리고 게시글 삭제,수정,댓글 삭제 모두 다 구현하자.
-                modal.style.display = 'none';
+            if(className.startsWith('.relpy')){
+
+                yesBtn.onclick = function(){
+                    console.log(buttonId); // 참고로 buttonId=reply-delete-3 이런식이라 파싱해야함.
+                    // 여기서 백엔드 서버로 해당 id를 보내서 실제로 삭제하자.
+                    // 그리고 게시글 삭제,수정,댓글 삭제 모두 다 구현하자.
+                    modal.style.display = 'none';
+                    document.body.style.overflow = '';
+                }
+            }
+            else{ // 게시글 삭제 미니 버튼이라면
+
             }
 
             noBtn.onclick = function (){
                 modal.style.display = 'none';
+                document.body.style.overflow = '';
             }
 
             window.onclick = function (event) {
@@ -326,5 +337,14 @@ function addEventListener_reply_button(){
         })
     })
 }
+
+// function addEventListener_reply_adjust_button(className){
+//     const reply_adjust_buttons = document.querySelectorAll(className);
+//     reply_adjust_buttons.forEach(adj_button => {
+//         adj_button.addEventListener('click',function (){
+//             document.getElementById('comment-input').value = 
+//         })
+//     })
+// }
 
 window.onload = render_Post;

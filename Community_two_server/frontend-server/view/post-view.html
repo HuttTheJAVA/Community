@@ -377,6 +377,18 @@
     </div>
     
     <script type="module" defer src="/javascript/postView.js"></script>
+    <script>
+      function adjustReply(replyId){
+        const contentText = document.getElementById(replyId);
+        const content = contentText.textContent.trim(); // 현재 내용 가져오기
+        const comment_input = document.getElementById("comment-input");
+        comment_input.value = content;
+        const adjustButton = document.getElementById("reply-submit");
+        adjustButton.style.backgroundColor = "#7f6aee";
+        adjustButton.textContent = "댓글 수정";
+        adjustButton.dataset.replyId = replyId; // 댓글 수정 버튼의 데이터 속성에 댓글 ID 저장
+    }
+  </script>
     <!-- <script defer src="/toastScript.js"></script> -->
   </body>
 </html>
