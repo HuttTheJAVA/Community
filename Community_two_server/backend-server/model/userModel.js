@@ -3,9 +3,11 @@ import path from 'path';
 
 const __dirname = path.resolve();
 
+const usersJsonDir = '/model/repository/users.json';
+
 function validateUser(email, password) {
 
-    const usersJsonFile = fs.readFileSync(__dirname + '/model/repository/users.json', 'utf8');
+    const usersJsonFile = fs.readFileSync(__dirname + usersJsonDir, 'utf8');
     const usersJsonData = JSON.parse(usersJsonFile);
 
     for (const key in usersJsonData){
@@ -19,7 +21,7 @@ function validateUser(email, password) {
 }
 
 function getUserNickName(email) {
-    const usersJsonFile = fs.readFileSync(__dirname + '/model/repository/users.json', 'utf8');
+    const usersJsonFile = fs.readFileSync(__dirname + usersJsonDir, 'utf8');
     const usersJsonData = JSON.parse(usersJsonFile);
 
     for (const key in usersJsonData){

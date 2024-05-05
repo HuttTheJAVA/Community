@@ -14,6 +14,8 @@ function validateUser(req, res) {
             nickname: `${model.getUserNickName(email)}`,
             authorized: true,
         }
+        console.log("세션 생성!");
+        console.log(req.session.user);
  
     }
 

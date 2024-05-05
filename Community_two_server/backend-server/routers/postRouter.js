@@ -7,6 +7,8 @@ router.get('/', postController.getPosts);
 
 router.get('/:postId',postController.getPost);
 
+router.patch('/:postId',postController.updatePost);
+
 router.get('/:postId/reply',postController.getReplys);
 
 router.post('/:postId/reply',postController.createReply);

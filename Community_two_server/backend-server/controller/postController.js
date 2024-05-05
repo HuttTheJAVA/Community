@@ -34,10 +34,26 @@ function updateReply(req,res){
     res.status(200).send();
 }
 
+function updatePost(req,res){
+    const postId = req.params.postId
+    console.log(req.body)
+    console.log(req.body.title)
+    console.log(req.body.content)
+    console.log(req.body.imageName)
+    const post = {
+        title : req.body.title,
+        content : req.body.content,
+        imageName : req.body.imageName,
+    }
+    model.updatePost(post,postId);
+    res.status(204).send('update_success');
+}
+
 export default {
     getPosts,
     getPost,
     getReplys,
     createReply,
     updateReply,
+    updatePost,
 };

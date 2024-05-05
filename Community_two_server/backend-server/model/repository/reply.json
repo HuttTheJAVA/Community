@@ -4,7 +4,7 @@
       "id": 1,
       "writer": "John",
       "date": "2024-04-14",
-      "content": "5번째 수정z"
+      "content": "5번째 수정zz"
     },
     {
       "id": 2,
@@ -28,7 +28,7 @@
       "id": 1,
       "writer": "andrew",
       "date": "2024-05-01",
-      "content": "5번째 수정z"
+      "content": "5번째 수정zz"
     },
     {
       "id": 16,
@@ -139,6 +139,18 @@
       "writer": "j1ohn",
       "date": "2024-04-23",
       "content": "ㅎㅎ~"
+    },
+    {
+      "id": 21,
+      "writer": "andrew",
+      "date": "2024-05-06",
+      "content": "ㅁ"
+    },
+    {
+      "id": 22,
+      "writer": "andrew",
+      "date": "2024-05-06",
+      "content": "ㅁ"
     }
   ]
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이미지 업로드</title>
+</head>
+<body>
+    <input type="file" id="imageUpload" accept="image/*">
+    <button onclick="uploadImage()">보내기</button>
+
+    <script>
+        function uploadImage() {
+            const input = document.getElementById('imageUpload');
+            const file = input.files[0];
+            const formData = new FormData();
+            const encodedFileName = encodeURIComponent(file.name);
+            formData.append('image', file,encodedFileName);
+            
+            console.log('파일 이름:',file.name);
+            
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('이미지가 성공적으로 전송되었습니다.');
+                } else {
+                    console.error('이미지 전송 중 오류가 발생했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('네트워크 오류:', error);
+            });
+        }
+    </script>
+</body>
+</html>

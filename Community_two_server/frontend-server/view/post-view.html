@@ -41,7 +41,6 @@
         height: 36px;
         border-radius: 50%; /* 반지름의 절반을 설정하여 원형 모양 생성 */
         background-color: #D9D9D9; /* 배경색 지정 (예시로 빨간색 사용) */
-        background-image: url('/images/earth.jpg'); /* 배경 이미지로 설정 */
         background-size: cover; /* 배경 이미지를 요소에 맞게 조절 */
         left: 62%;
       }
@@ -348,7 +347,7 @@
     <div class="flex-container-between">
       <span class="arrow-prev" onclick="window.location.href = '/post';"></span>
       <div class="title">아무 말 대잔치</div>
-      <span class="user-image"></span>
+      <span id="user-image" class="user-image"></span>
     </div>
     <div class="line-container">
       <div class="line"></div>
@@ -377,7 +376,7 @@
       </div>
     </div>
     
-    <script defer src="/javascript/postView.js"></script>
+    <script type="module" defer src="/javascript/postView.js"></script>
     <!-- <script defer src="/toastScript.js"></script> -->
   </body>
 </html>

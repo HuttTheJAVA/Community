@@ -1,14 +1,28 @@
-BACKEND_IP_PORT = "http://localhost:8081"
+const BACKEND_IP_PORT = "http://localhost:8081"
+
+import {getUserIdFromSession} from './session.js';
 
 function K_feature(feature){
     if(feature > 999){
-        feature_k = parseInt(feature/1000)
+        const feature_k = parseInt(feature/1000)
         return feature_k + "k";
     }
     return feature;
 }
 
 async function render_Post(){
+
+    var userNickname = ''
+    
+    const result = {
+        nickname:''
+    }
+
+    await getUserIdFromSession(result);
+    userNickname = result.nickname;
+
+    document.getElementById('user-image').style.backgroundImage = `url('/images/${userNickname}.png')`;
+
     const postId = window.location.pathname.split('/').pop();
     
     await fetch(`${BACKEND_IP_PORT}/post/${postId}`)
@@ -41,9 +55,7 @@ async function render_Post(){
         <div style="margin-left: 30px; font-size: 14px">
         ${time}
         </div>
-        <div class="flex-button margin-left">
-            <div class="mini-button" onclick="window.location.href = '/adjustPost/${postId}';">수정</div>
-            <div id="delete-post" class="mini-button" style="margin-left: 10px">삭제</div>
+        <div id="PostButton" class="flex-button margin-left">
         </div>
     </div>
     <div
@@ -81,6 +93,14 @@ async function render_Post(){
         댓글 등록
         </div>
     </div>`;
+
+    if(userNickname === writer){
+        const PostButton = document.getElementById("PostButton");
+        PostButton.innerHTML += 
+        `<div class="mini-button" onclick="window.location.href = 'adjustPost/${postId}';">수정</div>
+        <div id="delete-post" class="mini-button" style="margin-left: 10px">삭제</div>`
+    }
+
     document.getElementById("comment-input").addEventListener('input',activate_button)
     document.getElementById("reply-submit").addEventListener('click',submit_reply)
     document.getElementById("reply-submit").addEventListener('click',change_submit_button_text)
@@ -160,12 +180,6 @@ function toast(){
         // 근데 사실 이 버튼이 게시글 삭제, 댓글 삭제 공통으로 지금 적용된거라 버튼을 따로 분리하고 구현도 따로해야함.
     }
 
-    // deletePostButton.addEventListener('click', post_delete_message);
-    // button_cancel.addEventListener('click',hideToast);
-    // button_ok.addEventListener('click',deleteOk); // 이거는 게시글, 댓글 구분이 안되니 각각에대해 다른 결과가 나오게 처리 (지금 이대로 하면 댓글 삭제 때 확인 누르면 /board로 가버림.)
-    // button_delete.addEventListener('click',showPostModal);
-
-    // reply_delete.addEventListener('click',showReplyModal);
     addEventListener_reply_button();
 
 }

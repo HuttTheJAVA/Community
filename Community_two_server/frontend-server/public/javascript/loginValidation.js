@@ -120,7 +120,7 @@ document.getElementById("login").addEventListener('click', async function() {
         if(!isExist){
             document.getElementById('passwordHelper').innerHTML = '* 존재하지 않는 계정 정보입니다.';
         }else{
-            window.location.href = "/board";
+            window.location.href = "/post";
         }
     }
 });
