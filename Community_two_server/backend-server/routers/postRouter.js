@@ -15,4 +15,6 @@ router.post('/:postId/reply',postController.createReply);
 
 router.put('/:postId/reply/:replyId',postController.updateReply);
 
+router.delete('/:postId/reply/:replyId',postController.deleteReply);
+
 export default router;

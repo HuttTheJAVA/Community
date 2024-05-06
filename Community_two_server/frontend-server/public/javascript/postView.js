@@ -103,8 +103,6 @@ async function render_Post(){
 
     document.getElementById("comment-input").addEventListener('input',activate_button)
     document.getElementById("reply-submit").addEventListener('click',submit_reply)
-    document.getElementById("reply-submit").addEventListener('click',change_submit_button_text)
-    document.getElementById("reply-submit").addEventListener('click', submit_reply)
     });
     replys(userNickname);
 }
@@ -241,26 +239,42 @@ function adjustReply(replyId){
 }
 
 // 댓글 입력 제출하면 댓글 수정인 경우 `${BACKEND_IP_PORT}/post/${postId}/reply/replyId로 Put 요청
-function submit_reply(){
+async function submit_reply(){
+    
     const btn = document.getElementById("reply-submit");
+
     if(btn.style.backgroundColor != "rgb(127, 106, 238)"){
         alert("내용을 입력하세요!");
         return;
     }
-    const reply_text = document.getElementById("comment-input").value;
+
+    const input_space = document.getElementById("comment-input")
+    const input_text = document.getElementById("comment-input").value;
     const adjustButton = document.getElementById("reply-submit");
     const postId = window.location.pathname.split('/').pop();
     let fetchUrl = `${BACKEND_IP_PORT}/post/${postId}/reply`;
     let method = 'POST';
     let jsonData = {};
 
+    // 현재 댓글을 수정 또는 작성한 유저가 누군지 확인
+    var userNickname = ''
+    
+    const result = {
+        nickname:''
+    }
+
+    await getUserIdFromSession(result);
+    userNickname = result.nickname;
+    //////////////////////////////////////////////
+
     if (adjustButton.textContent === '댓글 수정') {
         const replyId = adjustButton.dataset.replyId;
-        fetchUrl += `/${replyId}`; // 수정할 댓글의 ID를 URL에 추가
+        fetchUrl += `/${replyId}`; // 수정할 댓글의 ID를 URL에 추가 
         method = 'PUT'; // 수정할 때는 PUT 메서드 사용
 
+        // 수정 내용만 보냄
         jsonData = {
-            content: reply_text
+            content: input_text
         }
     }else{
 
@@ -271,13 +285,13 @@ function submit_reply(){
         const formattedDate = `${year}-${month}-${day}`;
 
         jsonData = {
-            writer: "andrew", // 해당값은 사실 지금 로그인 된 사용자의 닉네임이 들어가야함. 이 부분은 세션때 구현하자
+            writer: userNickname, // 해당값은 사실 지금 로그인 된 사용자의 닉네임이 들어가야함. 이 부분은 세션때 구현하자
             date: formattedDate,
-            content: reply_text
+            content: input_text
         };
     }
 
-    fetch(fetchUrl, {
+    await fetch(fetchUrl, {
         method: method,
         headers: {
             'Content-Type': 'application/json'
@@ -291,16 +305,18 @@ function submit_reply(){
             } else {
                 alert("댓글 등록 완료!");
             }
-            reply_text.value="";
+            input_space.value="";
             // 댓글 등록/수정 후에 페이지를 다시 불러옴
             render_Post();
         } else {
             alert("오류가 발생했습니다. 다시 시도해주세요.");
         }
     })
+    change_submit_button_text();
 }
 
-function addEventListener_mini_button(className,text){
+async function addEventListener_mini_button(className,text){
+    const postId = window.location.pathname.split('/').pop();
     const reply_delete_buttons = document.querySelectorAll(className);
     const modal = document.getElementById('myModal');
     const yesBtn = document.getElementById('ok');
@@ -310,14 +326,20 @@ function addEventListener_mini_button(className,text){
             const buttonId = delButton.id;
             showReplyModal(text);
 
-            if(className.startsWith('.relpy')){
+            if(className.startsWith('.reply')){
 
-                yesBtn.onclick = function(){
+                yesBtn.onclick = async function(){
                     console.log(buttonId); // 참고로 buttonId=reply-delete-3 이런식이라 파싱해야함.
                     // 여기서 백엔드 서버로 해당 id를 보내서 실제로 삭제하자.
                     // 그리고 게시글 삭제,수정,댓글 삭제 모두 다 구현하자.
+                    const parts = buttonId.split("-");
+                    const replyId = parseInt(parts[parts.length - 1]);
+
+                    await fetch(`${BACKEND_IP_PORT}/post/${postId}/reply/${replyId}`,{method: 'DELETE'});
+
                     modal.style.display = 'none';
                     document.body.style.overflow = '';
+                    render_Post();
                 }
             }
             else{ // 게시글 삭제 미니 버튼이라면

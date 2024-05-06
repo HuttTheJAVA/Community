@@ -35,11 +35,7 @@ function updateReply(req,res){
 }
 
 function updatePost(req,res){
-    const postId = req.params.postId
-    console.log(req.body)
-    console.log(req.body.title)
-    console.log(req.body.content)
-    console.log(req.body.imageName)
+    const postId = req.params.postId;
     const post = {
         title : req.body.title,
         content : req.body.content,
@@ -49,6 +45,13 @@ function updatePost(req,res){
     res.status(204).send('update_success');
 }
 
+function deleteReply(req,res){
+    const postId = req.params.postId;
+    const replyId = req.params.replyId;
+    model.deleteReply(postId,replyId);
+    res.status(204).send('delete_success');
+}
+
 export default {
     getPosts,
     getPost,
@@ -56,4 +59,5 @@ export default {
     createReply,
     updateReply,
     updatePost,
+    deleteReply,
 };

@@ -60,6 +60,7 @@ fetch(`${BACKEND_IP_PORT}/post`)
             </div>
         `;
         }
+    
     })
     .catch(error => {
         console.error('Error fetching JSON:', error);
