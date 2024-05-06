@@ -8,12 +8,12 @@ router.get("/",(req,res) => {
     res.sendFile(path.join(__dirname,'view/board.html'));
 });
 
-router.get("/:postId",(req,res) => {
-    res.sendFile(path.join(__dirname,'view/post-view.html'));
+router.get("/create",(req,res) => {
+    res.sendFile(path.join(__dirname,'view/post.html'));
 });
 
-router.get("/board",(req,res) => {
-    res.sendFile(path.join(__dirname,'view/board.html'));
+router.get("/:postId",(req,res) => {
+    res.sendFile(path.join(__dirname,'view/post-view.html'));
 });
 
 router.get("/adjustPost/:postId",(req,res) => {

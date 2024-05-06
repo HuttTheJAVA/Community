@@ -1,6 +1,6 @@
 // https로 할려고 했는데 SSL 인증서가 필요한듯 하다
 //https 에러 메시지:https://localhost:8081/post net::ERR_SSL_PROTOCOL_ERROR
-BACKEND_IP_PORT = "http://localhost:8081"
+const BACKEND_IP_PORT = "http://localhost:8081"
 
 function redirectToPost(postId) {
     // postId를 사용하여 URL을 생성합니다.
@@ -13,7 +13,7 @@ function redirectToPost(postId) {
 
 function K_feature(feature){
     if(feature > 999){
-        feature_k = parseInt(feature/1000)
+        const feature_k = parseInt(feature/1000)
         return feature_k + "k";
     }
     return feature;
