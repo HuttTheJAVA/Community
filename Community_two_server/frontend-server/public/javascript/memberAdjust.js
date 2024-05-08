@@ -1,3 +1,6 @@
+const BACKEND_IP_PORT = "http://localhost:8081"
+import {getUserIdFromSession} from './session.js';
+
 const deleteMemberButton = document.getElementById('deleteMember');
 const button_cancel = document.getElementById("cancel");
 const button_ok = document.getElementById("ok");
@@ -90,3 +93,49 @@ document.querySelector('.change-button').addEventListener('click', function() {
     // 파일 입력(input) 요소 클릭
     fileInput.click();
   });
+
+
+async function pageLoadActive(){
+
+  var userNickname = ''
+
+    const result = {
+        nickname:''
+    }
+
+    const userInfo = {
+      email:"",
+      nickName:"",
+      profileImage:"",
+    }
+
+    await getUserIdFromSession(result);
+    userNickname = result.nickname;
+
+    await fetch(`${BACKEND_IP_PORT}/user`)
+    .then(response => response.json())
+    .then(data => {
+      for(const name in data){
+        if(data[name]["nickname"] === userNickname){
+          userInfo.email = data[name]["email"];
+          userInfo.nickName = userNickname;
+          userInfo.profileImage = data[name]["profileImage"]
+          break;
+        }
+      }
+    });
+
+    var dropbtn = document.querySelector('.dropbtn');
+    dropbtn.style.backgroundImage = `url("/images/${userInfo.profileImage}")`;
+
+    var big_image = document.getElementById("user-profile-image");
+    big_image.src = `/images/${userInfo.profileImage}`;
+
+    var email = document.getElementById("email");
+    email.innerText = userInfo.email;
+
+    var nickName = document.getElementById("nickName");
+    nickName.value = userInfo.nickName;
+}
+
+document.addEventListener('DOMContentLoaded', pageLoadActive);

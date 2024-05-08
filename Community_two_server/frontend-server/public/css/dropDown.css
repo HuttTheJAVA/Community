@@ -16,7 +16,7 @@
     width: 36px;
     height: 36px;
     border-radius: 50%; /* 반지름의 절반을 설정하여 원형 모양 생성 */
-    background-image: url('/earth.jpg');; /* 이미지 경로 설정 */
+    background-image: url('/images/earth.jpg'); /* 이미지 경로 설정 */
     background-size: cover; /* 배경 이미지를 요소에 맞게 조절 */
     border: none;
     cursor: pointer;

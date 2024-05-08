@@ -32,8 +32,29 @@ function getUserNickName(email) {
     }
 }
 
+function getUsers(){
+    const usersJsonFile = fs.readFileSync(__dirname + usersJsonDir, 'utf8');
+    return JSON.parse(usersJsonFile);
+}
+
+function joinUser(email,password,nickName,profileImage){
+    const usersJsonFile = fs.readFileSync(__dirname + usersJsonDir, 'utf8');
+    const usersJsonData = JSON.parse(usersJsonFile);
+    const newUser = {
+        "email":email,
+        "password":password,
+        "nickname":nickName,
+        "profileImage":profileImage,
+    }
+    usersJsonData[nickName] = newUser;
+    const updateUsersJsonData = JSON.stringify(usersJsonData);
+    fs.writeFileSync(path.join(__dirname,usersJsonDir),updateUsersJsonData);
+}
+
 
 export default {
     validateUser,
-    getUserNickName
+    getUserNickName,
+    getUsers,
+    joinUser,
 };

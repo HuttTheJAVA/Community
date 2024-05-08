@@ -11,6 +11,14 @@ function getPost(req,res){
     res.json(post);
 }
 
+function deletePost(req,res){
+    const postId = req.params.postId;
+    
+    model.deletePost(postId);
+
+    res.status(204).send("게시글 삭제 완료");
+}
+
 function getReplys(req,res){
     const replys = model.getReplys(req.params.postId);
     res.json(replys);
@@ -52,6 +60,22 @@ function deleteReply(req,res){
     res.status(204).send('delete_success');
 }
 
+function createPost(req,res){
+    const Body = req.body
+    const post = {
+        title : Body.title,
+        content : Body.content,
+        good : Body.good,
+        reply : Body.reply,
+        watch : Body.watch,
+        time : Body.time,
+        image : Body.image,
+        writer : Body.writer,
+    }
+    model.createPost(post);
+    res.status(201).send("create_success");
+}
+
 export default {
     getPosts,
     getPost,
@@ -60,4 +84,6 @@ export default {
     updateReply,
     updatePost,
     deleteReply,
+    deletePost,
+    createPost,
 };

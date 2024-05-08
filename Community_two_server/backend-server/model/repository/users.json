@@ -1,32 +1,6 @@
-{
-    "Lee":{
-        "email": "Lee@nav.com",
-        "password": "asdqwe123!Q",
-        "nickname": "Lee",
-        "profileImage": "Lee.png"
-    },
-    "Park":{
-		"email": "Park@nav.com",
-        "password": "asdqwe123!Q",
-        "nickname": "Park", 
-        "profileImage": "Park.png"
-    },
-    "Kim":{
-		"email": "Kim@nav.com",
-        "password": "asdqwe123!Q",
-        "nickname": "Kim",
-        "profileImage": "Kim.png"
-    },
-    "Choi":{
-		"email": "Choi@nav.com",
-        "password": "asdqwe123!Q",
-        "nickname": "Choi",
-        "profileImage": "Choi.png"
-    },
-    "Oh":{
-		"email": "Oh@nav.com",
-        "password": "asdqwe123!Q",
-        "nickname": "Oh",
-        "profileImage": "Oh.png"
-    }
-}
+{"Lee":
+{"email":"Lee@nav.com",
+"password":"asdqwe123!Q",
+"nickname":"Lee",
+"profileImage":"Lee.png"
+},"Park":{"email":"Park@nav.com","password":"asdqwe123!Q","nickname":"Park","profileImage":"Park.png"},"Kim":{"email":"Kim@nav.com","password":"asdqwe123!Q","nickname":"Kim","profileImage":"Kim.png"},"Choi":{"email":"Choi@nav.com","password":"asdqwe123!Q","nickname":"Choi","profileImage":"Choi.png"},"Oh":{"email":"Oh@nav.com","password":"asdqwe123!Q","nickname":"Oh","profileImage":"Oh.png"},"free":{"email":"free@nav.com","password":"asdqwe123!Q","nickname":"free","profileImage":"HPqppaD0V2lJncVsUnM7aZ3D_6B4s_qBnEIrJe3smPSeHaKmpIb5XaVisOFqYaWNU4GNWFjN9Mzuc6xNpxcNB1QWp0u1RSRakMW1iwJR-z3Uubye5cxlIdMSWEtCYJ8fYDYC8T4-m-a1CcEx3CoIdA.webp"},"free2":{"email":"free2@nav.com","password":"asdqwe123!Q","nickname":"free2","profileImage":"The_Earth_seen_from_Apollo_17.jpg"},"kurt":{"email":"nirvana@nav.com","password":"asdqwe123!Q","nickname":"kurt","profileImage":"df7eeb83a07162b45ac2e882cac055de9411054a_cover.avif"},"leauto":{"email":"Lee2@nav.com","password":"asdqwe123!Q","nickname":"leauto","profileImage":"화면 캡처 2023-08-10 221233.png"},"jju":{"email":"baek@nav.com","password":"asdqwe123!Q","nickname":"jju","profileImage":"1575611614777.jpg"}}

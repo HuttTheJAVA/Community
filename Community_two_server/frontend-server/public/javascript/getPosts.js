@@ -2,14 +2,9 @@
 //https 에러 메시지:https://localhost:8081/post net::ERR_SSL_PROTOCOL_ERROR
 const BACKEND_IP_PORT = "http://localhost:8081"
 
-function redirectToPost(postId) {
-    // postId를 사용하여 URL을 생성합니다.
-    // const url = `${BACKEND_IP_PORT}/post/${postId}`; // 예시 URL, postId에 따라서 동적으로 생성해야 합니다
-    const url = `/post/${postId}`;
+import { getUserIdFromSession } from "./session.js";
 
-    // 페이지를 새 URL로 리디렉션합니다.
-    window.location.href = url;
-}
+
 
 function K_feature(feature){
     if(feature > 999){
@@ -65,3 +60,17 @@ fetch(`${BACKEND_IP_PORT}/post`)
     .catch(error => {
         console.error('Error fetching JSON:', error);
     });
+
+function checkLogin(){
+    var userNickname = ''
+
+    const result = {
+        nickname:''
+    }
+
+    getUserIdFromSession(result);
+
+    window.location.href = '/post/create';
+}
+
+document.getElementById("createPost").addEventListener('click',checkLogin)

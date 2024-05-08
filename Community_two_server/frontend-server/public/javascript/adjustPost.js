@@ -23,19 +23,15 @@ async function render_Post(){
     .then(data => {
         var titleElement = document.getElementById("title");
         var contentAreaElement = document.getElementById("content-area");
-        var imgName = document.getElementById("imgName");
         titleElement.value = '';
         contentAreaElement.value = '';
-        imgName.value = '';
     
         // 이제 jsonContainer안에 게시글 상세 사항들을 렌더링.
         const title = data["title"];
         const content = data["content"];
-        const imgName_ = data["image"];
         
         titleElement.value = title;
         contentAreaElement.value = content;
-        imgName.value = imgName_;
     });
 }
 
@@ -71,7 +67,7 @@ async function adjust(){
 
     fetch('/upload',{
         method: 'POST',
-        body: formData
+        body: formData,
     }).then(response => {
             if(response.ok){
                 console.log("이미지 성공적으로 업로드.");
@@ -85,7 +81,6 @@ async function adjust(){
 
     
     const obj ={
-        postId:postId,
         title:title,
         content:content,
         imageName:encodedFileName
@@ -103,11 +98,10 @@ async function adjust(){
     .then(response =>{
         if(response.status === 204){
             alert("게시글이 수정되었습니다.");
-            window.location.href = `/post/${postId}`;
         }else{
             alert("게시글 수정 실패.");
-            window.location.href = `/post/${postId}`;
         }
+        window.location.href = `/post/${postId}`;
     })
     .catch(error => {
         console.error('fetch error:',error);
@@ -115,7 +109,6 @@ async function adjust(){
 
     window.location.href = `/post/${postId}`;
 }
-    
 
 const adjust_btn = document.getElementById("adjust");
 

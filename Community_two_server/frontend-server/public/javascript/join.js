@@ -1,3 +1,5 @@
+const BACKEND_IP_PORT = "http://localhost:8081"
+
 import { checkDuplicatenickName,checkDuplicateEmail } from "./checkDuplicate.js";
 const passwordHelper = document.getElementById('passwordHelper');
 const passwordCheckHelper = document.getElementById('passwordCheckHelper');
@@ -9,6 +11,8 @@ const password = document.getElementById('password').value;
 const passwordCheck = document.getElementById('password-check').value;
 const nickName = document.getElementById('nickName').value;
 const btn = document.getElementById('join');
+
+let profileImageFileName; // 이미지 파일명을 담는 전역변수
 
 function validateEmail(email) {
     // 이메일이 비어 있는지 확인
@@ -149,11 +153,61 @@ async function global_validation(){
     if(!email_err && !password_err && !passwordCheck_err && !nickName_err && !passwordCompare_err){
         // 완료 처리 및 페이지 이동
         
+        const input2 = document.getElementById("upload-input");
+        const file2 = input2.files[0];
+        const fileName = file2.name;
+
         // 회원가입 완료 메시지 표시
-        alert("회원가입 완료!");
-        
-        // 페이지 이동
-        window.location.href = "/login";
+        const obj = {
+            email:email,
+            password:password,
+            nickName:nickName,
+            profileImage:fileName,
+        }
+
+        const data = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(obj)
+        }
+
+        //여기서 이미지를 실제 저장하는 코드 구현하자
+        const input = document.getElementById("upload-input");
+        const file = input.files[0];
+        const formData = new FormData();
+
+        const encodedFileName = encodeURIComponent(file.name);
+        formData.append('image',file,encodedFileName);
+
+        fetch('/upload',{
+            method:'POST',
+            body: formData,
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log("이미지 성공적으로 업로드.");
+            } else {
+                console.error("이미지 업로드 오류 발생");
+            }
+        })
+        .catch(error => {
+            console.error('네트워크 오류:', error);
+        });
+
+
+        await fetch(`${BACKEND_IP_PORT}/user/join`,data)
+        .then(response => {
+            if(response.status === 204){
+                alert("회원가입을 축하드립니다!");
+                window.location.href = '/user/login';
+            }else{
+                alert("회원 가입 실패!");
+                window.location.href = '/user/join';
+            }
+        })
+    
         
     }else{
         emailHelper.innerText = email_err;
@@ -183,30 +237,36 @@ function showImageHelper() {
     }
 }
 
+function isUpload(){
+    var file = document.getElementById('upload-input').files[0];
+    var imageHelper = document.getElementById('imageHelper');
+    if(!file){
+        imageHelper.innerText = "*프로필 사진을 추가해주세요.";
+    }else{
+        // 이미지가 있는 경우
+        imageHelper.innerText = "";
+    }
+}
+
 window.onload = function() {
     showImageHelper();
 };
 
 document.getElementById('circle').addEventListener('click', function() {
-    var input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = function(event) {
-        var file = event.target.files[0];
-        if (file) {
-            var reader = new FileReader();
-            reader.onload = function() {
-                var img = document.getElementById('uploaded-image');
-                img.style.display = 'block'; // 이미지를 보이도록 설정합니다.
-                img.src = reader.result;
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-    input.click();
+    document.getElementById('upload-input').click();
 });
 
-document.getElementById('uploaded-image').addEventListener('load',showImageHelper);
+document.getElementById('upload-input').addEventListener('change', function(event) {
+    var file = this.files[0];
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+        document.getElementById('uploaded-image').src = e.target.result;
+        document.getElementById('uploaded-image').style.display = "block";
+        };
+        reader.readAsDataURL(file);
+    }
+});
 
 // 십자선 클릭 시 이벤트 버블링 방지
 document.getElementById('crosshair').addEventListener('click', function(event) {
@@ -217,5 +277,8 @@ document.getElementById("email").addEventListener('input',activate_button);
 document.getElementById("password").addEventListener('input',activate_button);
 document.getElementById("password-check").addEventListener('input',activate_button);
 document.getElementById("nickName").addEventListener('input',activate_button);
+document.getElementById('upload-input').addEventListener('change',isUpload);
+
+
 
 btn.addEventListener('click',global_validation);

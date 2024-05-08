@@ -208,7 +208,7 @@
     <div class="text-24">아무 말 대잔치 <strong>게시판</strong> 입니다.</div>
 
     <div class="container-right">
-      <button id="createPost" class="custom-button" onclick="window.location.href = '/post/create';">게시글 작성</button>
+      <button id="createPost" class="custom-button">게시글 작성</button>
     </div>
     <div class="litte-bottom-margin"></div>
     <div class="container-center" id="post-container">
@@ -216,6 +216,16 @@
       <!-- 여기에 게시글들이 들어감 -->
       
     </div>
-    <script src="/javascript/getPosts.js" type="text/javascript"></script>
+    <script>
+      function redirectToPost(postId) {
+        // postId를 사용하여 URL을 생성합니다.
+        // const url = `${BACKEND_IP_PORT}/post/${postId}`; // 예시 URL, postId에 따라서 동적으로 생성해야 합니다
+        const url = `/post/${postId}`;
+
+        // 페이지를 새 URL로 리디렉션합니다.
+        window.location.href = url;
+      }
+    </script>
+    <script type="module" src="/javascript/getPosts.js" type="text/javascript"></script>
   </body>
 </html>

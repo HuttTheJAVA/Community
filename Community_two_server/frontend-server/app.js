@@ -21,7 +21,6 @@ app.get('/', (req, res) => {
 app.use('/user', userRouter);
 app.use('/post', postRouter);
 
-
 //##########################################################//
 const uploadDirectory = path.join(__dirname, '/public/images');
 const storage = multer.diskStorage({

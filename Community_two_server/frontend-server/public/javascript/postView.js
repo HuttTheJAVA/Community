@@ -10,8 +10,21 @@ function K_feature(feature){
     return feature;
 }
 
-async function render_Post(){
+async function renderUserImage(writer) {
+    const userData = await fetch(`${BACKEND_IP_PORT}/user`)
+        .then(response => response.json());
 
+    for (const nickName in userData) {
+        if (nickName === writer) {
+            const profileImage = userData[nickName].profileImage;
+            return profileImage;
+        }
+    }
+}
+
+
+async function render_Post(){
+    
     var userNickname = ''
     
     const result = {
@@ -25,6 +38,8 @@ async function render_Post(){
 
     const postId = window.location.pathname.split('/').pop();
     
+    let globalWriter = null;
+
     await fetch(`${BACKEND_IP_PORT}/post/${postId}`)
     .then(response => response.json())
     .then(data => {
@@ -41,6 +56,8 @@ async function render_Post(){
     const time = data["time"];
     const image = data["image"];
 
+    globalWriter = writer;
+
     jsonContainer.innerHTML += `<div 
     class="feature-name-container bold litte-bottom-margin"
     style="font-size: 24px">
@@ -49,9 +66,9 @@ async function render_Post(){
     <div class="feature-name-container" style="margin-bottom: 25px">
         
         <div class="image-circle" style="margin-right: 10px">
-            <img src="/images/${writer}.png">
+            <img src="">
         </div>
-        <div class="text-15px bold">${writer}</div>
+        <div class="text-15px bold">${writer}</div> 
         <div style="margin-left: 30px; font-size: 14px">
         ${time}
         </div>
@@ -104,6 +121,14 @@ async function render_Post(){
     document.getElementById("comment-input").addEventListener('input',activate_button)
     document.getElementById("reply-submit").addEventListener('click',submit_reply)
     });
+
+    const profileImagePath = await renderUserImage(globalWriter);
+
+    const imageCircle = document.querySelector('.image-circle img');
+    imageCircle.src = "/images/"+profileImagePath;
+
+
+
     replys(userNickname);
 }
 
@@ -126,7 +151,7 @@ async function replys(nickName){
             <div class="reply-box">
                 <div class="reply-box-left">
                     <div class="reply-box-left-writer-info">
-                        <div class="image-circle" style="margin-right: 10px"></div>
+                        <div id="img-${writer}" class="user-image" style="margin-right: 10px"></div>
 
                         <div class="bold">${writer}</div>
                         <div style="margin-left: 30px; font-size: 14px">
@@ -146,6 +171,22 @@ async function replys(nickName){
             </div>`);
         }
     });
+
+    
+
+    await fetch(`${BACKEND_IP_PORT}/user`)
+    .then(response => response.json())
+    .then(data => {
+        const imgElements = document.querySelectorAll(`.user-image`);
+        imgElements.forEach(imgElement => {
+            const userName = imgElement.id.split('-')[1];
+            if(data[userName]){
+                const userImgPath = "/images/"+data[userName].profileImage;
+                imgElement.style.backgroundImage = `url('${userImgPath}')`;
+            }
+        });
+    });
+
     toast();
 }
 
@@ -329,7 +370,6 @@ async function addEventListener_mini_button(className,text){
             if(className.startsWith('.reply')){
 
                 yesBtn.onclick = async function(){
-                    console.log(buttonId); // 참고로 buttonId=reply-delete-3 이런식이라 파싱해야함.
                     // 여기서 백엔드 서버로 해당 id를 보내서 실제로 삭제하자.
                     // 그리고 게시글 삭제,수정,댓글 삭제 모두 다 구현하자.
                     const parts = buttonId.split("-");
@@ -343,7 +383,17 @@ async function addEventListener_mini_button(className,text){
                 }
             }
             else{ // 게시글 삭제 미니 버튼이라면
-
+                yesBtn.onclick = async function(){
+                    await fetch(`${BACKEND_IP_PORT}/post/${postId}`,{method: 'DELETE'})
+                    .then(response => {
+                        if(response.status === 204){
+                            alert("게시글 삭제 완료!");
+                            window.location.href = "/post";
+                        }else{
+                            alert("게시글 삭제 실패.");
+                        }
+                    })
+                }
             }
 
             noBtn.onclick = function (){
@@ -359,14 +409,5 @@ async function addEventListener_mini_button(className,text){
         })
     })
 }
-
-// function addEventListener_reply_adjust_button(className){
-//     const reply_adjust_buttons = document.querySelectorAll(className);
-//     reply_adjust_buttons.forEach(adj_button => {
-//         adj_button.addEventListener('click',function (){
-//             document.getElementById('comment-input').value = 
-//         })
-//     })
-// }
 
 window.onload = render_Post;

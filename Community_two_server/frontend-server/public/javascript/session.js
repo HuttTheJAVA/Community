@@ -7,6 +7,7 @@ export async function getUserIdFromSession(result) {
         .then(user => {
             if (user.nickname !== '') {
                 result.nickname = user.nickname;
+                console.log("세션 user.nickname은:",user.nickname)
             } else {
                 alert('로그아웃 되었습니다 !');
                 window.location.href = `/user/login`;

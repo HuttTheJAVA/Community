@@ -22,6 +22,24 @@ function validateUser(req, res) {
     res.status(200).json(resultJson);
 }
 
+function getUsers(req,res){
+    res.json(model.getUsers());
+}
+
+function joinUser(req,res){
+    const Body = req.body;
+
+    const email = Body.email;
+    const password = Body.password;
+    const nickName = Body.nickName;
+    const profileImage = Body.profileImage;
+    
+    model.joinUser(email,password,nickName,profileImage);
+    res.status(204).send("join_success");
+}
+
 export default {
     validateUser,
+    getUsers,
+    joinUser,
 }

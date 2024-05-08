@@ -17,6 +17,7 @@
     width: 20%;
     height: 20%;
     transform: translate(-50%, -50%);
+    
 }
 .crosshair::before,
 .crosshair::after {

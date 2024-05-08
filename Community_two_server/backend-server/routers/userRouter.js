@@ -13,4 +13,8 @@ router.get('/session',(req,res) => {
 
 router.post('/sign-in', userController.validateUser);
 
+router.post('/join',userController.joinUser);
+
+router.get('/',userController.getUsers);
+
 export default router;

@@ -1,78 +1,4 @@
 {
-  "1": [
-    {
-      "id": 1,
-      "writer": "John",
-      "date": "2024-04-14",
-      "content": "5번째 수정zz"
-    },
-    {
-      "id": 2,
-      "writer": "Ami",
-      "date": "2024-04-22",
-      "content": "잘 읽고 갑니다~수정!"
-    },
-    {
-      "id": 3,
-      "writer": "john",
-      "date": "2024-04-23",
-      "content": "ㅎㅎ~"
-    },
-    {
-      "id": 4,
-      "writer": "andrew",
-      "date": "2024-05-01",
-      "content": "잘 읽고 갑니다~ㅋㅋㅋ"
-    },
-    {
-      "id": 1,
-      "writer": "andrew",
-      "date": "2024-05-01",
-      "content": "5번째 수정zz"
-    },
-    {
-      "id": 16,
-      "writer": "andrew",
-      "date": "2024-05-01",
-      "content": "ㅋ"
-    },
-    {
-      "id": 17,
-      "writer": "andrew",
-      "date": "2024-05-01",
-      "content": "그럼 이건 id가 17!!!!!"
-    },
-    {
-      "id": 18,
-      "writer": "andrew",
-      "date": "2024-05-01",
-      "content": "ㅋㅋㅋ"
-    },
-    {
-      "id": 19,
-      "writer": "andrew",
-      "date": "2024-05-01",
-      "content": ""
-    },
-    {
-      "id": 20,
-      "writer": "andrew",
-      "date": "2024-05-01",
-      "content": "asdasdas"
-    },
-    {
-      "id": 25,
-      "writer": "andrew",
-      "date": "2024-05-06",
-      "content": "이 댓글은 누가 달았을까?"
-    },
-    {
-      "id": 26,
-      "writer": "",
-      "date": "2024-05-06",
-      "content": "이 댓글은 누가 달았을까?"
-    }
-  ],
   "2": [
     {
       "id": 4,
@@ -91,6 +17,12 @@
       "writer": "john",
       "date": "2024-04-23",
       "content": "저도 동생이 있었으면 좋겠네요."
+    },
+    {
+      "id": 31,
+      "writer": "leauto",
+      "date": "2024-05-08",
+      "content": "hi~ 에이치아이~"
     }
   ],
   "3": [
@@ -169,6 +101,60 @@
       "writer": "andrew",
       "date": "2024-05-06",
       "content": "ㅁ"
+    }
+  ],
+  "11": [
+    {
+      "id": 24,
+      "writer": "Choi",
+      "date": "2024-05-07",
+      "content": "커리큘럼인가요?"
+    },
+    {
+      "id": 25,
+      "writer": "Choi",
+      "date": "2024-05-07",
+      "content": "ㅁㄴㅇㅁㄴㅇㅁㄴ"
+    },
+    {
+      "id": 26,
+      "writer": "Lee",
+      "date": "2024-05-07",
+      "content": "막학기라서 널널하죠?"
+    },
+    {
+      "id": 27,
+      "writer": "Choi",
+      "date": "2024-05-07",
+      "content": "ㅌㅌㅌ"
+    }
+  ],
+  "12": [
+    {
+      "id": 28,
+      "writer": "Oh",
+      "date": "2024-05-07",
+      "content": "ㅁㄴㅇㅎ"
+    },
+    {
+      "id": 29,
+      "writer": "asdqweaz",
+      "date": "2024-05-08",
+      "content": "헬로"
+    },
+    {
+      "id": 30,
+      "writer": "leauto",
+      "date": "2024-05-08",
+      "content": "hi!"
+    }
+  ],
+  "13": [
+    {
+      "id": 32,
+      "writer": "jju",
+      "date": "2024-05-08",
+      "content": "쮸~?"
     }
   ]
 }

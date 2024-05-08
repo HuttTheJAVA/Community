@@ -9,7 +9,11 @@ router.get('/:postId',postController.getPost);
 
 router.patch('/:postId',postController.updatePost);
 
+router.delete('/:postId',postController.deletePost);
+
 router.get('/:postId/reply',postController.getReplys);
+
+router.post('/create',postController.createPost);
 
 router.post('/:postId/reply',postController.createReply);
 
