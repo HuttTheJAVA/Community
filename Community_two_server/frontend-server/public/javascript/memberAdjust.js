@@ -46,54 +46,68 @@ function insertErrorMessage(message){
     helper.innerText = message;
 }
 
-adjust.onclick = function(){
+adjust.onclick = async function(){
     const nickName = document.getElementById('nickName').value;
     if(!nickName){
         insertErrorMessage("*닉네임을 입력해주세요.");
-    }
-    else if(false){ // 닉네임 중복 확인 로직이 들어가야함.
-        insertErrorMessage("*닉네임을 입력해주세요.");
+        return;
     }
     else if(nickName.length>10){
         insertErrorMessage("*닉네임은 최대 10자 까지 작성 가능합니다.");
+        return;
     }
-    else{ 
-        helper.innerText = ""; // 이전에 유효하지 않은 입력을 한 적이 있다면 helper.innerText = ""이 아니다. 따라서 지워줘야 됨 
-        var toastMessage = document.getElementById("adjustToast");
-        toastMessage.textContent = "수정 완료";
-
-        toastMessage.style.display = "block";
-
-        // 그 유명한 비동기 논블로킹 코드
-        setTimeout(function() {
-            toastMessage.style.display = "none";
-        }, 3000); 
-    }
-}
-
-document.querySelector('.change-button').addEventListener('click', function() {
-    // 파일 입력(input) 요소 선택
-    var fileInput = document.createElement('input');
-    fileInput.type = 'file';
-  
-    // 파일 선택 시의 이벤트 처리
-    fileInput.addEventListener('change', function(event) {
-      var file = event.target.files[0]; // 선택된 파일 가져오기
-      if (file) {
-        var reader = new FileReader(); // 파일을 읽기 위한 FileReader 객체 생성
-        reader.onload = function(e) {
-          // 선택된 이미지를 user-big-image에 적용
-          var image = document.querySelector('.user-big-image img');
-          image.src = e.target.result;
-        };
-        reader.readAsDataURL(file); // 파일을 base64 형식의 데이터 URL로 변환하여 읽음
+    else{ // 닉네임 중복 확인 로직이 들어가야함.
+      let isDuplicate = false;
+      await fetch(`${BACKEND_IP_PORT}/user`)
+      .then(response => response.json())
+      .then(data => {
+        if(nickName in data){
+          isDuplicate = true;
+        }
+      });
+      if(isDuplicate){
+        return;
       }
-    });
-  
-    // 파일 입력(input) 요소 클릭
-    fileInput.click();
-  });
+    } 
+    
+    await getUserIdFromSession({nickName:""});
 
+    // 이미지 업로드 부분
+    const profileImage = document.getElementById('profile-image-upload').files[0];
+    const formData = new FormData();
+    const encodedFileName = encodeURIComponent(profileImage.name);
+    formData.append('image', profileImage,encodedFileName);
+
+    await fetch('/upload', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+      if(response.ok){
+          console.log("이미지 성공적으로 업로드.");
+      }else{
+          console.error("이미지 업로드 오류 발생");
+      }
+      })
+      .catch(error => {
+          console.error('네트워크 오류:',error);
+      });
+
+    await getUserIdFromSession({nickName: nickName});
+
+    helper.innerText = ""; // 이전에 유효하지 않은 입력을 한 적이 있다면 helper.innerText = ""이 아니다. 따라서 지워줘야 됨 
+    
+    var toastMessage = document.getElementById("adjustToast");
+    toastMessage.textContent = "수정 완료";
+
+    toastMessage.style.display = "block";
+
+    // 비동기 논블로킹 코드
+    setTimeout(function() {
+        toastMessage.style.display = "none";
+    }, 3000); 
+    
+}
 
 async function pageLoadActive(){
 
@@ -136,6 +150,38 @@ async function pageLoadActive(){
 
     var nickName = document.getElementById("nickName");
     nickName.value = userInfo.nickName;
+
+    //// 이미지 처리
+    const userBigImage = document.querySelector(".user-big-image");
+  
+    // 파일 업로드 input 요소를 가져옵니다.
+    const profileImageUpload = document.getElementById("profile-image-upload");
+    
+    // 이미지를 렌더링할 img 요소를 가져옵니다.
+    const userProfileImage = document.getElementById("user-profile-image");
+
+    userBigImage.addEventListener("click", function() {
+      // 파일 업로드 input을 클릭합니다.
+      profileImageUpload.click();
+    });
+
+    profileImageUpload.addEventListener("change", function() {
+      // 선택한 파일이 있는지 확인합니다.
+      if (profileImageUpload.files && profileImageUpload.files[0]) {
+        // FileReader 객체를 생성합니다.
+        const reader = new FileReader();
+        
+        // 파일을 읽었을 때의 이벤트를 설정합니다.
+        reader.onload = function(e) {
+          // 이미지를 렌더링합니다.
+          userProfileImage.src = e.target.result;
+        }
+        
+        // 파일을 읽습니다.
+        reader.readAsDataURL(profileImageUpload.files[0]);
+      }
+    });
+
 }
 
 document.addEventListener('DOMContentLoaded', pageLoadActive);
