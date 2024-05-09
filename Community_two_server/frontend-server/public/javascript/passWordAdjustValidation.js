@@ -1,4 +1,5 @@
-
+const BACKEND_IP_PORT = "http://localhost:8081"
+import {getUserIdFromSession} from './session.js';
 // 아래 함수는 비밀번호가 맞는지 확인하는 함수가 아닌 새로 수정할 비밀번호의 유효성을 검사한다.
 // 비밀번호 인증은 이미 adjustPassword페이지를 보여주기 전에 되 있어야 한다.
 function validatePassword(password) {
@@ -46,8 +47,15 @@ function button_change(){
     }
 }
 
-document.getElementById("adjust").addEventListener('click', function() {
+document.getElementById("adjust").addEventListener('click', async function() {
     
+    const result = {
+        nickname:''
+    }
+
+    await getUserIdFromSession(result);
+    const userNickname = result.nickname;
+
     var password = document.getElementById("password").value;
     var passWordErrorMessage = validatePassword(password);
 
@@ -68,9 +76,29 @@ document.getElementById("adjust").addEventListener('click', function() {
     }
 
     if (!passWordErrorMessage && !passwordCheckErrorMessage){
-        if(!password == passwordCheck){
+        if(!(password === passwordCheck)){
             passwordCheckHelper.innerHTML = '비밀번호와 비밀번호 확인이 다릅니다.'
         }else{
+
+            const obj = {
+                nickname:userNickname,
+                password:password
+            }
+
+            const data = {
+                method:'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(obj)
+            }
+
+            await fetch(`${BACKEND_IP_PORT}/user/password`,data)
+            .catch(err => {
+                console.error("fetch error:",err);
+              });
+
+
             var toastMessage = document.getElementById("adjustToast");
             toastMessage.textContent = "수정 완료";
     
@@ -91,3 +119,7 @@ document.getElementById("password").addEventListener('input',function(){
 document.getElementById("password-check").addEventListener('input',function(){
     button_change();
 });
+
+document.addEventListener('DOMContentLoaded',function(){
+    getUserIdFromSession({nickname:""})
+})

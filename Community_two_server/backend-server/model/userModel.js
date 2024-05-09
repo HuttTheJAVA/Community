@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'fs';
 import path from 'path';
 
 const __dirname = path.resolve();
@@ -51,10 +51,53 @@ function joinUser(email,password,nickName,profileImage){
     fs.writeFileSync(path.join(__dirname,usersJsonDir),updateUsersJsonData);
 }
 
+function updateUser(originName,nickname,imgName){
+    const usersJsonFile = fs.readFileSync(__dirname + usersJsonDir, 'utf8');
+    const usersJsonData = JSON.parse(usersJsonFile);
+
+    if(originName in usersJsonData){
+        const user = usersJsonData[originName];
+        user.nickname = nickname;
+        user.profileImage = imgName;
+        delete usersJsonData[originName];
+        usersJsonData[nickname] = user;
+
+        fs.writeFileSync(__dirname + usersJsonDir,JSON.stringify(usersJsonData,null,2),'utf8');
+    }else {
+        console.log(`${originName}을(를) 찾을 수 없습니다.`);
+    }
+}
+
+function deleteUser(nickname){
+    const usersJsonFile = fs.readFileSync(__dirname + usersJsonDir, 'utf8');
+    const usersJsonData = JSON.parse(usersJsonFile);
+
+    if(nickname in usersJsonData){
+        delete usersJsonData[nickname];
+        fs.writeFileSync(__dirname + usersJsonDir, JSON.stringify(usersJsonData, null, 2), 'utf8');
+    }else {
+        console.log(`${nickname}을(를) 찾을 수 없습니다.`);
+    }
+}
+
+function updatePassword(nickName,password){
+    const usersJsonFile = fs.readFileSync(__dirname + usersJsonDir, 'utf8');
+    const usersJsonData = JSON.parse(usersJsonFile);
+
+    if(nickName in usersJsonData){
+        usersJsonData[nickName]["password"] = password;
+        fs.writeFileSync(__dirname + usersJsonDir,JSON.stringify(usersJsonData,null,2),'utf8');
+    }else{
+        console.log(`${nickName}을(를) 찾을 수 없습니다.`);
+    }
+}
 
 export default {
     validateUser,
     getUserNickName,
     getUsers,
     joinUser,
+    updateUser,
+    updatePassword,
+    deleteUser,
 };

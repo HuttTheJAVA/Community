@@ -17,4 +17,8 @@ router.get('/update',(req,res) => {
     res.sendFile(path.join(__dirname,'view/memberAdjust.html'));
 });
 
+router.get('/adjustPassword',(req,res) => {
+    res.sendFile(path.join(__dirname,'view/adjustPassword.html'))
+})
+
 export default router;

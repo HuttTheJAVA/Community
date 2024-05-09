@@ -20,10 +20,45 @@ function hideToast(){
   document.getElementById("myModal").style.display = "none";
 }
 
-function member_delete(){
+async function member_delete(){
     // 실제 멤버 삭제하는 요청을 서버에게 해야함.
+    
+    var userNickname = ''
+
+    const result = {
+        nickname:''
+    }
+
+    await getUserIdFromSession(result);
+
+    userNickname = result.nickname;
+
+    const obj = {
+      nickname:userNickname
+    }
+
+    const data = {
+      method:"DELETE",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(obj)
+    }
+
+    await fetch(`${BACKEND_IP_PORT}/user`,data)
+    .then(response =>{
+      if(response.status === 204){
+          alert("사용자가 삭제 되었습니다");
+      }else{
+          alert("사용자 삭제 실패");
+      }
+    })
+    .catch(error => {
+        console.error('fetch error:',error);
+    });
+
     hideToast();
-    window.location.href = "/login";
+    window.location.href = "/user/login";
 }
 
 var btn = document.getElementById("deleteMember");
@@ -70,13 +105,42 @@ adjust.onclick = async function(){
       }
     } 
     
-    await getUserIdFromSession({nickName:""});
+    const result = {
+      nickname:''
+    }
+
+    await getUserIdFromSession(result);
 
     // 이미지 업로드 부분
     const profileImage = document.getElementById('profile-image-upload').files[0];
     const formData = new FormData();
     const encodedFileName = encodeURIComponent(profileImage.name);
     formData.append('image', profileImage,encodedFileName);
+
+    const originNickName = result.nickname;
+
+    // 유저 수정 정보 전송
+
+    const obj = {
+      originNickName:originNickName,
+      nickname:nickName,
+      imgName:encodedFileName,
+    }
+
+    const data = {
+      method:'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(obj)
+    }
+
+    await fetch(`${BACKEND_IP_PORT}/user/update`,data)
+    .catch(err => {
+      console.error("fetch error:",err);
+    });
+
+    // 이미지 저장 부분
 
     await fetch('/upload', {
         method: 'POST',
@@ -93,14 +157,14 @@ adjust.onclick = async function(){
           console.error('네트워크 오류:',error);
       });
 
-    await getUserIdFromSession({nickName: nickName});
-
     helper.innerText = ""; // 이전에 유효하지 않은 입력을 한 적이 있다면 helper.innerText = ""이 아니다. 따라서 지워줘야 됨 
     
     var toastMessage = document.getElementById("adjustToast");
     toastMessage.textContent = "수정 완료";
 
     toastMessage.style.display = "block";
+
+    // 사용자 수정 정보 
 
     // 비동기 논블로킹 코드
     setTimeout(function() {

@@ -38,8 +38,34 @@ function joinUser(req,res){
     res.status(204).send("join_success");
 }
 
+function updateUser(req,res){
+    const originNickName = req.body.originNickName;
+    const nickname = req.body.nickname;
+    const imgName = req.body.imgName;
+
+    model.updateUser(originNickName,nickname,imgName);
+    res.status(204).send("update_success");
+}
+
+function updatePassword(req,res){
+    const nickName = req.body.nickname;
+    const password = req.body.password;
+
+    model.updatePassword(nickName,password);
+    res.status(204).send("update_success");
+}
+
+function deleteUser(req,res){
+    const nickname = req.body.nickname;
+    model.deleteUser(nickname);
+    res.status(204).send("delete_success");
+}
+
 export default {
     validateUser,
     getUsers,
     joinUser,
+    updateUser,
+    updatePassword,
+    deleteUser,
 }
