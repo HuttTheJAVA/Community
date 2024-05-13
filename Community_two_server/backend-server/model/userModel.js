@@ -1,14 +1,21 @@
-import fs from 'fs';
+import fs, { read } from 'fs';
 import path from 'path';
 
 const __dirname = path.resolve();
 
 const usersJsonDir = '/model/repository/users.json';
 
-function validateUser(email, password) {
+function readJson(sub_dir,encode){
+    const usersJsonFile = fs.readFileSync(__dirname + sub_dir, encode);
+    return JSON.parse(usersJsonFile);
+}
 
-    const usersJsonFile = fs.readFileSync(__dirname + usersJsonDir, 'utf8');
-    const usersJsonData = JSON.parse(usersJsonFile);
+function writeJson(sub_dir,usersJsonData,encode){
+    fs.writeFileSync(__dirname + sub_dir,JSON.stringify(usersJsonData,null,2),encode);
+}
+
+function validateUser(email, password) {
+    const usersJsonData = readJson(usersJsonDir,'uttf8');
 
     for (const key in usersJsonData){
         let user = usersJsonData[key];
@@ -20,81 +27,99 @@ function validateUser(email, password) {
     return false;
 }
 
-function getUserNickName(email) {
-    const usersJsonFile = fs.readFileSync(__dirname + usersJsonDir, 'utf8');
-    const usersJsonData = JSON.parse(usersJsonFile);
+function getUserId(email) {
+    const usersJsonData = readJson(usersJsonDir,'utf8');
 
     for (const key in usersJsonData){
         let user = usersJsonData[key];
         if(user.email == email){
-            return user["nickname"];
+            return user["userId"];
         }
     }
 }
 
 function getUsers(){
-    const usersJsonFile = fs.readFileSync(__dirname + usersJsonDir, 'utf8');
-    return JSON.parse(usersJsonFile);
+    return readJson(usersJsonDir,'utf8');
 }
 
-function joinUser(email,password,nickName,profileImage){
-    const usersJsonFile = fs.readFileSync(__dirname + usersJsonDir, 'utf8');
-    const usersJsonData = JSON.parse(usersJsonFile);
+function assignId(){
+    const usersJsonData = JSON.parse(usersJsonDir,'utf8');
+    let maxId = 0;
+    for(key in usersJsonData){
+        const intKey = parseInt(key);
+        if(intKey > maxId){
+            maxId = intKey;
+        }
+    }
+    return maxId + 1;
+}
+
+async function joinUser(email,password,nickName,profileImage){
+    const usersJsonData = readJson(usersJsonData,'utf8');
+
+    const userId = await assignId();
+
     const newUser = {
+        "userId":userId,
         "email":email,
         "password":password,
         "nickname":nickName,
         "profileImage":profileImage,
     }
-    usersJsonData[nickName] = newUser;
-    const updateUsersJsonData = JSON.stringify(usersJsonData);
-    fs.writeFileSync(path.join(__dirname,usersJsonDir),updateUsersJsonData);
+    usersJsonData[userId] = newUser;
+    writeJson(usersJsonDir,usersJsonData,'utf8');
 }
 
 function updateUser(originName,nickname,imgName){
-    const usersJsonFile = fs.readFileSync(__dirname + usersJsonDir, 'utf8');
-    const usersJsonData = JSON.parse(usersJsonFile);
+    const usersJsonData = readJson(usersJsonDir,'utf8');
 
-    if(originName in usersJsonData){
-        const user = usersJsonData[originName];
-        user.nickname = nickname;
-        user.profileImage = imgName;
-        delete usersJsonData[originName];
-        usersJsonData[nickname] = user;
+    let isFound = false;
 
-        fs.writeFileSync(__dirname + usersJsonDir,JSON.stringify(usersJsonData,null,2),'utf8');
-    }else {
+    for(Id in usersJsonData){
+        if(usersJsonData[Id]["nickname"] === originName){
+            usersJsonData[Id]["nickname"] = nickname;
+            const user = usersJsonData[Id];
+            user.nickname = nickname;
+            user.profileImage = imgName;
+            delete usersJsonData[Id];
+            usersJsonData[Id] = user;
+            isFound = true;
+
+            writeJson(usersJsonDir,usersJsonData,'utf8');
+            break;
+        }
+    }
+    
+    if(!isFound){
         console.log(`${originName}을(를) 찾을 수 없습니다.`);
     }
 }
 
-function deleteUser(nickname){
-    const usersJsonFile = fs.readFileSync(__dirname + usersJsonDir, 'utf8');
-    const usersJsonData = JSON.parse(usersJsonFile);
+function deleteUser(userId){
+    const usersJsonData = readJson(usersJsonDir,'utf8');
 
-    if(nickname in usersJsonData){
-        delete usersJsonData[nickname];
-        fs.writeFileSync(__dirname + usersJsonDir, JSON.stringify(usersJsonData, null, 2), 'utf8');
+    if(userId in usersJsonData){
+        delete usersJsonData[userId];
+        writeJson(usersJsonDir,usersJsonData,'utf8');
     }else {
-        console.log(`${nickname}을(를) 찾을 수 없습니다.`);
+        console.log(`${userId}을(를) 찾을 수 없습니다.`);
     }
 }
 
-function updatePassword(nickName,password){
-    const usersJsonFile = fs.readFileSync(__dirname + usersJsonDir, 'utf8');
-    const usersJsonData = JSON.parse(usersJsonFile);
+function updatePassword(userId,password){
+    const usersJsonData = readJson(usersJsonDir,'utf8');
 
-    if(nickName in usersJsonData){
-        usersJsonData[nickName]["password"] = password;
-        fs.writeFileSync(__dirname + usersJsonDir,JSON.stringify(usersJsonData,null,2),'utf8');
+    if(userId in usersJsonData){
+        usersJsonData[userId]["password"] = password;
+        writeJson(usersJsonDir,usersJsonData,'utf8');
     }else{
-        console.log(`${nickName}을(를) 찾을 수 없습니다.`);
+        console.log(`${userId}을(를) 찾을 수 없습니다.`);
     }
 }
 
 export default {
     validateUser,
-    getUserNickName,
+    getUserId,
     getUsers,
     joinUser,
     updateUser,

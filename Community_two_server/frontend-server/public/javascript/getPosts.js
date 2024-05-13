@@ -17,11 +17,13 @@ function K_feature(feature){
 // 서버에서 JSON 데이터를 가져오는 AJAX 요청
 fetch(`${BACKEND_IP_PORT}/post`)
     .then(response => response.json())
-    .then(data => {
+    .then(async data => {
     // JSON 데이터를 받아온 후 HTML에 렌더링
     const jsonContainer = document.getElementById('post-container');
     jsonContainer.innerHTML = ''; // 기존에 있던 내용을 지웁니다.
     
+    const usersJsonData = getUsers();
+
     // JSON 객체에 있는 모든 요소를 순회 하며 렌더링
     for (const postNum in data) { // key는 게시글 번호, value는 게시글 속성들이 있는 또다른 json
         const feature_json = data[postNum] // 단일 게시글 속성 json
@@ -31,7 +33,7 @@ fetch(`${BACKEND_IP_PORT}/post`)
         const reply = K_feature(parseInt(feature_json["reply"]))
         const watch = K_feature(parseInt(feature_json["watch"]))
         const time = feature_json["time"]
-        const writer = feature_json["writer"]
+        const userId = feature_json["userId"]
         
         jsonContainer.innerHTML += `
             <div class="post-preview card" onclick="redirectToPost(${post_id})">
@@ -71,6 +73,10 @@ function checkLogin(){
     getUserIdFromSession(result);
 
     window.location.href = '/post/create';
+}
+
+function getUsers(){
+    
 }
 
 document.getElementById("createPost").addEventListener('click',checkLogin)

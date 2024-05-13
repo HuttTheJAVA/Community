@@ -1,44 +1,37 @@
 {
-  "Park": {
-    "email": "Park@nav.com",
-    "password": "asdqwe123!Q",
-    "nickname": "Park",
-    "profileImage": "Park.png"
-  },
-  "Kim": {
-    "email": "Kim@nav.com",
-    "password": "asdqwe123!Q",
-    "nickname": "Kim",
-    "profileImage": "Kim.png"
-  },
-  "Oh": {
-    "email": "Oh@nav.com",
-    "password": "asdqwe123!Q",
-    "nickname": "Oh",
-    "profileImage": "Oh.png"
-  },
-  "free": {
-    "email": "free@nav.com",
-    "password": "asdqwe123!Q",
-    "nickname": "free",
-    "profileImage": "HPqppaD0V2lJncVsUnM7aZ3D_6B4s_qBnEIrJe3smPSeHaKmpIb5XaVisOFqYaWNU4GNWFjN9Mzuc6xNpxcNB1QWp0u1RSRakMW1iwJR-z3Uubye5cxlIdMSWEtCYJ8fYDYC8T4-m-a1CcEx3CoIdA.webp"
-  },
-  "jju": {
-    "email": "baek@nav.com",
-    "password": "asdqwe123!Q",
-    "nickname": "jju",
-    "profileImage": "1575611614777.jpg"
-  },
-  "LeeAuto": {
-    "email": "Lee@nav.com",
-    "password": "asdqwe123!Q",
-    "nickname": "LeeAuto",
-    "profileImage": "Screenshot_2020-04-17-20-08-19.png"
-  },
-  "ChoiAWE": {
-    "email": "Choi@nav.com",
-    "password": "asdqwe123!QA",
-    "nickname": "ChoiAWE",
-    "profileImage": "applr.jpg"
-  }
+    "1":{
+        "userId":1,
+        "email": "Lee@asd.com",
+        "password": "asd1234!",
+        "nickname": "Lee",
+        "profileImage": "Lee.png"
+    },
+    "2":{
+        "userId":2,
+		"email": "Park@asd.com",
+        "password": "asd1234!",
+        "nickname": "Park", 
+        "profileImage": "Park.png"
+    },
+    "3":{
+        "userId":3,
+		"email": "Kim@asd.com",
+        "password": "asd1234!",
+        "nickname": "Kim",
+        "profileImage": "Kim.png"
+    },
+    "4":{
+        "userId":4,
+		"email": "Choi@asd.com",
+        "password": "asd1234!",
+        "nickname": "Choi",
+        "profileImage": "Choi.png"
+    },
+    "5":{
+        "userId":5,
+		"email": "Oh@asd.com",
+        "password": "asd1234!",
+        "nickname": "Oh",
+        "profileImage": "Oh.png"
+    }
 }

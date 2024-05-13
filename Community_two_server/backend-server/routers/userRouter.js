@@ -8,17 +8,17 @@ const __dirname = path.resolve();
 const router = express.Router();
 
 router.get('/session',(req,res) => {
-    if(req.session && req.session.user && req.session.user.nickname){
+    if(req.session && req.session.user && req.session.user.userId){
         const usersJsonFile = fs.readFileSync(__dirname + '/model/repository/users.json', 'utf8');
         const usersJsonData = JSON.parse(usersJsonFile);
-        if(req.session.user.nickname in usersJsonData){
-            return res.json({nickname: req.session.user.nickname});
+        if(req.session.user.userId in usersJsonData){
+            return res.json({userId: req.session.user.userId});
         }
         else{
-            return res.json({nickname: ''});
+            return res.json({userId: ''});
         }
     }else{
-        return res.json({nickname: ''});
+        return res.json({userId: ''});
     }
 })
 

@@ -11,7 +11,7 @@ function validateUser(req, res) {
     
     if (resultJson.result) {
         req.session.user = {
-            nickname: `${model.getUserNickName(email)}`,
+            userId: `${model.getUserId(email)}`,
             authorized: true,
         }
         console.log("세션 생성!");
@@ -48,16 +48,16 @@ function updateUser(req,res){
 }
 
 function updatePassword(req,res){
-    const nickName = req.body.nickname;
+    const userId = req.body.userId;
     const password = req.body.password;
 
-    model.updatePassword(nickName,password);
+    model.updatePassword(userId,password);
     res.status(204).send("update_success");
 }
 
 function deleteUser(req,res){
-    const nickname = req.body.nickname;
-    model.deleteUser(nickname);
+    const userId = req.body.userId;
+    model.deleteUser(userId);
     res.status(204).send("delete_success");
 }
 

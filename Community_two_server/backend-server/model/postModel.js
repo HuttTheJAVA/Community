@@ -13,6 +13,10 @@ function readJson(sub_dir,encodeStyle){
     return JsonData;
 }
 
+function writeJson(sub_dir,usersJsonData,encode){
+    fs.writeFileSync(__dirname + sub_dir,JSON.stringify(usersJsonData,null,2),encode);
+}
+
 function getPosts(){
     return readJson(postJsonDir,'utf8');
 }
@@ -33,7 +37,7 @@ function getPost(postId){
 function createPost(post){
     const postsJsonData = readJson(postJsonDir,'utf8');
 
-    let maxId = -1;
+    let maxId = 0;
 
     for(let key in postsJsonData){
         if(parseInt(key)>maxId){
@@ -55,9 +59,7 @@ function createPost(post){
 
     postsJsonData[postJson.id.toString()] = postJson;
 
-    const updatePostsJson = JSON.stringify(postsJsonData);
-
-    fs.writeFileSync(path.join(__dirname,postJsonDir),updatePostsJson);
+    writeJson(postJsonDir,postsJsonData,'utf8');
 }
 
 function updatePost(post,postId){
@@ -71,8 +73,7 @@ function updatePost(post,postId){
         }
     }
 
-    const updatePostsJsonData = JSON.stringify(postsJsonData);
-    fs.writeFileSync(path.join(__dirname,postJsonDir),updatePostsJsonData);
+    writeJson(postJsonDir,postsJsonData,'utf8');
 }
 
 function deletePost(postId){
@@ -88,9 +89,7 @@ function deletePost(postId){
 
     deletePostReplys(postId);
 
-    const updatePostsJsonData = JSON.stringify(postsJsonData);
-
-    fs.writeFileSync(path.join(__dirname,postJsonDir),updatePostsJsonData);
+    writeJson(postJsonDir,postsJsonData,'utf8');
 }
 
 function getReplys(postId){
@@ -105,7 +104,7 @@ function getReplys(postId){
     return postIdReplys;
 }
 
-function createReply(postId,writer,date,content){
+function createReply(postId,userId,date,content){
     let replysJsonData = readJson(replyJsonDir,'utf8');
 
     let maxId = 0;
@@ -120,7 +119,7 @@ function createReply(postId,writer,date,content){
 
     const newReply = {
         "id":maxId+1,
-        "writer":writer,
+        "userId":userId,
         "date":date,
         "content":content
     }
@@ -134,8 +133,7 @@ function createReply(postId,writer,date,content){
 
     postIdReplys.push(newReply);
 
-    const data = JSON.stringify(replysJsonData,null,2);
-    fs.writeFileSync(__dirname + replyJsonDir,data,'utf8')
+    writeJson(replyJsonDir,replysJsonData,'utf8');
 }
 
 function updateReply(postId,replyId,content){
@@ -146,9 +144,7 @@ function updateReply(postId,replyId,content){
             replysJsonData[postId][reply]["content"] = content;
         }
     }
-    
-    const data = JSON.stringify(replysJsonData,null,2);
-    fs.writeFileSync(__dirname + replyJsonDir,data,'utf8')
+    writeJson(replyJsonDir,replysJsonData,'utf8');
 }
 
 function deleteReply(postId,replyId){
@@ -163,9 +159,7 @@ function deleteReply(postId,replyId){
     }
     replysJsonData[postId] = postReplysArray;
 
-    const data = JSON.stringify(replysJsonData,null,2);
-    
-    fs.writeFileSync(__dirname + replyJsonDir,data,'utf8')
+    writeJson(replyJsonDir,replysJsonData,'utf8');
 }
 
 function deletePostReplys(postId){
@@ -178,9 +172,7 @@ function deletePostReplys(postId){
         }
     }
 
-    const updateReplysJsonData = JSON.stringify(replysJsonData,null,2);
-
-    fs.writeFileSync(__dirname + replyJsonDir,updateReplysJsonData,'utf8')
+    writeJson(replyJsonDir,replysJsonData,'utf8');
 }
 
 export default {
