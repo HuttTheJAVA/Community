@@ -28,7 +28,7 @@ function createReply(req,res){
     const postId = req.params.postId;
     const replyData = req.body;
 
-    model.createReply(postId,replyData.writer,replyData.date,replyData.content);
+    model.createReply(postId,replyData.userId,replyData.date,replyData.content);
 
     res.status(201).send('댓글 등록 완료');
 }
@@ -63,6 +63,7 @@ function deleteReply(req,res){
 function createPost(req,res){
     const Body = req.body
     const post = {
+        userId : Body.userId,
         title : Body.title,
         content : Body.content,
         good : Body.good,
@@ -70,7 +71,6 @@ function createPost(req,res){
         watch : Body.watch,
         time : Body.time,
         image : Body.image,
-        writer : Body.writer,
     }
     model.createPost(post);
     res.status(201).send("create_success");

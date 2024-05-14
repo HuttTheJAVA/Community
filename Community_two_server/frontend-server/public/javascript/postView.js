@@ -10,35 +10,24 @@ function K_feature(feature){
     return feature;
 }
 
-async function renderUserImage(writer) {
-    const userData = await fetch(`${BACKEND_IP_PORT}/user`)
-        .then(response => response.json());
-
-    for (const nickName in userData) {
-        if (nickName === writer) {
-            const profileImage = userData[nickName].profileImage;
-            return profileImage;
-        }
-    }
-}
-
-
 async function render_Post(){
     
-    var userNickname = ''
+    const usersJsonData = await getUsers();
+
+    let userSessionId = ''
     
     const result = {
-        nickname:''
+        userId:''
     }
 
     await getUserIdFromSession(result);
-    userNickname = result.nickname;
+    userSessionId = result.userId;
 
-    document.getElementById('user-image').style.backgroundImage = `url('/images/${userNickname}.png')`;
+    const imgPath = usersJsonData[userSessionId]["profileImage"];
+
+    document.getElementById('user-image').style.backgroundImage = `url('/images/${imgPath}')`;
 
     const postId = window.location.pathname.split('/').pop();
-    
-    let globalWriter = null;
 
     await fetch(`${BACKEND_IP_PORT}/post/${postId}`)
     .then(response => response.json())
@@ -47,16 +36,14 @@ async function render_Post(){
     jsonContainer.innerHTML = ''; // 기존에 있던 내용을 지웁니다.
     
     // 이제 jsonContainer안에 게시글 상세 사항들을 렌더링.
+    const userId = data["userId"];
     const title = data["title"];
-    const writer = data["writer"];
+    const writer = usersJsonData[userId]["nickname"];
     const content = data["content"];
-    const good = data["good"];
     const reply = K_feature(parseInt(data["reply"]));
     const watch = K_feature(parseInt(data["watch"]));
     const time = data["time"];
     const image = data["image"];
-
-    globalWriter = writer;
 
     jsonContainer.innerHTML += `<div 
     class="feature-name-container bold litte-bottom-margin"
@@ -111,28 +98,26 @@ async function render_Post(){
         </div>
     </div>`;
 
-    if(userNickname === writer){
+    if(parseInt(userSessionId) === parseInt(userId)){
         const PostButton = document.getElementById("PostButton");
         PostButton.innerHTML += 
-        `<div id=post-${postId} class="mini-button" onclick="window.location.href = 'adjustPost/${postId}';">수정</div>
+        `<div id=post-${postId} class="mini-button2" onclick="window.location.href = 'adjustPost/${postId}';">수정</div>
         <div id="delete-post-${postId}" class="mini-button" style="margin-left: 10px">삭제</div>`
     }
 
-    document.getElementById("comment-input").addEventListener('input',activate_button)
-    document.getElementById("reply-submit").addEventListener('click',submit_reply)
-    });
-
-    const profileImagePath = await renderUserImage(globalWriter);
+    const profileImagePath = usersJsonData[userId]["profileImage"];
 
     const imageCircle = document.querySelector('.image-circle img');
     imageCircle.src = "/images/"+profileImagePath;
 
+    document.getElementById("comment-input").addEventListener('input',activate_button);
+    document.getElementById("reply-submit").addEventListener('click',submit_reply);
+    });
 
-
-    replys(userNickname);
+    replys(userSessionId,usersJsonData);
 }
 
-async function replys(nickName){
+async function replys(userSessionId,usersJsonData){
     const postId = window.location.pathname.split('/').pop();
     await fetch(`${BACKEND_IP_PORT}/post/${postId}/reply`)
     .then(response => response.json())
@@ -140,18 +125,20 @@ async function replys(nickName){
         const replyContainer = document.getElementById("post-view-container");
 
         for(const reply in data){
-            const writer = data[reply]["writer"];
+            const userId = data[reply]["userId"];
             const content = data[reply]["content"];
             const time = data[reply]["date"];
             const id = data[reply]["id"];
 
-            const isCurrentUser = writer === nickName;
+            const isCurrentUser = parseInt(userSessionId) === parseInt(userId);
+
+            const writer = usersJsonData[userId]["nickname"];
 
             replyContainer.insertAdjacentHTML('beforeend',`
             <div class="reply-box">
                 <div class="reply-box-left">
                     <div class="reply-box-left-writer-info">
-                        <div id="img-${writer}" class="user-image" style="margin-right: 10px"></div>
+                        <div id="img-${userId}" class="user-image" style="margin-right: 10px"></div>
 
                         <div class="bold">${writer}</div>
                         <div style="margin-left: 30px; font-size: 14px">
@@ -172,20 +159,14 @@ async function replys(nickName){
         }
     });
 
-    
-
-    await fetch(`${BACKEND_IP_PORT}/user`)
-    .then(response => response.json())
-    .then(data => {
-        const imgElements = document.querySelectorAll(`.user-image`);
-        imgElements.forEach(imgElement => {
-            const userName = imgElement.id.split('-')[1];
-            if(data[userName]){
-                const userImgPath = "/images/"+data[userName].profileImage;
-                imgElement.style.backgroundImage = `url('${userImgPath}')`;
-            }
-        });
-    });
+    const imgElements = document.querySelectorAll(`.user-image`);
+    imgElements.forEach(imgElement => {
+        const user_id = imgElement.id.split('-')[1];
+        if(usersJsonData[user_id]){
+            const userImgPath = "/images/"+usersJsonData[user_id].profileImage;
+            imgElement.style.backgroundImage = `url('${userImgPath}')`;
+        }
+    })
 
     toast();
 }
@@ -200,27 +181,6 @@ function toast(){
     //댓글에 대한
     const reply_adjust = document.getElementById("reply-adjust");
     const reply_delete = document.getElementById("reply-delete");
-    
-    function hideToast(){
-        document.getElementById("myModal").style.display = "none";
-        document.body.style.overflow = '';
-    }
-
-    function deleteOk(){ // 게시글의 삭제 버튼일 경우 ID는 POSTID, 댓글 삭제의 경우 ID는 replyId
-        const context = document.getElementById("toastTitle").innerText;
-        if(context == '게시글을 삭제하시겠습니까?'){
-            window.location.href = "/board";
-            document.getElementById("myModal").style.display = "none";
-        }
-        else{
-            document.getElementById("myModal").style.display = "none";
-            alert("댓글 삭제 완료!");
-            document.body.style.overflow = ''; 
-        }
-
-        // display = none으로 안해주면 /board에서 이페이지로 다시 돌아오면 모달이 보여짐.
-        // 근데 사실 이 버튼이 게시글 삭제, 댓글 삭제 공통으로 지금 적용된거라 버튼을 따로 분리하고 구현도 따로해야함.
-    }
 
     addEventListener_mini_button('.reply-delete-mini-button','댓글을 삭제하시겠습니까?');
     addEventListener_mini_button('.mini-button','게시글을 삭제하시겠습니까?');
@@ -262,21 +222,14 @@ function showReplyModal(text){
     document.body.style.overflow = 'hidden';
 }
 
-function showPostModal() {
-    document.getElementById("myModal").style.display = "block";
-    post_delete_message("게시글을 삭제하시겠습니까?");
-    document.body.style.overflow = 'hidden';
-}
-
-function adjustReply(replyId){
-    const contentText = document.getElementById(replyId);
-    const content = contentText.textContent.trim(); // 현재 내용 가져오기
-    const comment_input = document.getElementById("comment-input");
-    comment_input.value = content;
-    const adjustButton = document.getElementById("reply-submit");
-    adjustButton.style.backgroundColor = "#7f6aee";
-    adjustButton.textContent = "댓글 수정";
-    adjustButton.dataset.replyId = replyId; // 댓글 수정 버튼의 데이터 속성에 댓글 ID 저장
+function getUsers(){
+    return fetch(`${BACKEND_IP_PORT}/user`)
+    .then(res => {
+        return res.json();
+    })
+    .catch(err => {
+        console.error(err);
+    });
 }
 
 // 댓글 입력 제출하면 댓글 수정인 경우 `${BACKEND_IP_PORT}/post/${postId}/reply/replyId로 Put 요청
@@ -289,7 +242,7 @@ async function submit_reply(){
         return;
     }
 
-    const input_space = document.getElementById("comment-input")
+    const input_space = document.getElementById("comment-input");
     const input_text = document.getElementById("comment-input").value;
     const adjustButton = document.getElementById("reply-submit");
     const postId = window.location.pathname.split('/').pop();
@@ -298,14 +251,14 @@ async function submit_reply(){
     let jsonData = {};
 
     // 현재 댓글을 수정 또는 작성한 유저가 누군지 확인
-    var userNickname = ''
+    var userSessionId = ''
     
     const result = {
-        nickname:''
+        userId:''
     }
 
     await getUserIdFromSession(result);
-    userNickname = result.nickname;
+    userSessionId = result.userId;
     //////////////////////////////////////////////
 
     if (adjustButton.textContent === '댓글 수정') {
@@ -326,7 +279,7 @@ async function submit_reply(){
         const formattedDate = `${year}-${month}-${day}`;
 
         jsonData = {
-            writer: userNickname, // 해당값은 사실 지금 로그인 된 사용자의 닉네임이 들어가야함. 이 부분은 세션때 구현하자
+            userId: userSessionId,
             date: formattedDate,
             content: input_text
         };

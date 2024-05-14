@@ -1,5 +1,6 @@
 const BACKEND_IP_PORT = "http://localhost:8081"
 import {getUserIdFromSession} from './session.js';
+import {getUser,getUsers} from './getUser.js';
 
 const deleteMemberButton = document.getElementById('deleteMember');
 const button_cancel = document.getElementById("cancel");
@@ -23,7 +24,7 @@ function hideToast(){
 async function member_delete(){
     // 실제 멤버 삭제하는 요청을 서버에게 해야함.
     
-    var userNickname = ''
+    let userNickname = ''
 
     const result = {
         nickname:''
@@ -61,7 +62,7 @@ async function member_delete(){
     window.location.href = "/user/login";
 }
 
-var btn = document.getElementById("deleteMember");
+let btn = document.getElementById("deleteMember");
 
 btn.onclick = function() {
     deleteMember();
@@ -82,7 +83,17 @@ function insertErrorMessage(message){
 }
 
 adjust.onclick = async function(){
+
+    const result = {
+      userId:''
+    }
+
+    await getUserIdFromSession(result);
+
     const nickName = document.getElementById('nickName').value;
+
+    let usersJsonData = null;
+
     if(!nickName){
         insertErrorMessage("*닉네임을 입력해주세요.");
         return;
@@ -93,31 +104,37 @@ adjust.onclick = async function(){
     }
     else{ // 닉네임 중복 확인 로직이 들어가야함.
       let isDuplicate = false;
-      await fetch(`${BACKEND_IP_PORT}/user`)
-      .then(response => response.json())
-      .then(data => {
-        if(nickName in data){
+
+      usersJsonData = await getUsers();
+
+      for(const id in usersJsonData){
+        if(usersJsonData[id]["nickname"] === nickName){
           isDuplicate = true;
+          break
         }
-      });
+      }
+
       if(isDuplicate){
+        insertErrorMessage("*이미 존재하는 닉네임입니다.");
         return;
       }
-    } 
-    
-    const result = {
-      nickname:''
     }
-
-    await getUserIdFromSession(result);
-
+    
     // 이미지 업로드 부분
     const profileImage = document.getElementById('profile-image-upload').files[0];
+    
     const formData = new FormData();
-    const encodedFileName = encodeURIComponent(profileImage.name);
-    formData.append('image', profileImage,encodedFileName);
 
-    const originNickName = result.nickname;
+    let encodedFileName = usersJsonData[result.userId].profileImage;
+
+    if(profileImage){
+      const encodedFileName = encodeURIComponent(profileImage.name);
+      formData.append('image', profileImage,encodedFileName);
+    }else{
+
+    }
+
+    const originNickName = usersJsonData[result.userId]["nickname"];
 
     // 유저 수정 정보 전송
 
@@ -142,24 +159,28 @@ adjust.onclick = async function(){
 
     // 이미지 저장 부분
 
-    await fetch('/upload', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => {
-      if(response.ok){
-          console.log("이미지 성공적으로 업로드.");
-      }else{
-          console.error("이미지 업로드 오류 발생");
-      }
+    const isEmpty = formData.entries().next().done;
+
+    if(!isEmpty){
+      await fetch('/upload', {
+          method: 'POST',
+          body: formData
       })
-      .catch(error => {
-          console.error('네트워크 오류:',error);
-      });
+      .then(response => {
+        if(response.ok){
+            console.log("이미지 성공적으로 업로드.");
+        }else{
+            console.error("이미지 업로드 오류 발생");
+        }
+        })
+        .catch(error => {
+            console.error('네트워크 오류:',error);
+        });
+    }
 
     helper.innerText = ""; // 이전에 유효하지 않은 입력을 한 적이 있다면 helper.innerText = ""이 아니다. 따라서 지워줘야 됨 
     
-    var toastMessage = document.getElementById("adjustToast");
+    let toastMessage = document.getElementById("adjustToast");
     toastMessage.textContent = "수정 완료";
 
     toastMessage.style.display = "block";
@@ -175,76 +196,70 @@ adjust.onclick = async function(){
 
 async function pageLoadActive(){
 
-  var userNickname = ''
+  let userSessionId = ''
 
-    const result = {
-        nickname:''
-    }
+  const result = {
+      userId:''
+  }
 
-    const userInfo = {
-      email:"",
-      nickName:"",
-      profileImage:"",
-    }
+  await getUserIdFromSession(result);
 
-    await getUserIdFromSession(result);
-    userNickname = result.nickname;
+  userSessionId = result.userId;
 
-    await fetch(`${BACKEND_IP_PORT}/user`)
-    .then(response => response.json())
-    .then(data => {
-      for(const name in data){
-        if(data[name]["nickname"] === userNickname){
-          userInfo.email = data[name]["email"];
-          userInfo.nickName = userNickname;
-          userInfo.profileImage = data[name]["profileImage"]
-          break;
-        }
-      }
-    });
+  const userInfo = {
+    email:"",
+    nickName:"",
+    profileImage:"",
+  }
 
-    var dropbtn = document.querySelector('.dropbtn');
-    dropbtn.style.backgroundImage = `url("/images/${userInfo.profileImage}")`;
+  const user = await getUser(userSessionId);
 
-    var big_image = document.getElementById("user-profile-image");
-    big_image.src = `/images/${userInfo.profileImage}`;
+  userInfo.email = user.email;
+  userInfo.nickName = user.nickname;
+  userInfo.profileImage = user.profileImage;
 
-    var email = document.getElementById("email");
-    email.innerText = userInfo.email;
+  let dropbtn = document.querySelector('.dropbtn');
+  dropbtn.style.backgroundImage = `url("/images/${userInfo.profileImage}")`;
 
-    var nickName = document.getElementById("nickName");
-    nickName.value = userInfo.nickName;
+  let big_image = document.getElementById("user-profile-image");
+  big_image.src = `/images/${userInfo.profileImage}`;
 
-    //// 이미지 처리
-    const userBigImage = document.querySelector(".user-big-image");
+  let email = document.getElementById("email");
+  email.innerText = userInfo.email;
+
+  let nickName = document.getElementById("nickName");
+  nickName.value = userInfo.nickName;
+
+  //// 이미지 처리
+  const userBigImage = document.querySelector(".user-big-image");
+
+  // 파일 업로드 input 요소를 가져옵니다.
+  const profileImageUpload = document.getElementById("profile-image-upload");
   
-    // 파일 업로드 input 요소를 가져옵니다.
-    const profileImageUpload = document.getElementById("profile-image-upload");
-    
-    // 이미지를 렌더링할 img 요소를 가져옵니다.
-    const userProfileImage = document.getElementById("user-profile-image");
+  // 이미지를 렌더링할 img 요소를 가져옵니다.
+  const userProfileImage = document.getElementById("user-profile-image");
 
-    userBigImage.addEventListener("click", function() {
-      // 파일 업로드 input을 클릭합니다.
-      profileImageUpload.click();
-    });
+  userBigImage.addEventListener("click", function() {
+    // 파일 업로드 input을 클릭합니다.
+    profileImageUpload.click();
+  });
 
-    profileImageUpload.addEventListener("change", function() {
-      // 선택한 파일이 있는지 확인합니다.
-      if (profileImageUpload.files && profileImageUpload.files[0]) {
-        // FileReader 객체를 생성합니다.
-        const reader = new FileReader();
-        
-        // 파일을 읽었을 때의 이벤트를 설정합니다.
-        reader.onload = function(e) {
-          // 이미지를 렌더링합니다.
-          userProfileImage.src = e.target.result;
-        }
-        
-        // 파일을 읽습니다.
-        reader.readAsDataURL(profileImageUpload.files[0]);
+  profileImageUpload.addEventListener("change", function() {
+    // 선택한 파일이 있는지 확인합니다.
+    if (profileImageUpload.files && profileImageUpload.files[0]) {
+      // FileReader 객체를 생성합니다.
+      const reader = new FileReader();
+      
+      // 파일을 읽었을 때의 이벤트를 설정합니다.
+      reader.onload = function(e) {
+        // 이미지를 렌더링합니다.
+        userProfileImage.src = e.target.result;
       }
-    });
+      
+      // 파일을 읽습니다.
+      reader.readAsDataURL(profileImageUpload.files[0]);
+    }
+  });
 
 }
 

@@ -47,6 +47,7 @@ function createPost(post){
 
     const postJson = {
         "id":maxId+1,
+        "userId":parseInt(post.userId),
         "title":post.title,
         "content":post.content,
         "good":post.good,
@@ -54,7 +55,6 @@ function createPost(post){
         "watch":post.watch,
         "time":post.time,
         "image":"images/"+post.image,
-        "writer":post.writer,
     }
 
     postsJsonData[postJson.id.toString()] = postJson;

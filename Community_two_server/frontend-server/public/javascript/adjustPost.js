@@ -1,20 +1,23 @@
 const BACKEND_IP_PORT = "http://localhost:8081"
 
 import {getUserIdFromSession} from './session.js';
+import {getUser} from './getUser.js'
 
 async function render_Post(){
     const postId = window.location.pathname.split('/').pop();
     
-    var userNickname = ''
+    var userSessionId = ''
 
     const result = {
-        nickname:''
+        userId:''
     }
 
     await getUserIdFromSession(result);
-    userNickname = result.nickname;
+    userSessionId = result.userId;
 
-    document.getElementById('user-image').style.backgroundImage = `url('/images/${userNickname}.png')`;
+    const user = await getUser(userSessionId);
+
+    document.getElementById('user-image').style.backgroundImage = `url('/images/${user.profileImage}')`;
 
 
 

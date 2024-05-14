@@ -1,6 +1,7 @@
 const BACKEND_IP_PORT = "http://localhost:8081"
 
 import {getUserIdFromSession} from './session.js';
+import { getUser,getUsers } from './getUser.js';
 
 function submitActivate(){
     const title = document.getElementById("title").value;
@@ -15,7 +16,10 @@ function submitActivate(){
 
 async function checkValidation(){
 
-    getUserIdFromSession({nickname:''}); // 게시글을 쓰기전에 로그인 상태인지 확인
+    const result = {
+        userId:''
+    }
+    await getUserIdFromSession(result); // 게시글을 쓰기전에 로그인 상태인지 확인
 
     const title = document.getElementById("title").value;
     const content = document.getElementById("content").value;
@@ -43,18 +47,6 @@ async function checkValidation(){
     const encodedFileName = encodeURIComponent(file.name);
     formData.append('image',file,encodedFileName);
 
-    var userNickname = ''
-
-    const result = {
-        nickname:''
-    }
-
-    await getUserIdFromSession(result); // 게시글 게시하기 전에 세션이 만료되거나 현재 로그인 상태인지 확인
-
-    userNickname = result.nickname;
-
-    console.log("접속된 유저 닉네임은 :",userNickname)
-
     fetch('/upload',{
         method: 'POST',
         body: formData,
@@ -73,6 +65,7 @@ async function checkValidation(){
         document.getElementById('postHelper').innerHTML = "*제목,내용을 모두 작성해주세요"
     }else{
         const jsonData = {
+            userId : result.userId,
             title: title,
             content: content,
             good : good,
@@ -80,7 +73,6 @@ async function checkValidation(){
             watch : watch,
             time : formattedDate,
             image : encodedFileName, 
-            writer : userNickname,
         };
 
         const data = {
@@ -101,18 +93,22 @@ async function checkValidation(){
             window.location.href = '/post';
         })
 
-        // 이 코드는 백엔드 서버에서 구현하자.
-        // fetch('/saveData',{
-        //     method: 'POST',
-        //     headers:{
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body:JSON.stringify(jsonData)
-        // })
-        // .then(response=>response.json())
-        // .then(data => console.log(data))
-        // .catch(error => console.error('Error:', error));
     }
+}
+
+async function init_page(){
+    let userId = '';
+    const result = {
+        userId:''
+    }
+    await getUserIdFromSession(result);
+    userId = result.userId;
+
+    const user = await getUser(userId);
+
+    const imgPath = user.profileImage;
+
+    document.getElementById('user-image').style.backgroundImage = `url('/images/${imgPath}')`;
 }
 
 document.getElementById("title").addEventListener('input',submitActivate);
@@ -120,3 +116,5 @@ document.getElementById("title").addEventListener('input',submitActivate);
 document.getElementById("content").addEventListener('input',submitActivate);
 
 document.getElementById("submit").addEventListener('click',checkValidation);
+
+document.addEventListener('DOMContentLoaded',init_page);

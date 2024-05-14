@@ -4,7 +4,7 @@ function validateUser(req, res) {
     const email = req.body.email;
     const password = req.body.password;
 
-    const isValid = model.validateUser(email, password)
+    const isValid = model.validateUser(email, password);
     const resultJson = {
         result : `${isValid}`
     }
@@ -24,6 +24,7 @@ function validateUser(req, res) {
 
 function getUsers(req,res){
     res.json(model.getUsers());
+    
 }
 
 function joinUser(req,res){
@@ -61,6 +62,11 @@ function deleteUser(req,res){
     res.status(204).send("delete_success");
 }
 
+function getUser(req,res){
+    const userId = req.params.userId;;
+    res.json(model.getUser(userId));
+}
+
 export default {
     validateUser,
     getUsers,
@@ -68,4 +74,5 @@ export default {
     updateUser,
     updatePassword,
     deleteUser,
+    getUser,
 }

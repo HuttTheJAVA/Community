@@ -15,7 +15,7 @@ function writeJson(sub_dir,usersJsonData,encode){
 }
 
 function validateUser(email, password) {
-    const usersJsonData = readJson(usersJsonDir,'uttf8');
+    const usersJsonData = readJson(usersJsonDir,'utf8');
 
     for (const key in usersJsonData){
         let user = usersJsonData[key];
@@ -40,6 +40,11 @@ function getUserId(email) {
 
 function getUsers(){
     return readJson(usersJsonDir,'utf8');
+}
+
+function getUser(userId){
+    const usersJsonData = readJson(usersJsonDir,'utf8');
+    return usersJsonData[userId];
 }
 
 function assignId(){
@@ -75,7 +80,7 @@ function updateUser(originName,nickname,imgName){
 
     let isFound = false;
 
-    for(Id in usersJsonData){
+    for(const Id in usersJsonData){
         if(usersJsonData[Id]["nickname"] === originName){
             usersJsonData[Id]["nickname"] = nickname;
             const user = usersJsonData[Id];
@@ -125,4 +130,5 @@ export default {
     updateUser,
     updatePassword,
     deleteUser,
+    getUser,
 };

@@ -1,5 +1,6 @@
 const BACKEND_IP_PORT = "http://localhost:8081"
 import {getUserIdFromSession} from './session.js';
+import {getUsers,getUser} from './getUser.js';
 // 아래 함수는 비밀번호가 맞는지 확인하는 함수가 아닌 새로 수정할 비밀번호의 유효성을 검사한다.
 // 비밀번호 인증은 이미 adjustPassword페이지를 보여주기 전에 되 있어야 한다.
 function validatePassword(password) {
@@ -50,11 +51,11 @@ function button_change(){
 document.getElementById("adjust").addEventListener('click', async function() {
     
     const result = {
-        nickname:''
+        userId:''
     }
 
     await getUserIdFromSession(result);
-    const userNickname = result.nickname;
+    const userSessionId = result.userId;
 
     var password = document.getElementById("password").value;
     var passWordErrorMessage = validatePassword(password);
@@ -81,7 +82,7 @@ document.getElementById("adjust").addEventListener('click', async function() {
         }else{
 
             const obj = {
-                nickname:userNickname,
+                userId:userSessionId,
                 password:password
             }
 
@@ -120,6 +121,14 @@ document.getElementById("password-check").addEventListener('input',function(){
     button_change();
 });
 
-document.addEventListener('DOMContentLoaded',function(){
-    getUserIdFromSession({nickname:""})
+document.addEventListener('DOMContentLoaded',async function(){
+    const result = {
+        userId:''
+    }
+    await getUserIdFromSession(result)
+    console.log("getUserIdFromSession 후.. result 상태",console.log(result));
+    const user = await getUser(result.userId);
+
+    const user_image = document.getElementById('user-image');
+    user_image.style.backgroundImage = `url("/images/${user.profileImage}")`;
 })
