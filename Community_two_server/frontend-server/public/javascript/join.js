@@ -181,21 +181,7 @@ async function global_validation(){
         const encodedFileName = encodeURIComponent(file.name);
         formData.append('image',file,encodedFileName);
 
-        fetch('/upload',{
-            method:'POST',
-            body: formData,
-        })
-        .then(response => {
-            if (response.ok) {
-                console.log("이미지 성공적으로 업로드.");
-            } else {
-                console.error("이미지 업로드 오류 발생");
-            }
-        })
-        .catch(error => {
-            console.error('네트워크 오류:', error);
-        });
-
+        const isSaved = true;
 
         await fetch(`${BACKEND_IP_PORT}/user/join`,data)
         .then(response => {
@@ -204,10 +190,31 @@ async function global_validation(){
                 window.location.href = '/user/login';
             }else{
                 alert("회원 가입 실패!");
+                isSaved = false;
                 window.location.href = '/user/join';
             }
-        })
-    
+        }).catch(error => {
+            isSaved = false
+        });
+
+        // 백엔드 서버에 회원 정보 정상 저장 여부에 따라 
+        // 이미지를 저장한다.
+        if(isSaved){
+            fetch('/upload',{
+                method:'POST',
+                body: formData,
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log("이미지 성공적으로 업로드.");
+                } else {
+                    console.error("이미지 업로드 오류 발생");
+                }
+            })
+            .catch(error => {
+                console.error('네트워크 오류:', error);
+            });
+        }
         
     }else{
         emailHelper.innerText = email_err;

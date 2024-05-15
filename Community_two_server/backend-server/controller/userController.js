@@ -5,8 +5,9 @@ function validateUser(req, res) {
     const password = req.body.password;
 
     const isValid = model.validateUser(email, password);
+
     const resultJson = {
-        result : `${isValid}`
+        result : isValid
     }
     
     if (resultJson.result) {

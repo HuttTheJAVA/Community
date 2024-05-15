@@ -2,7 +2,7 @@
 //https 에러 메시지:https://localhost:8081/post net::ERR_SSL_PROTOCOL_ERROR
 const BACKEND_IP_PORT = "http://localhost:8081"
 
-import { getUserIdFromSession } from "./session.js";
+import { getUserIdFromSession,isLogin } from "./session.js";
 import {getUsers} from "./getUser.js"
 
 
@@ -23,6 +23,20 @@ fetch(`${BACKEND_IP_PORT}/post`)
     jsonContainer.innerHTML = ''; // 기존에 있던 내용을 지웁니다.
     
     const usersJsonData = await getUsers();
+    
+    const result = {
+        userId:''
+    }
+
+    await isLogin(result);
+
+    if(result.userId !== ''){
+        const user_image = document.getElementById("user-image");
+
+        const user_progile_image = usersJsonData[result.userId].profileImage;
+
+        user_image.style.backgroundImage = `url('/images/${user_progile_image}')`;
+    }
 
     // JSON 객체에 있는 모든 요소를 순회 하며 렌더링
     for (const postNum in data) { // key는 게시글 번호, value는 게시글 속성들이 있는 또다른 json

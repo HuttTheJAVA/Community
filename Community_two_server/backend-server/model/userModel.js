@@ -4,6 +4,8 @@ import path from 'path';
 const __dirname = path.resolve();
 
 const usersJsonDir = '/model/repository/users.json';
+const replysJsonDir = '/model/repository/reply.json';
+const postsJsonDir = '/model/repository/posts.json';
 
 function readJson(sub_dir,encode){
     const usersJsonFile = fs.readFileSync(__dirname + sub_dir, encode);
@@ -48,9 +50,9 @@ function getUser(userId){
 }
 
 function assignId(){
-    const usersJsonData = JSON.parse(usersJsonDir,'utf8');
+    const usersJsonData = readJson(usersJsonDir,'utf8');
     let maxId = 0;
-    for(key in usersJsonData){
+    for(const key in usersJsonData){
         const intKey = parseInt(key);
         if(intKey > maxId){
             maxId = intKey;
@@ -60,7 +62,7 @@ function assignId(){
 }
 
 async function joinUser(email,password,nickName,profileImage){
-    const usersJsonData = readJson(usersJsonData,'utf8');
+    const usersJsonData = readJson(usersJsonDir,'utf8');
 
     const userId = await assignId();
 
@@ -102,13 +104,43 @@ function updateUser(originName,nickname,imgName){
 
 function deleteUser(userId){
     const usersJsonData = readJson(usersJsonDir,'utf8');
+    const replysJsonData = readJson(replysJsonDir,'utf8');
+    const postsJsonData = readJson(postsJsonDir,'utf8');
 
     if(userId in usersJsonData){
         delete usersJsonData[userId];
-        writeJson(usersJsonDir,usersJsonData,'utf8');
     }else {
         console.log(`${userId}을(를) 찾을 수 없습니다.`);
     }
+
+    for(const postId in replysJsonData){
+        const array = [];
+        const replyArray = replysJsonData[postId];
+        let isChanged = false;
+        for(let idx = 0;idx<replyArray.length;idx++){
+            const replyJson = replyArray[idx];
+            if(parseInt(replyJson["userId"]) !== parseInt(userId)){
+                array.push(replyJson);
+            }else{
+                isChanged = true;
+            }
+        }
+        if(isChanged){
+            delete replysJsonData[postId];
+            replysJsonData[postId] = array;
+        }
+    }
+
+    for(const postId in postsJsonData){
+        const post = postsJsonData[postId];
+        if(parseInt(post.userId) === parseInt(userId)){
+            delete postsJsonData[postId];
+        }
+    }
+
+    writeJson(usersJsonDir,usersJsonData,'utf8');
+    writeJson(replysJsonDir,replysJsonData,'utf8');
+    writeJson(postsJsonDir,postsJsonData,'utf8');
 }
 
 function updatePassword(userId,password){

@@ -13,3 +13,14 @@ export async function getUserIdFromSession(result) {
             }
         });
 }
+
+export async function isLogin(result) {
+
+    await fetch(`${BACKEND_IP_PORT}/user/session`, {credentials: 'include'})
+        .then(response => response.json())
+        .then(user => {
+            if (user.userId !== '') {
+                result.userId = user.userId;
+            }
+        });
+}

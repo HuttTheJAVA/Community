@@ -24,18 +24,18 @@ function hideToast(){
 async function member_delete(){
     // 실제 멤버 삭제하는 요청을 서버에게 해야함.
     
-    let userNickname = ''
+    let userSessionId = ''
 
     const result = {
-        nickname:''
+        userId:''
     }
 
     await getUserIdFromSession(result);
 
-    userNickname = result.nickname;
+    userSessionId = result.userId;
 
     const obj = {
-      nickname:userNickname
+      userId:userSessionId
     }
 
     const data = {
@@ -128,7 +128,7 @@ adjust.onclick = async function(){
     let encodedFileName = usersJsonData[result.userId].profileImage;
 
     if(profileImage){
-      const encodedFileName = encodeURIComponent(profileImage.name);
+      encodedFileName = encodeURIComponent(profileImage.name);
       formData.append('image', profileImage,encodedFileName);
     }else{
 

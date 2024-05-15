@@ -68,7 +68,7 @@ async function existAccount(email,password){
     return await fetch(`${BACKEND_IP_PORT}/user/sign-in`,data)
     .then(isAuthentic => isAuthentic.json())
     .then(isAuthenticJson => {
-        return isAuthenticJson.result === "true";
+        return isAuthenticJson.result === true;
     })
 }
 

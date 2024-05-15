@@ -2,9 +2,9 @@
   "1": {
     "userId": 1,
     "email": "Lee@nav.com",
-    "password": "freefromseoul123!Q",
-    "nickname": "Lee2782",
-    "profileImage": "KoreanDream.webp"
+    "password": "asdqwe123!Q",
+    "nickname": "Lee",
+    "profileImage": "newMan.png"
   },
   "2": {
     "userId": 2,
@@ -33,5 +33,12 @@
     "password": "freefromseoul123!Q",
     "nickname": "Oh",
     "profileImage": "Oh.png"
+  },
+  "6": {
+    "userId": 6,
+    "email": "yeopo@nav.com",
+    "password": "asdqwe123!Q",
+    "nickname": "yeopo",
+    "profileImage": "여포.webp"
   }
 }
