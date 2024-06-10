@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path, { parse } from 'path';
+import postDAO from './repository/postDAO.js';
 
 const __dirname = path.resolve();
 
@@ -17,8 +18,10 @@ function writeJson(sub_dir,usersJsonData,encode){
     fs.writeFileSync(__dirname + sub_dir,JSON.stringify(usersJsonData,null,2),encode);
 }
 
-function getPosts(){
-    return readJson(postJsonDir,'utf8');
+async function getPosts(){
+    // return readJson(postJsonDir,'utf8');
+    // return await postDAO.getPosts();
+    console.log(await postDAO.getPosts());
 }
 
 function getPost(postId){

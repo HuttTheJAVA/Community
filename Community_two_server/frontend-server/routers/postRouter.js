@@ -12,6 +12,11 @@ router.get("/create",(req,res) => {
     res.sendFile(path.join(__dirname,'view/post.html'));
 });
 
+router.get("/asd",(req,res) => {
+    console.log("hi ㅋ");
+    res.sendFile(path.join(__dirname,'view/sessionTest.html'))
+})
+
 router.get("/:postId",(req,res) => {
     res.sendFile(path.join(__dirname,'view/post-view.html'));
 });

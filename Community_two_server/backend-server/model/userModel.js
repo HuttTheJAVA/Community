@@ -38,6 +38,8 @@ function getUserId(email) {
             return user["userId"];
         }
     }
+
+    // 실제 DAO를 통해 DB의 것을 가져오는 코드 구현할 것.
 }
 
 function getUsers(){
@@ -47,6 +49,10 @@ function getUsers(){
 function getUser(userId){
     const usersJsonData = readJson(usersJsonDir,'utf8');
     return usersJsonData[userId];
+
+    //실제 DAO 활용해서 구현해야 함.
+
+    // const findUser = 
 }
 
 function assignId(){

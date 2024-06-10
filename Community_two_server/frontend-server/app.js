@@ -46,4 +46,3 @@ app.get('/image', (req, res) => {
 app.listen(port, () => {
     console.log(`FrontEnd Server app listening on port ${port}`);
 });
-
