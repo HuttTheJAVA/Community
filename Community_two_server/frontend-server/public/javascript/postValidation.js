@@ -106,7 +106,7 @@ async function init_page(){
 
     const user = await getUser(userId);
 
-    const imgPath = user.profileImage;
+    const imgPath = user[0].profileImage;
 
     document.getElementById('user-image').style.backgroundImage = `url('/images/${imgPath}')`;
 }

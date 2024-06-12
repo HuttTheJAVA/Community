@@ -3,7 +3,7 @@
 const BACKEND_IP_PORT = "http://localhost:8081"
 
 import { getUserIdFromSession,isLogin } from "./session.js";
-import {getUsers} from "./getUser.js"
+import {getUser,getUsers} from "./getUser.js"
 
 
 function K_feature(feature){
@@ -22,18 +22,23 @@ fetch(`${BACKEND_IP_PORT}/post`)
     const jsonContainer = document.getElementById('post-container');
     jsonContainer.innerHTML = ''; // 기존에 있던 내용을 지웁니다.
     
-    const usersJsonData = await getUsers();
-    
     const result = {
         userId:''
     }
 
     await isLogin(result);
 
+
+
     if(result.userId !== ''){
+
+        const userId = result.userId;
+
+        const userJsonData = await getUser(userId); //배열 타입
+
         const user_image = document.getElementById("user-image");
 
-        const user_progile_image = usersJsonData[result.userId].profileImage;
+        const user_progile_image = userJsonData[0].profileImage; //배열 타입이라서 인덱싱
 
         user_image.style.backgroundImage = `url('/images/${user_progile_image}')`;
     }
@@ -41,14 +46,11 @@ fetch(`${BACKEND_IP_PORT}/post`)
     // JSON 객체에 있는 모든 요소를 순회 하며 렌더링
     for (const postNum in data) { // key는 게시글 번호, value는 게시글 속성들이 있는 또다른 json
         
-        let { id, userId, title, content, good, reply, watch, time, image } = data[postNum];
+        let { id, title, content, good, reply, watch, date, image, userId, nickname, profileImage  } = data[postNum];
 
         good = K_feature(good);
         reply = K_feature(reply);
         watch = K_feature(watch);
-
-        const writer = usersJsonData[userId]["nickname"];
-        const imgPath = usersJsonData[userId]["profileImage"]
 
         jsonContainer.innerHTML += `
             <div class="post-preview card" onclick="redirectToPost(${id})">
@@ -57,16 +59,16 @@ fetch(`${BACKEND_IP_PORT}/post`)
                     <div>좋아요 ${good}</div>
                     <div class="post-feature-area">댓글 ${reply}</div>
                     <div class="post-feature-area">조회수 ${watch}</div>
-                    <div class="post-feature-right">${time}</div>
+                    <div class="post-feature-right">${date}</div>
                     <div class="middleBig-bottom-margin"></div>
                 </div>
                 <div class="solid-line-1px-black"></div>
                 <div class="container-row">
                 <div class="image-circle">
-                    <img src="/images/${imgPath}">
+                    <img src="/images/${profileImage}">
                 </div>
                     <div class="left-margin bold" style="font-size: 15px">
-                        ${writer}
+                        ${nickname}
                     </div>
                 </div>
             </div>

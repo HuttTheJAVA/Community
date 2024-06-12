@@ -68,7 +68,8 @@ async function existAccount(email,password){
     return await fetch(`${BACKEND_IP_PORT}/user/sign-in`,data)
     .then(isAuthentic => isAuthentic.json())
     .then(isAuthenticJson => {
-        return isAuthenticJson.result === true;
+        console.log(isAuthenticJson);
+        return isAuthenticJson.result !== -1; // 반환값은 유저 id이며 유저가 존재한다면 반환값은 -1이 될 수 없음.
     })
 }
 

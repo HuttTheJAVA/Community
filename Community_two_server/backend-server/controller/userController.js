@@ -1,19 +1,19 @@
 import model from '../model/userModel.js';
 
-function validateUser(req, res) {
+async function validateUser(req, res) {
     const email = req.body.email;
     const password = req.body.password;
 
-    const isValid = model.validateUser(email, password);
+    const userId = await model.validateUser(email, password);
 
     const resultJson = {
-        result : isValid
+        result : userId
     }
     
-    if (resultJson.result) {
+    if (resultJson.result !== -1) {
         req.session.user = {
-            userId: `${model.getUserId(email)}`,
-            authorized: true,
+            userId: `${resultJson.result}`,
+            authorized: true,   
         }
         console.log("세션 생성!");
         console.log(req.session.user);
@@ -63,9 +63,10 @@ function deleteUser(req,res){
     res.status(204).send("delete_success");
 }
 
-function getUser(req,res){
-    const userId = req.params.userId;;
-    res.json(model.getUser(userId));
+async function getUser(req,res){
+    const userId = req.params.userId;
+    const user = await model.getUser(userId);
+    res.json(user);
 }
 
 export default {

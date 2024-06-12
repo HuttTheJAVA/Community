@@ -25,7 +25,6 @@ router.get('/session',(req,res) => {
     // }
 
     if (req.session && req.session.user && req.session.user.userId) {
-
         res.json({userId: req.session.user.userId});
     } else {
         res.json({ userId: '' });

@@ -20,8 +20,10 @@ function writeJson(sub_dir,usersJsonData,encode){
 
 async function getPosts(){
     // return readJson(postJsonDir,'utf8');
-    // return await postDAO.getPosts();
-    console.log(await postDAO.getPosts());
+
+    console.log("postDAO.getPosts(): "+postDAO.getPosts());
+    const posts = await postDAO.getPosts();
+    return posts;
 }
 
 function getPost(postId){

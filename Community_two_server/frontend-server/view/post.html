@@ -199,7 +199,7 @@
   </head>
   <body>
     <div class="flex-container-between">
-      <span class="arrow-prev"></span>
+      <span class="arrow-prev" onclick="window.location.href = '/post';"></span>
       <div class="title">아무 말 대잔치</div>
       <span id="user-image" class="user-image"></span>
     </div>
@@ -239,7 +239,7 @@
         class="solid-line-1px-black"
         style="margin-top: 10px; margin-bottom: 15px"
       ></div>
-      <textarea id="content" placeholder="내용을 입력해주세요."></textarea>
+      <textarea id="content" placeholder="내용을 입력해주세요. 최대(500자)" maxlength="500"></textarea>
 
       <div
         class="solid-line-1px-black"

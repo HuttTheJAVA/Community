@@ -1,7 +1,7 @@
 import model from '../model/postModel.js'
 
-function getPosts(req,res){
-    const postsJson = model.getPosts();
+async function getPosts(req,res){
+    const postsJson = await model.getPosts();
 
     res.json(postsJson);
 }

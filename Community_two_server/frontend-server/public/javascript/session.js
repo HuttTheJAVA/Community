@@ -14,6 +14,7 @@ export async function getUserIdFromSession(result) {
         });
 }
 
+// 유저의 프로필 사진을 유지하기 위한 메소드 (비로그인 상태여도 로그인을 요구하지 않음.)
 export async function isLogin(result) {
 
     await fetch(`${BACKEND_IP_PORT}/user/session`, {credentials: 'include'})

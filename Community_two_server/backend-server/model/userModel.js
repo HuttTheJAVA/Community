@@ -1,5 +1,6 @@
 import fs, { read } from 'fs';
 import path from 'path';
+import userDAO from './repository/userDAO.js';
 
 const __dirname = path.resolve();
 
@@ -16,17 +17,23 @@ function writeJson(sub_dir,usersJsonData,encode){
     fs.writeFileSync(__dirname + sub_dir,JSON.stringify(usersJsonData,null,2),encode);
 }
 
-function validateUser(email, password) {
-    const usersJsonData = readJson(usersJsonDir,'utf8');
+async function validateUser(email, password) {
+    // const usersJsonData = readJson(usersJsonDir,'utf8');
 
-    for (const key in usersJsonData){
-        let user = usersJsonData[key];
-        if(user.email == email && user.password == password){
-            return true;
-        }
-    }
+    // for (const key in usersJsonData){
+    //     let user = usersJsonData[key];
+    //     if(user.email == email && user.password == password){
+    //         return true;
+    //     }
+    // }
     
-    return false;
+    // return false;
+
+    const foundUser = await userDAO.loginUser(email,password);
+    if(foundUser.length === 0){
+        return -1;
+    }
+    return foundUser[0].id;
 }
 
 function getUserId(email) {
@@ -35,7 +42,7 @@ function getUserId(email) {
     for (const key in usersJsonData){
         let user = usersJsonData[key];
         if(user.email == email){
-            return user["userId"];
+            return user["userId"];  
         }
     }
 
@@ -46,13 +53,14 @@ function getUsers(){
     return readJson(usersJsonDir,'utf8');
 }
 
-function getUser(userId){
-    const usersJsonData = readJson(usersJsonDir,'utf8');
-    return usersJsonData[userId];
+async function getUser(userId){
+    // const usersJsonData = readJson(usersJsonDir,'utf8');
+    
+    // 여기서 유저 전체 정보를 넘기면 안됨 (비밀번호도 같이 넘어감)
+    // return usersJsonData[userId];
 
     //실제 DAO 활용해서 구현해야 함.
-
-    // const findUser = 
+    return await userDAO.getUserById(userId);
 }
 
 function assignId(){
