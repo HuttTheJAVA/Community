@@ -38,9 +38,9 @@ fetch(`${BACKEND_IP_PORT}/post`)
 
         const user_image = document.getElementById("user-image");
 
-        const user_progile_image = userJsonData[0].profileImage; //배열 타입이라서 인덱싱
+        const user_profile_image = userJsonData[0].profileImage; //배열 타입이라서 인덱싱
 
-        user_image.style.backgroundImage = `url('/images/${user_progile_image}')`;
+        user_image.style.backgroundImage = `url('/images/${user_profile_image}')`;
     }
 
     // JSON 객체에 있는 모든 요소를 순회 하며 렌더링

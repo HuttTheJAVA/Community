@@ -6,8 +6,8 @@ async function getPosts(req,res){
     res.json(postsJson);
 }
 
-function getPost(req,res){
-    const post = model.getPost(req.params.postId);
+async function getPost(req,res){
+    const post = await model.getPost(req.params.postId);
     res.json(post);
 }
 

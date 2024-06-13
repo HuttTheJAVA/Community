@@ -26,12 +26,14 @@ async function getPosts(){
     return posts;
 }
 
-function getPost(postId){
-    const postsJsonData = readJson(postJsonDir,'utf8');
+async function getPost(postId){
+    // const postsJsonData = readJson(postJsonDir,'utf8');
 
-    const post = postsJsonData[postId];
+    // const post = postsJsonData[postId];
     
-    if (!post) {
+    const post = await postDAO.getPost(postId);
+
+    if (post === null) {
         // postId에 해당하는 게시물이 없는 경우
         throw new Error("게시물을 찾을 수 없습니다.");
     }

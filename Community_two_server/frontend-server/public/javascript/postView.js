@@ -1,6 +1,7 @@
 const BACKEND_IP_PORT = "http://localhost:8081"
 
 import {getUserIdFromSession} from './session.js';
+import {getUser} from "./getUser.js"
 
 function K_feature(feature){
     if(feature > 999){
@@ -12,22 +13,22 @@ function K_feature(feature){
 
 async function render_Post(){
     
-    const usersJsonData = await getUsers();
-
-    let userSessionId = ''
-    
     const result = {
         userId:''
     }
 
     await getUserIdFromSession(result);
-    userSessionId = result.userId;
+    const userSessionId = result.userId;
 
-    const imgPath = usersJsonData[userSessionId]["profileImage"];
+    const userJsonData = await getUser(userSessionId); //배열 타입
 
-    document.getElementById('user-image').style.backgroundImage = `url('/images/${imgPath}')`;
+    const user_profile_image = userJsonData[0].profileImage; //배열 타입이라서 인덱싱
+
+    document.getElementById('user-image').style.backgroundImage = `url('/images/${user_profile_image}')`;
 
     const postId = window.location.pathname.split('/').pop();
+
+    let replys;
 
     await fetch(`${BACKEND_IP_PORT}/post/${postId}`)
     .then(response => response.json())
@@ -35,15 +36,19 @@ async function render_Post(){
     const jsonContainer = document.getElementById("post-view-container");
     jsonContainer.innerHTML = ''; // 기존에 있던 내용을 지웁니다.
     
+    const post = data.post[0]; // 단일 json
+    replys = data.replys; // array
+
     // 이제 jsonContainer안에 게시글 상세 사항들을 렌더링.
-    const userId = data["userId"];
-    const title = data["title"];
-    const writer = usersJsonData[userId]["nickname"];
-    const content = data["content"];
-    const reply = K_feature(parseInt(data["reply"]));
-    const watch = K_feature(parseInt(data["watch"]));
-    const time = data["time"];
-    const image = data["image"];
+    const title = post["title"];
+    const content = post["content"];
+    const watch = K_feature(parseInt(post["watch"]));
+    const reply = K_feature(parseInt(post["reply"]))
+    const date = post["date"];
+    const image = post["image"];
+    const writer = post["nickname"];
+    const userId = post["userId"];
+    const writerImage = post[""]
 
     jsonContainer.innerHTML += `<div 
     class="feature-name-container bold litte-bottom-margin"
@@ -51,13 +56,12 @@ async function render_Post(){
         ${title}
     </div>
     <div class="feature-name-container" style="margin-bottom: 25px">
-        
         <div class="image-circle" style="margin-right: 10px">
             <img src="">
         </div>
-        <div class="text-15px bold">${writer}</div> 
+        <div class="text-15px bold">${writer}</div>
         <div style="margin-left: 30px; font-size: 14px">
-        ${time}
+        ${date}
         </div>
         <div id="PostButton" class="flex-button margin-left">
         </div>
@@ -105,7 +109,7 @@ async function render_Post(){
         <div id="delete-post-${postId}" class="mini-button" style="margin-left: 10px">삭제</div>`
     }
 
-    const profileImagePath = usersJsonData[userId]["profileImage"];
+    const profileImagePath = post["profileImage"];
 
     const imageCircle = document.querySelector('.image-circle img');
     imageCircle.src = "/images/"+profileImagePath;
@@ -114,59 +118,57 @@ async function render_Post(){
     document.getElementById("reply-submit").addEventListener('click',submit_reply);
     });
 
-    replys(userSessionId,usersJsonData);
+    randerReplys(userSessionId,replys);
 }
 
-async function replys(userSessionId,usersJsonData){
-    const postId = window.location.pathname.split('/').pop();
-    await fetch(`${BACKEND_IP_PORT}/post/${postId}/reply`)
-    .then(response => response.json())
-    .then(data => {
-        const replyContainer = document.getElementById("post-view-container");
+async function randerReplys(userSessionId,replys){
+    
+    const replyContainer = document.getElementById("post-view-container");
 
-        for(const reply in data){
-            const userId = data[reply]["userId"];
-            const content = data[reply]["content"];
-            const time = data[reply]["date"];
-            const id = data[reply]["id"];
+    for(const reply in replys){
+        const userId = replys[reply]["userId"];
+        const content = replys[reply]["content"];
+        const date = replys[reply]["date"];
+        const id = replys[reply]["id"];
+        const profileImage = replys[reply]["profileImage"];
 
-            const isCurrentUser = parseInt(userSessionId) === parseInt(userId);
+        const isCurrentUser = parseInt(userSessionId) === parseInt(userId);
 
-            const writer = usersJsonData[userId]["nickname"];
+        const writer = replys[reply]["nickname"];
 
-            replyContainer.insertAdjacentHTML('beforeend',`
-            <div class="reply-box">
-                <div class="reply-box-left">
-                    <div class="reply-box-left-writer-info">
-                        <div id="img-${userId}" class="user-image" style="margin-right: 10px"></div>
+        replyContainer.insertAdjacentHTML('beforeend',`
+        <div class="reply-box">
+            <div class="reply-box-left">
+                <div class="reply-box-left-writer-info">
+                    <div id="img-${userId}" class="user-image" style="margin-right: 10px; background-image: url('/images/${profileImage}')"></div>
 
-                        <div class="bold">${writer}</div>
-                        <div style="margin-left: 30px; font-size: 14px">
-                        ${time}
-                        </div>
-                    </div>
-                    <div class="reply-box-left-content">
-                        <div id=${id} style="margin-left: 45px">${content}</div>
+                    <div class="bold">${writer}</div>
+                    <div style="margin-left: 30px; font-size: 14px">
+                    ${date}
                     </div>
                 </div>
-                ${isCurrentUser ? `
-                            <div class="reply-box-update">
-                                <div id="reply-adjust-${id}" class="reply-adjust-mini-button" onclick="adjustReply(${id})">수정</div>
-                                <div id="reply-delete-${id}" class="reply-delete-mini-button" style="margin-left: 10px">삭제</div>
-                            </div>
-                        ` : ''}
-            </div>`);
-        }
-    });
+                <div class="reply-box-left-content">
+                    <div id=${id} style="margin-left: 45px">${content}</div>
+                </div>
+            </div>
+            ${isCurrentUser ? `
+                        <div class="reply-box-update">
+                            <div id="reply-adjust-${id}" class="reply-adjust-mini-button" onclick="adjustReply(${id})">수정</div>
+                            <div id="reply-delete-${id}" class="reply-delete-mini-button" style="margin-left: 10px">삭제</div>
+                        </div>
+                    ` : ''}
+        </div>`);
+    }
 
-    const imgElements = document.querySelectorAll(`.user-image`);
-    imgElements.forEach(imgElement => {
-        const user_id = imgElement.id.split('-')[1];
-        if(usersJsonData[user_id]){
-            const userImgPath = "/images/"+usersJsonData[user_id].profileImage;
-            imgElement.style.backgroundImage = `url('${userImgPath}')`;
-        }
-    })
+    // const imgElements = document.querySelectorAll(`.user-image`);
+    // imgElements.forEach(imgElement => {
+    //     const user_id = imgElement.id.split('-')[1];
+    //     if(usersJsonData[user_id]){
+    //         const userImgPath = "/images/"+usersJsonData[user_id].profileImage;
+    //         imgElement.style.backgroundImage = `url('${userImgPath}')`;
+    //     }
+    //     const userImgPath
+    // })
 
     toast();
 }

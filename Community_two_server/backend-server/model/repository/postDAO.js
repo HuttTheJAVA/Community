@@ -8,11 +8,11 @@ const getPosts = async () => {
 }
 
 const getPost = async (postId) => {
-    const selectPostSQL = "SELECT * FROM posts WHERE id = ?";
+    const selectPostSQL = "SELECT userId,title,content,good,reply,watch,date,image,nickname,profileImage FROM posts as p left join users as u on p.userId=u.id WHERE p.id = ?";
 
     const updatePostWatchSQL = "UPDATE posts SET watch = watch + 1 WHERE id = ?";
 
-    const postReplySQL = "SELECT * FROM replys WHERE postId = ? ORDER BY date";
+    const postReplySQL = "select r.id,userId,date,content,nickname,profileImage from replys as r left join users u on r.userId=u.id where r.postId = ? ORDER BY date";
 
     return new Promise( async (resolve,reject) => {
         connection.beginTransaction();
