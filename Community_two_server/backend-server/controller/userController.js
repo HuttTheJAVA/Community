@@ -70,16 +70,14 @@ async function getUser(req,res){
 }
 
 async function getUserByNickname(req,res){
-    const nickname = req.body.nickname;
+    const nickname = req.params.nickname;
     const userId = await model.getUserByNickname(nickname);
-
     res.json(userId);
 }
 
 async function getUserByEmail(req,res){
-    const email = req.body.email;
+    const email = req.params.email;
     const userId = await model.getUserByEmail(email);
-
     res.json(userId);
 }
 

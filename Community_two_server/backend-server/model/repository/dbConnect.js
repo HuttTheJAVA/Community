@@ -4,7 +4,7 @@ const options = {
     host: 'localhost',
     port: 3306,
     user: 'root',
-    password: '025044',
+    password: '19970623',
     database: 'community',
 };
 

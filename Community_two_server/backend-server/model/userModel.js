@@ -31,19 +31,7 @@ async function getUser(userId){
 }
 
 async function joinUser(email,password,nickName,profileImage){
-    const usersJsonData = readJson(usersJsonDir,'utf8');
-
-    const userId = await assignId();
-
-    const newUser = {
-        "userId":userId,
-        "email":email,
-        "password":password,
-        "nickname":nickName,
-        "profileImage":profileImage,
-    }
-    usersJsonData[userId] = newUser;
-    writeJson(usersJsonDir,usersJsonData,'utf8');
+    userDAO.createUser(email,password,nickName,profileImage);
 }
 
 function updateUser(originName,nickname,imgName){
@@ -116,6 +104,14 @@ function updatePassword(userId,password){
     userDAO.updatePassword(userId,password);
 }
 
+async function getUserByNickname(nickname){
+    return await userDAO.getUserByNickname(nickname);
+}
+
+async function getUserByEmail(email){
+    return await userDAO.getUserByEmail(email);
+}
+
 export default {
     validateUser,
     getUserId,
@@ -125,4 +121,6 @@ export default {
     updatePassword,
     deleteUser,
     getUser,
+    getUserByNickname,
+    getUserByEmail,
 };

@@ -1,13 +1,13 @@
 const BACKEND_IP_PORT = "http://localhost:8081"
 
-export function checkDuplicatenickName(nickName){
+export function checkDuplicatenickName(nickname){
+
     return new Promise((resolve,reject) => {
-    fetch(`${BACKEND_IP_PORT}/user/nickname`)
+    fetch(`${BACKEND_IP_PORT}/user/nickname/${nickname}`)
     .then(response => response.json())
     .then(data => {
-        console.log(data);
         let isDuplicate = false;
-        if(nickName in data){
+        if(data.length){
             isDuplicate = true;
         }
         
@@ -24,17 +24,14 @@ export function checkDuplicatenickName(nickName){
 }
 
 export function checkDuplicateEmail(email){
+
     return new Promise((resolve,reject) => {
-    fetch(`${BACKEND_IP_PORT}/user/email`)
+    fetch(`${BACKEND_IP_PORT}/user/email/${email}`)
     .then(response => response.json())
     .then(data => {
-        console.log(data);
         let isDuplicate = false;
-        for(const user in data){
-            if(data[user]["email"] == email){
-                isDuplicate = true;
-                break;
-            }
+        if(data.length){
+            isDuplicate = true;
         }
         
         if (isDuplicate) {

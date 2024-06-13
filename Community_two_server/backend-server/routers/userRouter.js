@@ -43,9 +43,9 @@ router.patch('/update',userController.updateUser);
 
 router.patch('/password',userController.updatePassword);
 
-router.get('/nickname',userController.getUserByNickname);
+router.get('/nickname/:nickname',userController.getUserByNickname);
 
-router.get('/email',userController.getUserByEmail);
+router.get('/email/:email',userController.getUserByEmail);
 
 router.get('/:userId',userController.getUser);
 

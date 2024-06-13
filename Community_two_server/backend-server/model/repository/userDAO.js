@@ -7,9 +7,9 @@ const getUserById = async (id) => {
     return sendQuery(sql,values);
 }
 
-const createUser = async (user) => {
+const createUser = async (email,password,nickname,profileImage) => {
     const sql = "INSERT INTO users (email,password,nickname,profileImage) VALUES (?,?,?,?)";
-    const values = [user.email,user.password,user.nickname,user.profileImage];
+    const values = [email,password,nickname,profileImage];
 
     return sendQuery(sql,values);
 }
