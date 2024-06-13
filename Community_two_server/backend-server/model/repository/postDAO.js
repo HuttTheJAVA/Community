@@ -75,13 +75,13 @@ const getPost = async (postId) => {
 
 const updatePost = async (post) => {
     const sql = "UPDATE posts SET title = ?, content = ?, image = ? WHERE id = ?";
-    const values = [post.title,post.content,post.image,post.id];
+    const values = [post.title,post.content,post.imageName,post.id];
 
     return sendQuery(sql,values);
 }
 
 const deletePost = async (postId) => {
-    const sql = "DELETE FROM posts WHERE id = postId";
+    const sql = "DELETE FROM posts WHERE id = ?";
     const values = [postId];
 
     return sendQuery(sql,values);
@@ -110,7 +110,7 @@ const deleteReply = async (replyId) => {
 
 const updateReply = async (reply) => {
     const sql = "UPDATE replys SET content = ? WHERE id = ?";
-    const values = [reply.content,reply.id];
+    const values = [reply.content,reply.replyId];
 
     return sendQuery(sql,values);
 } 

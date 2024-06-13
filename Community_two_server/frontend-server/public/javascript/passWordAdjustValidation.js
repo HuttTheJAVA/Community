@@ -105,10 +105,12 @@ document.getElementById("adjust").addEventListener('click', async function() {
     
             toastMessage.style.display = "block";
     
-            // 그 유명한 비동기 논블로킹 코드
-            setTimeout(function() {
-                toastMessage.style.display = "none";
-            }, 3000); 
+            // 비동기 setTimeout을 위한 Promise 래퍼
+            await new Promise(resolve => setTimeout(resolve, 3000));
+    
+            // 리다이렉트
+            window.location.href = '/post';
+
         }
     }
 });
@@ -126,9 +128,8 @@ document.addEventListener('DOMContentLoaded',async function(){
         userId:''
     }
     await getUserIdFromSession(result)
-    console.log("getUserIdFromSession 후.. result 상태",console.log(result));
     const user = await getUser(result.userId);
 
     const user_image = document.getElementById('user-image');
-    user_image.style.backgroundImage = `url("/images/${user.profileImage}")`;
+    user_image.style.backgroundImage = `url("/images/${user[0].profileImage}")`;
 })

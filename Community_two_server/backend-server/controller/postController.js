@@ -28,35 +28,33 @@ function createReply(req,res){
     const postId = req.params.postId;
     const replyData = req.body;
 
-    model.createReply(postId,replyData.userId,replyData.date,replyData.content);
+    model.createReply(postId,replyData.userId,replyData.content);
 
     res.status(201).send('댓글 등록 완료');
 }
 
 function updateReply(req,res){
-    const postId = req.params.postId;
     const replyId = req.params.replyId;
     const content = req.body.content;
-    model.updateReply(postId,replyId,content);
+    model.updateReply(replyId,content);
 
     res.status(200).send();
 }
 
 function updatePost(req,res){
-    const postId = req.params.postId;
     const post = {
+        id : req.params.postId,
         title : req.body.title,
         content : req.body.content,
         imageName : req.body.imageName,
     }
-    model.updatePost(post,postId);
+    model.updatePost(post);
     res.status(204).send('update_success');
 }
 
 function deleteReply(req,res){
-    const postId = req.params.postId;
     const replyId = req.params.replyId;
-    model.deleteReply(postId,replyId);
+    model.deleteReply(replyId);
     res.status(204).send('delete_success');
 }
 
@@ -66,10 +64,6 @@ function createPost(req,res){
         userId : Body.userId,
         title : Body.title,
         content : Body.content,
-        good : Body.good,
-        reply : Body.reply,
-        watch : Body.watch,
-        time : Body.time,
         image : Body.image,
     }
     model.createPost(post);

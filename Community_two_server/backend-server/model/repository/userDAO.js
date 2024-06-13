@@ -21,9 +21,9 @@ const updateNickname = async (user) => {
     return sendQuery(sql,values);
 }
 
-const updatePassword = async (user) => {
+const updatePassword = async (userId,password) => {
     const sql = "UPDATE users SET password = ? WHERE id = ?";
-    const values = [user.password,user.id];
+    const values = [password,userId];
 
     return sendQuery(sql,values);
 }
@@ -42,11 +42,27 @@ const loginUser = async (email,password) => {
     return sendQuery(sql,values);
 }
 
+const getUserByNickname = async (nickname) => {
+    const sql = "SELECT id FROM users WHERE nickname = ?";
+    const values = [nickname];
+
+    return sendQuery(sql,values);
+}
+
+const getUserByEmail = async (email) => {
+    const sql = "SELECT id FROM users WHERE email = ?";
+    const values = [email];
+
+    return sendQuery(sql,values);
+}
+
 export default {
     getUserById,
     createUser,
     updateNickname,
     updatePassword,
     deleteUser,
-    loginUser
+    loginUser,
+    getUserByNickname,
+    getUserByEmail
 }

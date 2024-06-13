@@ -69,6 +69,20 @@ async function getUser(req,res){
     res.json(user);
 }
 
+async function getUserByNickname(req,res){
+    const nickname = req.body.nickname;
+    const userId = await model.getUserByNickname(nickname);
+
+    res.json(userId);
+}
+
+async function getUserByEmail(req,res){
+    const email = req.body.email;
+    const userId = await model.getUserByEmail(email);
+
+    res.json(userId);
+}
+
 export default {
     validateUser,
     getUsers,
@@ -77,4 +91,6 @@ export default {
     updatePassword,
     deleteUser,
     getUser,
+    getUserByNickname,
+    getUserByEmail
 }

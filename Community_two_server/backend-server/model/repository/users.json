@@ -40,5 +40,12 @@
     "password": "asdqwe123!Q",
     "nickname": "yeopo",
     "profileImage": "여포.webp"
+  },
+  "7": {
+    "userId": 7,
+    "email": "LEE@nav.com",
+    "password": "asdqwe123!Q",
+    "nickname": "킹갓충무공리순신",
+    "profileImage": "이순신.png"
   }
 }

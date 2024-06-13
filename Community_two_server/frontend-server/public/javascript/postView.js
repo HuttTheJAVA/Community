@@ -48,7 +48,7 @@ async function render_Post(){
     const image = post["image"];
     const writer = post["nickname"];
     const userId = post["userId"];
-    const writerImage = post[""]
+    const writerImage = post["profileImage"];
 
     jsonContainer.innerHTML += `<div 
     class="feature-name-container bold litte-bottom-margin"
@@ -72,7 +72,7 @@ async function render_Post(){
     </div>
 
     <div class="img-container">
-        <img src="/${image}" width=544px height=306px/>
+        <img src="/images/${image}" width=544px height=306px/>
     </div>
     <div class="post-message middle-bottom-margin">
         ${content}
@@ -93,7 +93,7 @@ async function render_Post(){
         style="margin-top: 20px; margin-bottom: 20px">
     </div>
     <div class="reply-write-box">
-        <textarea id="comment-input" placeholder="댓글을 남겨주세요!" style="margin-top: 15px"></textarea>
+        <textarea id="comment-input" placeholder="댓글을 남겨주세요! (최대 500자)" style="margin-top: 15px" maxlength="500"></textarea>
     </div>
     <div class="solid-line-1px-black"></div>
     <div class="reply-submit-box middle-bottom-margin">
@@ -160,16 +160,6 @@ async function randerReplys(userSessionId,replys){
         </div>`);
     }
 
-    // const imgElements = document.querySelectorAll(`.user-image`);
-    // imgElements.forEach(imgElement => {
-    //     const user_id = imgElement.id.split('-')[1];
-    //     if(usersJsonData[user_id]){
-    //         const userImgPath = "/images/"+usersJsonData[user_id].profileImage;
-    //         imgElement.style.backgroundImage = `url('${userImgPath}')`;
-    //     }
-    //     const userImgPath
-    // })
-
     toast();
 }
 
@@ -224,16 +214,6 @@ function showReplyModal(text){
     document.body.style.overflow = 'hidden';
 }
 
-function getUsers(){
-    return fetch(`${BACKEND_IP_PORT}/user`)
-    .then(res => {
-        return res.json();
-    })
-    .catch(err => {
-        console.error(err);
-    });
-}
-
 // 댓글 입력 제출하면 댓글 수정인 경우 `${BACKEND_IP_PORT}/post/${postId}/reply/replyId로 Put 요청
 async function submit_reply(){
     
@@ -265,24 +245,16 @@ async function submit_reply(){
 
     if (adjustButton.textContent === '댓글 수정') {
         const replyId = adjustButton.dataset.replyId;
-        fetchUrl += `/${replyId}`; // 수정할 댓글의 ID를 URL에 추가 
+        fetchUrl += `/${replyId}`; // 수정할 댓글의 ID를 URL에 추가
         method = 'PUT'; // 수정할 때는 PUT 메서드 사용
 
         // 수정 내용만 보냄
         jsonData = {
             content: input_text
         }
-    }else{
-
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2,'0');
-        const day = String(now.getDate()).padStart(2,'0');
-        const formattedDate = `${year}-${month}-${day}`;
-
+    }else{ 
         jsonData = {
             userId: userSessionId,
-            date: formattedDate,
             content: input_text
         };
     }

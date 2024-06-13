@@ -1,34 +1,7 @@
 import fs, { read } from 'fs';
-import path from 'path';
 import userDAO from './repository/userDAO.js';
 
-const __dirname = path.resolve();
-
-const usersJsonDir = '/model/repository/users.json';
-const replysJsonDir = '/model/repository/reply.json';
-const postsJsonDir = '/model/repository/posts.json';
-
-function readJson(sub_dir,encode){
-    const usersJsonFile = fs.readFileSync(__dirname + sub_dir, encode);
-    return JSON.parse(usersJsonFile);
-}
-
-function writeJson(sub_dir,usersJsonData,encode){
-    fs.writeFileSync(__dirname + sub_dir,JSON.stringify(usersJsonData,null,2),encode);
-}
-
 async function validateUser(email, password) {
-    // const usersJsonData = readJson(usersJsonDir,'utf8');
-
-    // for (const key in usersJsonData){
-    //     let user = usersJsonData[key];
-    //     if(user.email == email && user.password == password){
-    //         return true;
-    //     }
-    // }
-    
-    // return false;
-
     const foundUser = await userDAO.loginUser(email,password);
     if(foundUser.length === 0){
         return -1;
@@ -54,25 +27,7 @@ function getUsers(){
 }
 
 async function getUser(userId){
-    // const usersJsonData = readJson(usersJsonDir,'utf8');
-    
-    // 여기서 유저 전체 정보를 넘기면 안됨 (비밀번호도 같이 넘어감)
-    // return usersJsonData[userId];
-
-    //실제 DAO 활용해서 구현해야 함.
     return await userDAO.getUserById(userId);
-}
-
-function assignId(){
-    const usersJsonData = readJson(usersJsonDir,'utf8');
-    let maxId = 0;
-    for(const key in usersJsonData){
-        const intKey = parseInt(key);
-        if(intKey > maxId){
-            maxId = intKey;
-        }
-    }
-    return maxId + 1;
 }
 
 async function joinUser(email,password,nickName,profileImage){
@@ -158,14 +113,7 @@ function deleteUser(userId){
 }
 
 function updatePassword(userId,password){
-    const usersJsonData = readJson(usersJsonDir,'utf8');
-
-    if(userId in usersJsonData){
-        usersJsonData[userId]["password"] = password;
-        writeJson(usersJsonDir,usersJsonData,'utf8');
-    }else{
-        console.log(`${userId}을(를) 찾을 수 없습니다.`);
-    }
+    userDAO.updatePassword(userId,password);
 }
 
 export default {

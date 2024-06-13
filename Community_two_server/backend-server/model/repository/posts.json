@@ -43,17 +43,6 @@
     "time": "2024-06-23 13:40:30",
     "image": "images/park.jpg"
   },
-  "5": {
-    "id": 5,
-    "userId": 5,
-    "title": "제빵은 어렵습니다.",
-    "content": "빵을 만드는 것은 어렵다고 합니다. 빵의 종류에 따라 난이도는 달라지겠지만, 만드는 그 자체로 어렵다고 합니다. 저는 사실 빵을 만들어 본 적은 없는데요. 그래도 만드는 게 어렵다고 합니다. 그래서 그런건지 몰라도 우리나라의 빵 가격은 전 세계 어디에 내놓아도 꿀리지 않는 가격이라고 합니다. 그래서 저는 빵을 안 사먹습니다.",
-    "good": 27,
-    "reply": 3,
-    "watch": 11,
-    "time": "2024-12-23 13:40:30",
-    "image": "images/bread.jpg"
-  },
   "7": {
     "id": 7,
     "userId": 1,
@@ -97,5 +86,19 @@
     "watch": 1910,
     "time": "2024-06-12",
     "image": "images/earth.jpg"
+  },
+  "11": {
+    "id": 11,
+    "userId": 4,
+    "title": "hi lite!",
+    "content": "내 음악은 젊음을 바치는 전부 hi lite 나의 삶을 밝혀준 전등~",
+    "image": "images/%2FpostKoreanDream.webp"
+  },
+  "12": {
+    "id": 12,
+    "userId": 4,
+    "title": "hi lite!",
+    "content": "나의 삶을 밝혀준 전등!",
+    "image": "images/%2Fpost%2FKoreanDream.webp"
   }
 }

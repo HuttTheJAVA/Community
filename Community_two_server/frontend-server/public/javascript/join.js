@@ -6,13 +6,7 @@ const passwordCheckHelper = document.getElementById('passwordCheckHelper');
 const emailHelper = document.getElementById('emailHelper');
 const nickNameHelper = document.getElementById('nickNameHelper');
 
-const email = document.getElementById('email').value;
-const password = document.getElementById('password').value;
-const passwordCheck = document.getElementById('password-check').value;
-const nickName = document.getElementById('nickName').value;
 const btn = document.getElementById('join');
-
-let profileImageFileName; // 이미지 파일명을 담는 전역변수
 
 function validateEmail(email) {
     // 이메일이 비어 있는지 확인
@@ -66,9 +60,9 @@ async function check_passWords(){
     const password = document.getElementById('password').value;
     const passwordCheck = document.getElementById('password-check').value;
 
-    var passWordErrorMessage = await validatePassword(password);
+    var passWordErrorMessage = validatePassword(password);
 
-    var passwordCheckErrorMessage = await validatePassword(passwordCheck);
+    var passwordCheckErrorMessage = validatePassword(passwordCheck);
     
     if (passWordErrorMessage){
         return passWordErrorMessage;
@@ -126,10 +120,10 @@ async function global_validation(){
     const passwordCheck = document.getElementById('password-check').value;
     const nickName = document.getElementById('nickName').value;
 
-    let email_err = await validateEmail(email);
-    let password_err = await validatePassword(password);
-    let passwordCheck_err = await validatePassword(passwordCheck);
-    let nickName_err = await checkNickName(nickName);
+    let email_err = validateEmail(email);
+    let password_err = validatePassword(password);
+    let passwordCheck_err = validatePassword(passwordCheck);
+    let nickName_err = checkNickName(nickName);
     let passwordCompare_err = "";
     
     if(password != passwordCheck){

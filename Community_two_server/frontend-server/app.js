@@ -37,9 +37,6 @@ const upload = multer({ storage: storage });
 app.post('/upload', upload.single('image'), (req, res) => {
     res.send('이미지가 성공적으로 업로드되었습니다.');
 });
-app.get('/image', (req, res) => {
-    res.sendFile(path.join(__dirname, 'view/imageUpload.html'));
-});
 //##########################################################//
 
 

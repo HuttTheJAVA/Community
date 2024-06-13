@@ -17,9 +17,9 @@ async function render_Post(){
 
     const user = await getUser(userSessionId);
 
-    document.getElementById('user-image').style.backgroundImage = `url('/images/${user.profileImage}')`;
+    const profileImage = user[0].profileImage;
 
-
+    document.getElementById('user-image').style.backgroundImage = `url('/images/${profileImage}')`;
 
     await fetch(`${BACKEND_IP_PORT}/post/${postId}`)
     .then(response => response.json())
@@ -29,9 +29,11 @@ async function render_Post(){
         titleElement.value = '';
         contentAreaElement.value = '';
     
+        const post = data.post[0];
+
         // 이제 jsonContainer안에 게시글 상세 사항들을 렌더링.
-        const title = data["title"];
-        const content = data["content"];
+        const title = post["title"];
+        const content = post["content"];
         
         titleElement.value = title;
         contentAreaElement.value = content;
