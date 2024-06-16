@@ -1,11 +1,10 @@
 const BACKEND_IP_PORT = "http://localhost:8081"
 import {getUserIdFromSession} from './session.js';
 import {getUser,getUsers} from './getUser.js';
+import { checkDuplicatenickName } from "./checkDuplicate.js";
 
-const deleteMemberButton = document.getElementById('deleteMember');
 const button_cancel = document.getElementById("cancel");
 const button_ok = document.getElementById("ok");
-
 
 function deleteMember(){
   const title = document.getElementById('toastTitle');
@@ -84,113 +83,107 @@ function insertErrorMessage(message){
 
 adjust.onclick = async function(){
 
-    const result = {
-      userId:''
+  const result = {
+    userId:''
+  }
+
+  await getUserIdFromSession(result);
+
+  const nickname = document.getElementById('nickName').value;
+
+  if(!nickname){
+      insertErrorMessage("*닉네임을 입력해주세요.");
+      return;
+  }
+  else if(nickname.length>10){
+      insertErrorMessage("*닉네임은 최대 10자 까지 작성 가능합니다.");
+      return;
+  }
+  else{ // 닉네임 중복 확인 로직이 들어가야함.
+    let isDuplicate = false;
+
+    const msg = await checkDuplicatenickName(nickname);
+
+    if(msg !== ""){
+      isDuplicate = true;
     }
 
-    await getUserIdFromSession(result);
-
-    const nickName = document.getElementById('nickName').value;
-
-    let usersJsonData = null;
-
-    if(!nickName){
-        insertErrorMessage("*닉네임을 입력해주세요.");
-        return;
+    if(isDuplicate){
+      insertErrorMessage("*이미 존재하는 닉네임입니다.");
+      return;
     }
-    else if(nickName.length>10){
-        insertErrorMessage("*닉네임은 최대 10자 까지 작성 가능합니다.");
-        return;
-    }
-    else{ // 닉네임 중복 확인 로직이 들어가야함.
-      let isDuplicate = false;
+  }
+  
+  // 이미지 업로드 부분
+  const profileImage = document.getElementById('profile-image-upload').files[0];
+  
+  const formData = new FormData();
 
-      usersJsonData = await getUsers();
+  let encodedFileName;
 
-      for(const id in usersJsonData){
-        if(usersJsonData[id]["nickname"] === nickName){
-          isDuplicate = true;
-          break
-        }
+  if(profileImage){
+    encodedFileName = encodeURIComponent("/user/"+profileImage.name);
+    formData.append('image', profileImage,encodedFileName);
+  }else{
+    insertErrorMessage("*이미지를 선택하세요.");
+  }
+
+  // 유저 수정 정보 전송
+
+  const obj = {
+    userId:result.userId,
+    nickname:nickname,
+    imgName:encodedFileName,
+  }
+
+  const data = {
+    method:'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(obj)
+  }
+
+  await fetch(`${BACKEND_IP_PORT}/user/update`,data)
+  .catch(err => {
+    console.error("fetch error:",err);
+  });
+
+  // 이미지 저장 부분
+
+  const isEmpty = formData.entries().next().done;
+
+  if(!isEmpty){
+    await fetch('/upload', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+      if(response.ok){
+          console.log("이미지 성공적으로 업로드.");
+      }else{
+          console.error("이미지 업로드 오류 발생");
       }
-
-      if(isDuplicate){
-        insertErrorMessage("*이미 존재하는 닉네임입니다.");
-        return;
-      }
-    }
-    
-    // 이미지 업로드 부분
-    const profileImage = document.getElementById('profile-image-upload').files[0];
-    
-    const formData = new FormData();
-
-    let encodedFileName = usersJsonData[result.userId].profileImage;
-
-    if(profileImage){
-      encodedFileName = encodeURIComponent(profileImage.name);
-      formData.append('image', profileImage,encodedFileName);
-    }else{
-
-    }
-
-    const originNickName = usersJsonData[result.userId]["nickname"];
-
-    // 유저 수정 정보 전송
-
-    const obj = {
-      originNickName:originNickName,
-      nickname:nickName,
-      imgName:encodedFileName,
-    }
-
-    const data = {
-      method:'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(obj)
-    }
-
-    await fetch(`${BACKEND_IP_PORT}/user/update`,data)
-    .catch(err => {
-      console.error("fetch error:",err);
-    });
-
-    // 이미지 저장 부분
-
-    const isEmpty = formData.entries().next().done;
-
-    if(!isEmpty){
-      await fetch('/upload', {
-          method: 'POST',
-          body: formData
       })
-      .then(response => {
-        if(response.ok){
-            console.log("이미지 성공적으로 업로드.");
-        }else{
-            console.error("이미지 업로드 오류 발생");
-        }
-        })
-        .catch(error => {
-            console.error('네트워크 오류:',error);
-        });
-    }
+      .catch(error => {
+          console.error('네트워크 오류:',error);
+      });
+  }
 
-    helper.innerText = ""; // 이전에 유효하지 않은 입력을 한 적이 있다면 helper.innerText = ""이 아니다. 따라서 지워줘야 됨 
-    
-    let toastMessage = document.getElementById("adjustToast");
-    toastMessage.textContent = "수정 완료";
+  helper.innerText = ""; // 이전에 유효하지 않은 입력을 한 적이 있다면 helper.innerText = ""이 아니다. 따라서 지워줘야 됨 
+  
+  let toastMessage = document.getElementById("adjustToast");
+  toastMessage.textContent = "수정 완료";
 
-    toastMessage.style.display = "block";
+  toastMessage.style.display = "block";
 
-    // 사용자 수정 정보 
+  // 사용자 수정 정보 
 
-    // 비동기 논블로킹 코드
-    setTimeout(function() {
-        toastMessage.style.display = "none";
-    }, 3000); 
+  // 비동기 논블로킹 코드
+  setTimeout(function() {
+    toastMessage.style.display = "none";
+    window.location.href = '/post';
+  }, 3000);
     
 }
 
@@ -208,14 +201,16 @@ async function pageLoadActive(){
 
   const userInfo = {
     email:"",
-    nickName:"",
+    nickname:"",
     profileImage:"",
   }
 
-  const user = await getUser(userSessionId);
+  const userArr = await getUser(userSessionId);
+
+  const user = userArr[0];
 
   userInfo.email = user.email;
-  userInfo.nickName = user.nickname;
+  userInfo.nickname = user.nickname;
   userInfo.profileImage = user.profileImage;
 
   let dropbtn = document.querySelector('.dropbtn');
@@ -227,8 +222,8 @@ async function pageLoadActive(){
   let email = document.getElementById("email");
   email.innerText = userInfo.email;
 
-  let nickName = document.getElementById("nickName");
-  nickName.value = userInfo.nickName;
+  let nickname = document.getElementById("nickName");
+  nickname.value = userInfo.nickname;
 
   //// 이미지 처리
   const userBigImage = document.querySelector(".user-big-image");

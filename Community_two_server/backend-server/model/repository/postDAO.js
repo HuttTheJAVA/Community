@@ -1,18 +1,18 @@
 import {connection,sendQuery} from "./dbConnect.js";
 
 const getPosts = async () => {
-    const sql = "select posts.id, title, content, good, reply, watch, date, image, users.id as userId,nickname,profileImage from posts left join users on posts.userId = users.id ORDER BY date;";
+    const sql = "select posts.id, title, content, good, reply, watch, DATE_FORMAT(date, '%Y-%m-%d %H:%i:%s') AS date, image, users.id as userId,nickname,profileImage from posts left join users on posts.userId = users.id ORDER BY date;";
     const values = [];
 
     return sendQuery(sql,values);
 }
 
 const getPost = async (postId) => {
-    const selectPostSQL = "SELECT userId,title,content,good,reply,watch,date,image,nickname,profileImage FROM posts as p left join users as u on p.userId=u.id WHERE p.id = ?";
+    const selectPostSQL = "SELECT userId,title,content,good,reply,watch,DATE_FORMAT(date, '%Y-%m-%d %H:%i:%s') AS date,image,nickname,profileImage FROM posts as p left join users as u on p.userId=u.id WHERE p.id = ?";
 
     const updatePostWatchSQL = "UPDATE posts SET watch = watch + 1 WHERE id = ?";
 
-    const postReplySQL = "select r.id,userId,date,content,nickname,profileImage from replys as r left join users u on r.userId=u.id where r.postId = ? ORDER BY date";
+    const postReplySQL = "select r.id,userId,DATE_FORMAT(date, '%Y-%m-%d %H:%i:%s') AS date,content,nickname,profileImage from replys as r left join users u on r.userId=u.id where r.postId = ? ORDER BY date";
 
     return new Promise( async (resolve,reject) => {
         connection.beginTransaction();
@@ -87,6 +87,13 @@ const deletePost = async (postId) => {
     return sendQuery(sql,values);
 }
 
+const deleteUserIdPost = async (userId) => {
+    const sql = "DELETE FROM posts WHERE userId = ?";
+    const values = [userId];
+
+    return sendQuery(sql,values);
+}
+
 const createPost = async (post) => {
     const sql = "INSERT INTO posts (userId,title,content,image) VALUES (?,?,?,?)";
     const values = [post.userId,post.title,post.content,post.image];
@@ -108,6 +115,13 @@ const deleteReply = async (replyId) => {
     return sendQuery(sql,values);
 }
 
+const deleteUserIdReplys = async (userId) => {
+    const sql = "DELETE FROM replys WHERE userId = ?";
+    const values = [userId];
+
+    return sendQuery(sql,values);
+}
+
 const updateReply = async (reply) => {
     const sql = "UPDATE replys SET content = ? WHERE id = ?";
     const values = [reply.content,reply.replyId];
@@ -116,7 +130,7 @@ const updateReply = async (reply) => {
 } 
 
 const getReplys = async () => {
-    const sql = "SELECT * FROM replys";
+    const sql = "SELECT postId,userId,DATE_FORMAT(date, '%Y-%m-%d %H:%i:%s') AS date,content FROM replys";
     const values = [];
 
     return sendQuery(sql,values);
@@ -127,9 +141,11 @@ export default {
     getPost,
     updatePost,
     deletePost,
+    deleteUserIdPost,
     createPost,
     createReply,
     deleteReply,
     updateReply,
     getReplys,
+    deleteUserIdReplys,
 }

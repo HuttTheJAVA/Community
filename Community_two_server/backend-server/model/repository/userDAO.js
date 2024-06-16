@@ -1,7 +1,7 @@
 import {sendQuery} from "./dbConnect.js"
 
 const getUserById = async (id) => {
-    const sql = "SELECT id,nickname,profileImage FROM users WHERE id = ?";
+    const sql = "SELECT id,email,nickname,profileImage FROM users WHERE id = ?";
     const values = [id];
 
     return sendQuery(sql,values);
@@ -56,6 +56,13 @@ const getUserByEmail = async (email) => {
     return sendQuery(sql,values);
 }
 
+const updateUser = async (userId,nickname,imgName) => {
+    const sql = "UPDATE users SET nickname=?,profileImage=? WHERE id=?";
+    const values = [nickname,imgName,userId];
+
+    return sendQuery(sql,values);
+}
+
 export default {
     getUserById,
     createUser,
@@ -64,5 +71,6 @@ export default {
     deleteUser,
     loginUser,
     getUserByNickname,
-    getUserByEmail
+    getUserByEmail,
+    updateUser,
 }

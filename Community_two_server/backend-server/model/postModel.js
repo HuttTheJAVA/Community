@@ -3,6 +3,7 @@ import postDAO from './repository/postDAO.js';
 
 async function getPosts(){
     const posts = await postDAO.getPosts();
+    console.log(posts);
     return posts;
 }
 

@@ -23,11 +23,6 @@ async function validateUser(req, res) {
     res.status(200).json(resultJson);
 }
 
-function getUsers(req,res){
-    res.json(model.getUsers());
-    
-}
-
 function joinUser(req,res){
     const Body = req.body;
 
@@ -41,11 +36,11 @@ function joinUser(req,res){
 }
 
 function updateUser(req,res){
-    const originNickName = req.body.originNickName;
+    const userId = req.body.userId;
     const nickname = req.body.nickname;
     const imgName = req.body.imgName;
 
-    model.updateUser(originNickName,nickname,imgName);
+    model.updateUser(userId,nickname,imgName);
     res.status(204).send("update_success");
 }
 
@@ -83,7 +78,6 @@ async function getUserByEmail(req,res){
 
 export default {
     validateUser,
-    getUsers,
     joinUser,
     updateUser,
     updatePassword,
