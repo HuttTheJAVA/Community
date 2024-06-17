@@ -12,10 +12,8 @@ export function getUsers(){
 
 export async function getUser(userId){
     try {
-        console.log("url에 들어가는 userId:",userId);
         const res = await fetch(`${BACKEND_IP_PORT}/user/${userId}`);
         const user = await res.json();
-        console.log("반환된 유저:",user);
         return user;
     } catch (err) {
         console.error(err);

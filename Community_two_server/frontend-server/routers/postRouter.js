@@ -13,7 +13,6 @@ router.get("/create",(req,res) => {
 });
 
 router.get("/asd",(req,res) => {
-    console.log("hi ㅋ");
     res.sendFile(path.join(__dirname,'view/sessionTest.html'))
 })
 

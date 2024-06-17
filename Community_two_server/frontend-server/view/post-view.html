@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>아무말 대잔치</title>
     <link rel="stylesheet" href="/css/toast.css">
+    <link rel="stylesheet" href="/css/diamondLine.css">
     <style>
       .flex-container-between {
         width: 22%;
@@ -188,41 +189,99 @@
         justify-content: center;
       }
       .mini-button {
-        width: 40px;
+        display: flex;
+        width: 50px;
         height: 25px;
+        background-color: #03C75A;
+        color: black;
         font-size: 15px;
+        font-weight: bold;
         border-radius: 6px;
-        border: 2px solid #aca0eb;
+        border: none;
         text-align: center; /* 텍스트를 가운데로 정렬 */
+        justify-content: center;
         line-height: 25px; /* 버튼의 높이와 같게 설정하여 수직 가운데 정렬 */
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.1), #23ee7f, rgba(0, 0, 0, 0.1));
+        transform: skew(40deg);
+      }
+      .mini-button:hover {
+        background-color: #03C75A;
+      }
+
+      .mini-button:not(:hover) {
+        background-color: #03C75A;
       }
 
       .mini-button2 {
-        width: 40px;
+        display: flex;
+        width: 50px;
         height: 25px;
+        background-color: #03C75A;
+        color: black;
         font-size: 15px;
+        font-weight: bold;
         border-radius: 6px;
-        border: 2px solid #aca0eb;
+        border: none;
         text-align: center; /* 텍스트를 가운데로 정렬 */
+        justify-content: center;
         line-height: 25px; /* 버튼의 높이와 같게 설정하여 수직 가운데 정렬 */
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.1), #23ee7f, rgba(0, 0, 0, 0.1));
+        transform: skew(40deg);
       }
+
+      .mini-button2:hover {
+        background-color: #03C75A;
+      }
+
+      .mini-button2:not(:hover) {
+        background-color: #03C75A;
+      }
+
       .reply-adjust-mini-button{
-        width: 40px;
+        display: flex;
+        width: 50px;
         height: 25px;
+        background-color: #03C75A;
+        color: black;
         font-size: 15px;
+        font-weight: bold;
         border-radius: 6px;
-        border: 2px solid #aca0eb;
+        border: none;
         text-align: center; /* 텍스트를 가운데로 정렬 */
+        justify-content: center;
         line-height: 25px; /* 버튼의 높이와 같게 설정하여 수직 가운데 정렬 */
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.1), #23ee7f, rgba(0, 0, 0, 0.1));
+        transform: skew(40deg);
+      }
+      .reply-adjust-mini-button:hover {
+        background-color: #03C75A;
+      }
+
+      .reply-adjust-mini-button:not(:hover) {
+        background-color: #03C75A;
       }
       .reply-delete-mini-button{
-        width: 40px;
+        display: flex;
+        width: 50px;
         height: 25px;
+        background-color: #03C75A;
+        color: black;
         font-size: 15px;
+        font-weight: bold;
         border-radius: 6px;
-        border: 2px solid #aca0eb;
+        border: none;
         text-align: center; /* 텍스트를 가운데로 정렬 */
+        justify-content: center;
         line-height: 25px; /* 버튼의 높이와 같게 설정하여 수직 가운데 정렬 */
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.1), #23ee7f, rgba(0, 0, 0, 0.1));
+        transform: skew(40deg);
+      }
+      .reply-delete-mini-button:hover {
+        background-color: #03C75A;
+      }
+
+      .reply-delete-mini-button:not(:hover) {
+        background-color: #03C75A;
       }
       .button-flex{
         display: flex;
@@ -261,32 +320,45 @@
         display: flex;
         width: 544px;
         font-size: 14px;
+        /* background-image: url('/images/paper.png'); 이미지 경로를 적절히 지정하세요 */
       }
       .post-feature-box {
         display: flex;
-        width: 116px;
-        height: 77px;
+        width: 106px;
+        height: 57px;
         align-items: center;
         justify-content: center;
         flex-direction: column;
         font-weight: bold;
         font-size: 16px;
-        background-color: #d9d9d9;
-        border-radius: 16px;
+        /* background-color: #03C75A; */
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.1), #23ee7f, rgba(0, 0, 0, 0.1));
+        /* border-radius: 16px; */
+        transform: skew(40deg);
+      }
+      .reverse-40deg{
+        display: flex;
+        flex-direction: column;
+        transform: skew(-40deg); /* 텍스트를 -40도로 반대로 기울임 */
+        align-items: center;
+        justify-content: center;
       }
       .custom-button {
         width: 138px;
         height: 39px;
-        background-color: #aca0eb;
-        color: #ffffff;
+        background-color: #03C75A;
+        color: black;
         border: none;
-        border-radius: 16px;
+        /* border-radius: 16px; */
         font-size: 16px;
         font-weight: bold;
         cursor: pointer;
-        text-align: center;
-        line-height: 39px;
+        margin-right: 10px; /* 추가: 버튼 사이 여백 설정 */
+        display: flex; /* Flexbox를 사용하여 내부 요소 정렬 */
+        align-items: center; /* 수직 가운데 정렬 */
+        justify-content: center; /* 수평 가운데 정렬 */
       }
+
       .post-feature-container {
         display: flex;
         width: 240px;
@@ -359,8 +431,9 @@
       <div class="title">아무 말 대잔치</div>
       <span id="user-image" class="user-image"></span>
     </div>
-    <div class="line-container">
-      <div class="line"></div>
+    <div class="container">
+      <div class="horizontal-line"></div>
+      <div class="diamond"></div>
     </div>
     <div id="post-view-container" class="post-view-container" style="margin-top: 30px">
       

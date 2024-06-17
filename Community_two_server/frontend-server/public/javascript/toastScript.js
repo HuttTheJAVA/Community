@@ -28,6 +28,5 @@ btn.onclick = function() {
   post_delete_message();
 }
 
-// deletePostButton.addEventListener('click', post_delete_message);
 button_cancel.addEventListener('click',hideToast);
 button_ok.addEventListener('click',post_delete);

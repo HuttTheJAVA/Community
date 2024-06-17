@@ -1,7 +1,7 @@
 const BACKEND_IP_PORT = "http://localhost:8081"
 
 import {getUserIdFromSession} from './session.js';
-import { getUser,getUsers } from './getUser.js';
+import { getUser } from './getUser.js';
 
 function submitActivate(){
     const title = document.getElementById("title").value;
@@ -34,9 +34,10 @@ async function checkValidation(){
         document.getElementById('postHelper').innerHTML = "*이미지를 선택해주세요";
         return;
     }
-
+    console.log("원본 파일명:"+file.name)
     const encodedFileName = encodeURIComponent("/post/"+file.name);
     formData.append('image',file,encodedFileName);
+    console.log("encodedFileName:"+encodedFileName);
 
     if(!title || !content){
         document.getElementById('postHelper').innerHTML = "*제목,내용을 모두 작성해주세요"
@@ -62,6 +63,7 @@ async function checkValidation(){
             content: content,
             image : encodedFileName, 
         };
+        console.log("저장 이후의 encodedFileName:"+jsonData.image);
 
         const data = {
             method: 'POST',

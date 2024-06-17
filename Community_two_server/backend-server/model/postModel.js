@@ -1,9 +1,7 @@
-import fs from 'fs';
 import postDAO from './repository/postDAO.js';
 
 async function getPosts(){
     const posts = await postDAO.getPosts();
-    console.log(posts);
     return posts;
 }
 
@@ -53,19 +51,6 @@ function updateReply(replyId,content){
 
 function deleteReply(replyId){
     postDAO.deleteReply(replyId);
-}
-
-function deletePostReplys(postId){
-    let replysJsonData = readJson(replyJsonDir,'utf8');
-
-    for(let key in replysJsonData){
-        if(parseInt(key) === parseInt(postId)){
-            delete replysJsonData[key];
-            break;
-        }
-    }
-
-    writeJson(replyJsonDir,replysJsonData,'utf8');
 }
 
 export default {

@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>아무말 대잔치</title>
+    <link rel="stylesheet" href="/css/diamondLine.css">
     <style>
       body {
         margin: 0;
@@ -17,6 +18,8 @@
         font-size: 32px;
         margin-top: 20px;
         margin-bottom: 20px;
+        font-family: 'Arial Black', Gadget, sans-serif; /* 글씨체 변경 */
+        font-weight: bold;
       }
       .line-container {
         width: 100%;
@@ -76,29 +79,30 @@
         flex-direction: column;
       }
       .container-row {
-        margin-top: 15px;
-        display: flex;
-        max-width: 600px;
-        flex-direction: row;
-        align-items: center;
+          margin-top: 15px;
+          display: flex;
+          max-width: 600px;
+          flex-direction: row;
+          align-items: center;
       }
+
       .custom-button {
         width: 138px;
         height: 39px;
-        background-color: #aca0eb;
-        color: #ffffff;
+        background-color: #03C75A;
+        color: black;
         border: none;
-        border-radius: 16px;
+        /* border-radius: 16px; */
         font-size: 16px;
         font-weight: bold;
         cursor: pointer;
         margin-right: 10px; /* 추가: 버튼 사이 여백 설정 */
       }
       .custom-button:hover{
-        background-color: #7F6AEE;
+        background-color: #03C75A;
       }
       .custom-button:not(:hover){
-        background-color: #aca0eb;
+        background-color: #03C75A;
       }
       .text-24 {
         font-size: 24px;
@@ -110,6 +114,9 @@
         margin-bottom: 15px;
         background-color: #ffffff;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        background-image: url('images/paper.png'); /* 이미지 경로를 적절히 지정하세요 */
+        background-size: cover; /* 배경 이미지를 커버하도록 조정 */
+        background-position: center; /* 배경 이미지를 가운데 정렬 */
       }
       .post-title {
         margin-top: 17px; /* 위쪽으로 20px의 상대적인 마진 */
@@ -133,12 +140,20 @@
       .post-feature-right {
         margin-left: auto;
         margin-right: 22px;
-      }
+        font-family: 'Arial', sans-serif;
+        font-size: 14px;
+        color: #333333;
+        font-weight: bold; /* 글꼴을 더 강조하기 위해 볼드 처리 */
+        text-transform: uppercase; /* 대문자로 변환하여 더 강조 */
+        letter-spacing: 1px; /* 글자 간격 조정 */
+    }
+
       .post-feature-area {
         margin-left: 10px;
       }
       .solid-line-1px-black {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.16);
+        height: 1px;
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1));
       }
       .image-circle {
         width: 36px;
@@ -187,6 +202,33 @@
         max-width: 100%; /* 이미지가 원 안에 들어가도록 함 */
         max-height: 100%; /* 이미지가 원 안에 들어가도록 함 */
       }
+      .cute-square {
+        width: 70px;
+        height: 70px;
+        background-color: #03C75A; /* 귀여운 색상 예시 */
+        position: relative;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 약간의 그림자 효과 */
+        border-radius: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        color: black;
+        font-weight: bold;
+        font-size: 15px;
+        text-transform: uppercase;
+      }
+      
+      .cute-square span {
+        display: inline-block;
+      }
+    
+      .wrap {
+      display: flex;
+      align-items: center;
+      gap: 5px; /* 사각형 간 간격 */
+      margin-top: 20px;
+      }
     </style>
   </head>
   <body>
@@ -195,17 +237,21 @@
     <div class="container-top">
       <div class="flex-container-between">
         <div class="invisable_circle"></div>
-        <div class="title">아무 말 대잔치</div>
+        <div class="title">🔔 웃음 게시판 🔔</div>
         <div id="user-image" class="user-image"></div>
       </div>
     </div>
-    <div class="line-container">
-      <div class="line"></div>
+    <div class="container">
+      <div class="horizontal-line"></div>
+      <div class="diamond"></div>
     </div>
 
-    <div class="text-24 middle-top-margin">안녕하세요,</div>
-
-    <div class="text-24">아무 말 대잔치 <strong>게시판</strong> 입니다.</div>
+    <div class="wrap">
+      <div class="cute-square"><span>회원가입</span></div>
+      <div class="cute-square"><span>글 쓰기</span></div>
+      <div class="cute-square"><span>회원 수정</span></div>
+      <div class="cute-square"><span>비번 수정</span></div>
+    </div>
 
     <div class="container-right">
       <button id="createPost" class="custom-button">게시글 작성</button>

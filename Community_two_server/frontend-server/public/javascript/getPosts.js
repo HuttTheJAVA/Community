@@ -3,7 +3,7 @@
 const BACKEND_IP_PORT = "http://localhost:8081"
 
 import { getUserIdFromSession,isLogin } from "./session.js";
-import {getUser,getUsers} from "./getUser.js"
+import {getUser} from "./getUser.js"
 
 
 function K_feature(feature){
@@ -53,20 +53,20 @@ fetch(`${BACKEND_IP_PORT}/post`)
         watch = K_feature(watch);
 
         jsonContainer.innerHTML += `
-            <div class="post-preview card" onclick="redirectToPost(${id})">
+            <div class="post-preview" onclick="redirectToPost(${id})">
                 <div class="post-title">${title}</div>
                 <div class="post-feature">
-                    <div>좋아요 ${good}</div>
-                    <div class="post-feature-area">댓글 ${reply}</div>
-                    <div class="post-feature-area">조회수 ${watch}</div>
+                    <div>&#128077; ${good}</div>
+                    <div class="post-feature-area">&#128172; ${reply}</div>
+                    <div class="post-feature-area">&#128064 ${watch}</div>
                     <div class="post-feature-right">${date}</div>
                     <div class="middleBig-bottom-margin"></div>
                 </div>
                 <div class="solid-line-1px-black"></div>
                 <div class="container-row">
-                <div class="image-circle">
-                    <img src="/images/${profileImage}">
-                </div>
+                    <div class="image-circle">
+                        <img src="/images/${profileImage}">
+                    </div>
                     <div class="left-margin bold" style="font-size: 15px">
                         ${nickname}
                     </div>

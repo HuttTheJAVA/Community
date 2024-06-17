@@ -1,6 +1,6 @@
 const BACKEND_IP_PORT = "http://localhost:8081"
 import {getUserIdFromSession} from './session.js';
-import {getUsers,getUser} from './getUser.js';
+import {getUser} from './getUser.js';
 // 아래 함수는 비밀번호가 맞는지 확인하는 함수가 아닌 새로 수정할 비밀번호의 유효성을 검사한다.
 // 비밀번호 인증은 이미 adjustPassword페이지를 보여주기 전에 되 있어야 한다.
 function validatePassword(password) {

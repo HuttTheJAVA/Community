@@ -48,7 +48,6 @@ async function render_Post(){
     const image = post["image"];
     const writer = post["nickname"];
     const userId = post["userId"];
-    const writerImage = post["profileImage"];
 
     jsonContainer.innerHTML += `<div 
     class="feature-name-container bold litte-bottom-margin"
@@ -78,14 +77,18 @@ async function render_Post(){
         ${content}
     </div>
     <div class="post-feature-container">
-        <div class="post-feature-box">
-        <div>${watch}</div>
-        <div>조회수</div>
+        <div class="post-feature-box ">
+            <div class = "reverse-40deg">
+                <div>${watch}</div>
+                <div>조회수</div>
+            </div>
         </div>
 
         <div class="post-feature-box">
-        <div>${reply}</div>
-        <div>댓글</div>
+            <div class = "reverse-40deg">
+                <div>${reply}</div>
+                <div>댓글</div>
+            </div>
         </div>
     </div>
     <div
@@ -105,8 +108,16 @@ async function render_Post(){
     if(parseInt(userSessionId) === parseInt(userId)){
         const PostButton = document.getElementById("PostButton");
         PostButton.innerHTML += 
-        `<div id=post-${postId} class="mini-button2" onclick="window.location.href = 'adjustPost/${postId}';">수정</div>
-        <div id="delete-post-${postId}" class="mini-button" style="margin-left: 10px">삭제</div>`
+        `<div id=post-${postId} class="mini-button2" onclick="window.location.href = 'adjustPost/${postId}';">
+            <div class = "reverse-40deg">
+                수정
+            </div>
+        </div>
+        <div id="delete-post-${postId}" class="mini-button" style="margin-left: 10px">
+            <div class = "reverse-40deg">
+                삭제
+            </div>
+        </div>`
     }
 
     const profileImagePath = post["profileImage"];
@@ -153,8 +164,16 @@ async function randerReplys(userSessionId,replys){
             </div>
             ${isCurrentUser ? `
                         <div class="reply-box-update">
-                            <div id="reply-adjust-${id}" class="reply-adjust-mini-button" onclick="adjustReply(${id})">수정</div>
-                            <div id="reply-delete-${id}" class="reply-delete-mini-button" style="margin-left: 10px">삭제</div>
+                            <div id="reply-adjust-${id}" class="reply-adjust-mini-button" onclick="adjustReply(${id})">
+                                <div class = "reverse-40deg">
+                                    수정
+                                </div>
+                            </div>
+                            <div id="reply-delete-${id}" class="reply-delete-mini-button" style="margin-left: 10px">
+                                <div class = "reverse-40deg">
+                                    삭제
+                                </div>
+                            </div>
                         </div>
                     ` : ''}
         </div>`);
@@ -164,16 +183,6 @@ async function randerReplys(userSessionId,replys){
 }
 
 function toast(){
-    
-    //게시글에 대한
-    const button_cancel = document.getElementById("cancel");
-    const button_ok = document.getElementById("ok"); // 모달에 있는 ok를 말하는거 따라서 게시글 삭제버튼, 댓글 삭제 버튼 모두에 적용됨.
-    const button_delete = document.getElementById("delete-post");
-
-    //댓글에 대한
-    const reply_adjust = document.getElementById("reply-adjust");
-    const reply_delete = document.getElementById("reply-delete");
-
     addEventListener_mini_button('.reply-delete-mini-button','댓글을 삭제하시겠습니까?');
     addEventListener_mini_button('.mini-button','게시글을 삭제하시겠습니까?');
 }

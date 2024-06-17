@@ -147,16 +147,21 @@ async function global_validation(){
     if(!email_err && !password_err && !passwordCheck_err && !nickName_err && !passwordCompare_err){
         // 완료 처리 및 페이지 이동
         
-        const input2 = document.getElementById("upload-input");
-        const file2 = input2.files[0];
-        const fileName = file2.name;
+        const input = document.getElementById("upload-input");
+        const file = input.files[0];
+        const formData = new FormData();
+
+        console.log("원본 파일명:"+file.name);
+        const encodedFileName = encodeURIComponent("/user/"+file.name);
+        console.log("encodedFileName:"+encodedFileName);
+        formData.append('image',file,encodedFileName);
 
         // 회원가입 완료 메시지 표시
         const obj = {
             email:email,
             password:password,
             nickName:nickName,
-            profileImage:fileName,
+            profileImage:encodedFileName,
         }
 
         const data = {
@@ -167,13 +172,7 @@ async function global_validation(){
             body: JSON.stringify(obj)
         }
 
-        //여기서 이미지를 실제 저장하는 코드 구현하자
-        const input = document.getElementById("upload-input");
-        const file = input.files[0];
-        const formData = new FormData();
 
-        const encodedFileName = encodeURIComponent(file.name);
-        formData.append('image',file,encodedFileName);
 
         const isSaved = true;
 
@@ -181,11 +180,9 @@ async function global_validation(){
         .then(response => {
             if(response.status === 204){
                 alert("회원가입을 축하드립니다!");
-                window.location.href = '/user/login';
             }else{
                 alert("회원 가입 실패!");
                 isSaved = false;
-                window.location.href = '/user/join';
             }
         }).catch(error => {
             isSaved = false
@@ -194,15 +191,17 @@ async function global_validation(){
         // 백엔드 서버에 회원 정보 정상 저장 여부에 따라 
         // 이미지를 저장한다.
         if(isSaved){
-            fetch('/upload',{
+            await fetch('/upload',{
                 method:'POST',
                 body: formData,
             })
             .then(response => {
                 if (response.ok) {
                     console.log("이미지 성공적으로 업로드.");
+                    window.location.href = '/user/login';
                 } else {
                     console.error("이미지 업로드 오류 발생");
+                    window.location.href = '/user/join';
                 }
             })
             .catch(error => {

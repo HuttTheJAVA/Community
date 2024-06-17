@@ -15,9 +15,6 @@ async function validateUser(req, res) {
             userId: `${resultJson.result}`,
             authorized: true,   
         }
-        console.log("세션 생성!");
-        console.log(req.session.user);
- 
     }
 
     res.status(200).json(resultJson);

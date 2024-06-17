@@ -1,6 +1,6 @@
 const BACKEND_IP_PORT = "http://localhost:8081"
 import {getUserIdFromSession} from './session.js';
-import {getUser,getUsers} from './getUser.js';
+import {getUser} from './getUser.js';
 import { checkDuplicatenickName } from "./checkDuplicate.js";
 
 const button_cancel = document.getElementById("cancel");
