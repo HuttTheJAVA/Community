@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>아무말 대잔치</title>
     <link rel="stylesheet" href="/css/userImage.css">
+    <link rel="stylesheet" href="/css/diamondLine.css">
     <style>
       .flex-container-between {
-        width: 22%;
+        width: 30%;
         align-items: center;
         display: flex;
         justify-content: space-between;
@@ -35,6 +36,13 @@
         width: 100%;
         height: 1px;
         background-color: black;
+      }
+      .re-reverse-40deg{
+        display: flex;
+        flex-direction: column;
+        transform: skew(40deg); /* 텍스트를 -40도로 반대로 기울임 */
+        align-items: center;
+        justify-content: center;
       }
 
       .error-flex{
@@ -171,12 +179,14 @@
         width: 355px;
         height: 33px;
         border-radius: 4px;
-        background-color: #aca0eb;
+        background-color: #23ee7f;
         font-size: 14;
         font-weight: bold;
-        color: #ffffff;
+        color: black;
         text-align: center; /* 텍스트를 가운데로 정렬 */
         line-height: 33px; /* 버튼의 높이와 같게 설정하여 수직 가운데 정렬 */
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.1), #23ee7f, rgba(0, 0, 0, 0.1));
+        transform: skew(-40deg);
       }
       .goLogin{
         font-size: 14px;
@@ -189,11 +199,12 @@
   <body>
     <div class="flex-container-between">
       <div class="arrow-prev" onclick="window.location.href = '/login';"></div>
-      <div class="title">아무 말 대잔치</div>
-      <div class="arrow-next"></div>
+      <div class="title">🔔 웃음 게시판 🔔</div>
+      <div class="arrow-next" ></div>
     </div>
-    <div class="line-container">
-      <div class="line"></div>
+    <div class="container">
+      <div class="horizontal-line"></div>
+      <div class="diamond"></div>
     </div>
 
     <div class="big-bottom-margin"></div>
@@ -243,7 +254,11 @@
           <input id="nickName" type="text" placeholder="닉네임을 입력하세요" />
           <div id="nickNameHelper" class="error-flex" style="font-size: 12px; margin-bottom: 10px;"></div>
         </div>
-        <div id="join" class="join-button">회원가입</div>
+        <div id="join" class="join-button">
+          <div class="re-reverse-40deg">
+            회원가입
+          </div>
+        </div>
         <a href="/login" class='goLogin' style="font-size: 14px; margin-top: 10px">로그인하러 가기</a>
       </div>
     </div>

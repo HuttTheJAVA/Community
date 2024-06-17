@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>아무말 대잔치</title>
+    <link rel="stylesheet" href="/css/diamondLine.css">
     <style>
       body {
         margin: 0;
@@ -23,6 +24,7 @@
         font-size: 32px;
         margin-top: 20px;
         margin-bottom: 20px;
+        font-weight: bold;
       }
       .line-container {
         width: 100%;
@@ -102,12 +104,33 @@
       .left-margin{
         margin-left: 5px;
       }
+      .join-button {
+        width: 355px;
+        height: 33px;
+        border-radius: 4px;
+        background-color: #23ee7f;
+        font-size: 14;
+        font-weight: bold;
+        color: black;
+        text-align: center; /* 텍스트를 가운데로 정렬 */
+        line-height: 33px; /* 버튼의 높이와 같게 설정하여 수직 가운데 정렬 */
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.1), #23ee7f, rgba(0, 0, 0, 0.1));
+        transform: skew(-40deg);
+      }
+      .re-reverse-40deg{
+        display: flex;
+        flex-direction: column;
+        transform: skew(40deg); /* 텍스트를 -40도로 반대로 기울임 */
+        align-items: center;
+        justify-content: center;
+      }
     </style>
   </head>
   <body>
-    <div class="title">아무 말 대잔치</div>
-    <div class="line-container">
-      <div class="line"></div>
+    <div class="title">🔔 웃음 게시판 🔔</div>
+    <div class="container">
+      <div class="horizontal-line"></div>
+      <div class="diamond"></div>
     </div>
     <div class="wrap">
       <!-- <div class="login">로그인</div> -->
@@ -138,7 +161,11 @@
         <div id="passwordHelper" class="error-flex" style="font-size: 12px;"></div>
       </form>
       <div>
-        <button class="login button" id="login">로그인</button>
+        <button class="login join-button" id="login">
+          <div class="re-reverse-40deg">
+            로그인
+          </div>
+        </button>
       </div>
       <a href="/join" class="join" id="join" style="margin-top: 10px;">회원가입</p>
     </div>
