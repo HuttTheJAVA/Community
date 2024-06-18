@@ -99,9 +99,10 @@ document.getElementById("adjust").addEventListener('click', async function() {
                 console.error("fetch error:",err);
               });
 
+            let toasgMsgDiv = document.getElementById("toasgMsgDiv");
+            toasgMsgDiv.textContent = "수정 완료";
 
-            var toastMessage = document.getElementById("adjustToast");
-            toastMessage.textContent = "수정 완료";
+            let toastMessage = document.getElementById("adjustToast");
     
             toastMessage.style.display = "block";
     

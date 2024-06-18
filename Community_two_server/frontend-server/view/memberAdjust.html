@@ -6,6 +6,7 @@
 <title>아무말 대잔치</title>
 <link rel="stylesheet" href="/css/dropDown.css">
 <link rel="stylesheet" href="/css/toast.css">
+<link rel="stylesheet" href="/css/diamondLine.css">
 <style>
   body {
     margin: 0;
@@ -17,6 +18,7 @@
   }
   .title {
     font-size: 32px;
+    font-weight: bold;
     margin-top: 20px;
     margin-bottom: 20px;
   }
@@ -86,12 +88,22 @@
     width: 355px;
     height: 33px;
     border-radius: 4px;
-    background-color: #ACA0EB;
+    background-color: #23ee7f;
     font-size: 14;
     font-weight: bold;
-    color: #FFFFFF;
+    color: black;
     text-align: center; /* 텍스트를 가운데로 정렬 */
-    line-height: 33px;
+    line-height: 33px; /* 버튼의 높이와 같게 설정하여 수직 가운데 정렬 */
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.1), #23ee7f, rgba(0, 0, 0, 0.1));
+    transform: skew(-40deg);
+  }
+  .re-reverse-40deg{
+    display: flex;
+    flex-direction: column;
+    transform: skew(40deg); /* 텍스트를 -40도로 반대로 기울임 */
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
   }
   .text-24{
     font-size: 24px;
@@ -217,7 +229,7 @@
 <div class="container-top">
   <div class="flex-container-between">
     <div class="invisable_circle"></div>
-    <div class="title">아무 말 대잔치</div>
+    <div class="title">🔔 웃음 게시판 🔔</div>
 
     <div class="dropdown">
       <div class="dropbtn"></div>
@@ -230,8 +242,9 @@
 
   </div>
 </div>
-<div class="line-container">
-  <div class="line"></div>
+<div class="container">
+  <div class="horizontal-line"></div>
+  <div class="diamond"></div>
 </div>
 <div class="bold" style="margin-top: 150px;font-size: 32px;margin-bottom: 15px;">회원정보수정</div>
 <div class="user-feature-container" style="font-weight: bold;">프로필 사진*</div>
@@ -267,7 +280,9 @@
           style="padding-left: 10px;"
       />
     <div id="adjust" class="custom-button">
+      <div class="re-reverse-40deg">
         수정하기
+      </div>
     </div>
     <div id="nickNameHelper" class="error-flex" style="font-size: 12px;"></div>
     <div id="deleteMember" style="font-size: 14px;margin-top: 10px;margin-bottom: 70px;">
@@ -294,7 +309,11 @@
       </div>
   </div>
 </div>
-<div class="adjustPassWordtoastMessage" id="adjustToast"></div>
+<div class="adjustPassWordtoastMessage" id="adjustToast">
+  <div class="re-reverse-40deg" id="toasgMsgDiv">
+    
+  </div>
+</div>
 <script type="module" src="/javascript/memberAdjust.js"></script>
 </body>
 </html>

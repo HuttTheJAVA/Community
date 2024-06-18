@@ -172,8 +172,10 @@ adjust.onclick = async function(){
 
   helper.innerText = ""; // 이전에 유효하지 않은 입력을 한 적이 있다면 helper.innerText = ""이 아니다. 따라서 지워줘야 됨 
   
+  let toasgMsgDiv = document.getElementById("toasgMsgDiv");
+  toasgMsgDiv.textContent = "수정 완료";
+
   let toastMessage = document.getElementById("adjustToast");
-  toastMessage.textContent = "수정 완료";
 
   toastMessage.style.display = "block";
 
