@@ -88,9 +88,9 @@ DELETE ~/post/:postId/reply/:replyId = 특정 게시글의 댓글 삭제
 ```jsx
 GET ~/user/session = 유저 세션 확인
 
-GET ~/user/nickname/:nickname = 유저를 닉네임으로 조회 (회원가입 시 중복 닉네임 확인용)
+GET ~/user/nickname/:nickname = 닉네임으로 유저를 조회 (회원가입 시 중복 닉네임 확인용)
 
-GET ~/user/email/:email = 유저를 이메일로 조회 (회원가입 시 중복 이메일 확인용)
+GET ~/user/email/:email = 이메일로 유저를 조회 (회원가입 시 중복 이메일 확인용)
 
 GET ~/user/:userId = 유저 조회 
 
