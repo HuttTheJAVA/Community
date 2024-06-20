@@ -3,11 +3,12 @@
 🔗 https://www.youtube.com/watch?v=eVBjY3X_y5Q&t=1s
 
 
-![Untitled.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/bb5077a0-34b6-47db-8986-b6046377123f/56d834a4-a10e-4b09-8d81-ecad283dd8b1/Untitled.png)
+<img width="989" alt="Untitled" src="https://github.com/HuttTheJAVA/KakaoCloudSchool/assets/92637789/e4d30376-da13-4377-8842-2df79721c5b8">
+
 
 
 **개략도**
-
+<br></br>
 ## ✅ 컴포넌트
 
 
