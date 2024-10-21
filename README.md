@@ -31,7 +31,7 @@
 ## ✅ URL
 
 
-- http://localhost:8080/는 모든 URL에 기본적으로 포함되므로 URL 표현에서 생략<br></br>
+- http://localhost:8080/는 모든 URL에 기본적으로 포함되므로 URL 표현에서 생략.<br></br>
 
 ## 프론트 서버
 
